@@ -15,17 +15,28 @@ bitcoin: bc1q9fpu6muvmg5fj76pyzg3ffjrmksnvfj3c0xva6
 Currently, most functions are prototypes that need to be optimized and
 attempt to reduce dependency. They work just fine right now, but more can be done.
 
-> Originally designed for hyperdrive | localdrive but anything with certain functions will do.
-> A more thorough documentation on how will come along soon
+> Originally designed for [hyperdrive](https://docs.holepunch.to/building-blocks/hyperdrive) |
+> [localdrive](https://docs.holepunch.to/helpers/localdrive) but this library strives to be usable for any
+> storage source that is available. 
 
 ---
 ---
 
-# I love rxjs
 
-I am aiming to make most of the API rxjs compatible. However, all the functions also have a promise based variation.
+## Installation
+
+```sh
+npm install bring-your-own-storage-utilities --save
+```
 
 ---
+
+# It starts with a source
+
+Most functions currently have the ability to adapt to most source storages. For example,
+the find-down by default will access source.readdir, but you can supply your own observable 
+if you need specific way to list the files in the directory. Check the function on what ways 
+you can adapt your source storage for it.
 
 # API
 
@@ -56,11 +67,14 @@ file operations on storage you bring. The first parameter of all functions will 
 
 ---
 
-## Installation
+# Initial plan
 
-```sh
-npm install bring-your-own-storage-utilities --save
-```
+- I am aiming to make most of the API rxjs compatible. However, all the functions also have a promise based variation.
+- I am aiming to be completely browser-compatible.
+- I am planning rollup and bundling from the browser.
+
+
+---
 
 ## Todo
 
@@ -77,6 +91,10 @@ npm install bring-your-own-storage-utilities --save
      todo: ensure rxjs traversals doesn't have memory leaks.
  
      todo: more tests
+ 
+     todo: make random-access-storage adapter
+ 
+     todo: test with hyperbee and make it more compatible
  */
 ```
 
