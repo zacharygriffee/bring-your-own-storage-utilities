@@ -45,7 +45,7 @@ you can adapt your source storage for it.
 The find api functions mainly encompass directory traversals, node_module and package.json resolutions, and typical
 file operations on storage you bring. The first parameter of all functions will take a source storage.
 
-### [API Documentation](./docs/find-api.md)
+### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/find-api.md)
 
 - collectModules
 - createImportMapFromModules
@@ -63,7 +63,7 @@ file operations on storage you bring. The first parameter of all functions will 
 - readdir
 - resolvePackageExportsImports
 - findPackageJson
-- and more... [API Documentation](./docs/find-api.md)
+- and more... [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/find-api.md)
 
 ---
 
