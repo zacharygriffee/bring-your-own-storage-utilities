@@ -67,7 +67,7 @@ Find directories up package.json resides in.</p>
 <dt><a href="#isAbsolute">isAbsolute(x)</a> ⇒ <code>boolean</code></dt>
 <dd><p>Simple method to determine absolute path.</p>
 </dd>
-<dt><a href="#isFile$">isFile$(driveSource, path)</a> ⇒ <code>Observable.&lt;boolean&gt;</code> | <code>Observable.&lt;(boolean|T)&gt;</code></dt>
+<dt><a href="#isFile$">isFile$(driveSource, path)</a> ⇒ <code>Observable.&lt;boolean&gt;</code> | <code>Observable.&lt;boolean&gt;</code></dt>
 <dd><p>Determines if from source this file exists.</p>
 </dd>
 <dt><a href="#isFile">isFile(driveSource, path)</a> ⇒ <code>Promise.&lt;boolean&gt;</code></dt>
@@ -76,7 +76,7 @@ Find directories up package.json resides in.</p>
 <dt><a href="#isFolder">isFolder(driveSource, path)</a> ⇒ <code>Promise.&lt;boolean&gt;</code></dt>
 <dd><p>Convenience async function for isFolder$. It will <strong>not</strong> test positive on some sources if the folder is empty.</p>
 </dd>
-<dt><a href="#isFolder$">isFolder$(driveSource, path)</a> ⇒ <code>Observable.&lt;boolean&gt;</code> | <code>Observable.&lt;(boolean|T)&gt;</code></dt>
+<dt><a href="#isFolder$">isFolder$(driveSource, path)</a> ⇒ <code>Observable.&lt;boolean&gt;</code> | <code>Observable.&lt;boolean&gt;</code></dt>
 <dd><p>Determines if from source this folder exists. It will <strong>not</strong> test positive on some sources if the folder is empty.</p>
 </dd>
 <dt><a href="#isRelative">isRelative(x)</a> ⇒ <code>boolean</code></dt>
@@ -409,7 +409,7 @@ Simple method to determine absolute path.
 
 <a name="isFile$"></a>
 
-## isFile$(driveSource, path) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;(boolean\|T)&gt;</code>
+## isFile$(driveSource, path) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;boolean&gt;</code>
 Determines if from source this file exists.
 
 **Kind**: global function  
@@ -449,7 +449,7 @@ Convenience async function for isFolder$. It will **not** test positive on some 
 
 <a name="isFolder$"></a>
 
-## isFolder$(driveSource, path) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;(boolean\|T)&gt;</code>
+## isFolder$(driveSource, path) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;boolean&gt;</code>
 Determines if from source this folder exists. It will **not** test positive on some sources if the folder is empty.
 
 **Kind**: global function  

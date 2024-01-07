@@ -40,7 +40,7 @@ you can adapt your source storage for it.
 
 # API
 
-## find
+## Find
 
 The find api functions mainly encompass directory traversals, node_module and package.json resolutions, and typical
 file operations on storage you bring. The first parameter of all functions will take a source storage.
@@ -64,6 +64,17 @@ file operations on storage you bring. The first parameter of all functions will 
 - resolvePackageExportsImports
 - findPackageJson
 - and more... [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/find-api.md)
+
+---
+
+## Resolvers
+
+The resolvers api is all about resolving some sort of identifier or specifier or resource from the source. The resolver does not have
+to resolve from a source. This can be anywhere from DNS resolving, to user id resolving, file resolving, whatever needs resolving, this seciton is what it's about.
+
+### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/resolvers-api.md)
+
+- nodeLikeResolver 
 
 ---
 

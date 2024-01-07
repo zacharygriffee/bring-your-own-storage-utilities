@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.12",
+  "version": "0.0.2",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "type": "module",
@@ -15,6 +15,7 @@
   "a-test-key": "just-testing",
   "dependencies": {
     "b4a": "^1.6.4",
+    "codecs": "^3.1.0",
     "common-dir": "^3.0.1",
     "glob-parent": "^6.0.2",
     "lodash-es": "^4.17.21",
