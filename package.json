@@ -1,0 +1,29 @@
+{
+  "name": "bring-your-own-storage-utilities",
+  "version": "0.0.1",
+  "description": "Utilities for storage devices you bring on your own",
+  "main": "index.js",
+  "type": "module",
+  "fundme": "bc1q9fpu6muvmg5fj76pyzg3ffjrmksnvfj3c0xva6",
+  "scripts": {
+    "test": "node ./tests/all.js"
+  },
+  "keywords": [],
+  "author": "Zachary Eric Griffee",
+  "license": "MIT",
+  "a-test-key": "just-testing",
+  "dependencies": {
+    "b4a": "^1.6.4",
+    "common-dir": "^3.0.1",
+    "glob-parent": "^6.0.2",
+    "lodash-es": "^4.17.21",
+    "minimatch": "^9.0.3",
+    "rxjs": "^7.8.1",
+    "rxjs-etc": "^10.6.2",
+    "tiny-paths": "^1.0.2"
+  },
+  "devDependencies": {
+    "brittle": "^3.3.2",
+    "localdrive": "^1.11.1"
+  }
+}
