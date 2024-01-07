@@ -34,7 +34,7 @@ I am aiming to make most of the API rxjs compatible. However, all the functions 
 The find api functions mainly encompass directory traversals, node_module and package.json resolutions, and typical
 file operations on storage you bring. The first parameter of all functions will take a source storage.
 
-### [API Documentation](./docs/find-api)
+### [API Documentation](./docs/find-api.md)
 
 - collectModules
 - createImportMapFromModules
@@ -52,7 +52,7 @@ file operations on storage you bring. The first parameter of all functions will 
 - readdir
 - resolvePackageExportsImports
 - findPackageJson
-- and more... [API Documentation](./docs/find-api)
+- and more... [API Documentation](./docs/find-api.md)
 
 ---
 
