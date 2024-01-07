@@ -8,6 +8,7 @@
   "scripts": {
     "test": "node ./tests/all.js"
   },
+  "homepage": "https://github.com/zacharygriffee/bring-your-own-storage-utilities#",
   "keywords": [],
   "author": "Zachary Eric Griffee",
   "license": "MIT",

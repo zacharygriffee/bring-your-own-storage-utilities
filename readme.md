@@ -80,6 +80,9 @@ file operations on storage you bring. The first parameter of all functions will 
 
 ```ecmascript 6
 /**
+   
+     todo: examples for most functions
+     
      todo: rollup-plugin for this library 
            or make a separate library that utilizes
            these functions
