@@ -2,21 +2,21 @@ import {test, solo, skip} from "brittle";
 
 import * as rx from "rxjs";
 import * as _ from "lodash-es";
-import {findUp, findUp$, findUpMultiple$} from "../lib/find-up.js";
-import {findDown, findDown$, findDownMultiple$} from "../lib/find-down.js";
-import {findPackageJson$} from "../lib/findPackageJson.js";
-import fileURLToPath from "../lib/fileURLToPath.js";
+import {findUp, findUp$, findUpMultiple$} from "../lib/find/find-up.js";
+import {findDown, findDown$, findDownMultiple$} from "../lib/find/find-down.js";
+import {findPackageJson$} from "../lib/find/findPackageJson.js";
+import fileURLToPath from "../lib/find/fileURLToPath.js";
 import path from "tiny-paths";
 
 import LocalDrive from "localdrive";
-import {findPackageDirectory$} from "../lib/findPackageDirectory.js";
-import {findNodeModule$} from "../lib/findNodeModule.js";
-import {findNodeModulesDirectory$} from "../lib/findNodeModulesDirectory.js";
-import {readdir$} from "../lib/readdir.js";
-import {parseModuleSpecifier} from "../lib/parseModuleSpecifier.js";
-import {loadPackageJson$} from "../lib/loadPackageJson.js";
-import {collectModules$} from "../lib/collectModules.js";
-import {createDataUri} from "../lib/createDataUri.js";
+import {findPackageDirectory$} from "../lib/find/findPackageDirectory.js";
+import {findNodeModule$} from "../lib/find/findNodeModule.js";
+import {findNodeModulesDirectory$} from "../lib/find/findNodeModulesDirectory.js";
+import {readdir$} from "../lib/find/readdir.js";
+import {parseModuleSpecifier} from "../lib/find/parseModuleSpecifier.js";
+import {loadPackageJson$} from "../lib/find/loadPackageJson.js";
+import {collectModules$} from "../lib/find/collectModules.js";
+import {createDataUri} from "../lib/find/createDataUri.js";
 
 const p = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(p);
