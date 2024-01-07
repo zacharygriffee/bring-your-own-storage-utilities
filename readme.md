@@ -69,8 +69,7 @@ file operations on storage you bring. The first parameter of all functions will 
 
 ## Resolvers
 
-The resolvers api is all about resolving some sort of identifier or specifier or resource from the source. The resolver does not have
-to resolve from a source. This can be anywhere from DNS resolving, to user id resolving, file resolving, whatever needs resolving, this seciton is what it's about.
+The resolvers api is all about resolving some sort of identifier or specifier or resource from the source. 
 
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/resolvers-api.md)
 
