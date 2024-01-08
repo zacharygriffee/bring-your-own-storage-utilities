@@ -48,6 +48,9 @@ for the browser.
 | [config.createScriptEle] | <code>false</code> | Create the script element for html template file. |
 | [config.entryName] | <code>&#x27;imports&#x27;</code> | Maybe you're not using this for html, create a different name for the 'imports' field                           of the import map. |
 | [config.includeBook=] |  | Include additional uri or urls for the import map. Good place to add cdn links if necessary. |
+| [config.exportConditions] | <code>[&quot;browser&quot;, &quot;default&quot;, &quot;main&quot;]</code> | [Read about conditional exports of package.json](https://nodejs.org/api/packages.html#conditional-exports) |
+| [config.nameFormatHandler] | <code>x &#x3D;&gt; camelCase(x)</code> | To mutate the name of the package to something else in the returned object. |
+| [config.cwd] |  | The working directory |
 
 **Example**  
 ```js
@@ -63,8 +66,8 @@ createImportMapFromModules$(myDrive, ["your-minified-library1", "your-minified-l
                  <script type="importmap">
                      {
                          imports: {
-                             "your-minified-library1": "...dataUri",
-                             "your-minified-library2": "...dataUri",
+                             "yourMinifiedLibrary1": "...dataUri",
+                             "yourMinifiedLibrary2": "...dataUri",
                              "lodash-es": "...dataUriOfLodash"
                          }
                      }
