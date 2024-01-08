@@ -40,7 +40,7 @@ you can adapt your source storage for it.
 
 # API
 
-## Find
+## `Find`
 
 The find api functions mainly finding stuff in the source storage or making it easier to find stuff.
 
@@ -53,7 +53,7 @@ The find api functions mainly finding stuff in the source storage or making it e
 - List recursively or read directory shallow.
 
 ---
-## Query
+## `Query`
 
 You could say this is pretty similar to find. But, query is more about `opening` and `loading` resources 
 from the source storage.
@@ -65,20 +65,20 @@ from the source storage.
 
 ---
 
-## Resolve
+## `Resolve`
 
-Have an `id`, specifier, import, name, extension, hash table, whatever, this section should be for resolving these 
+Have an id, specifier, import, name, extension, hash table, whatever, this section should be for resolving these 
 identifiers and indexers to a resource.
 
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/resolve-api.md)
 
-- Resolve an identifier similar to node's `require` or es6's `import` 
+- Resolve a bare module specifier and other files similar to node's `require` or es6's `import` 
 - Collect modules from parent directories that have a `node_modules` folder
 - Load all `package.json` from child directory up to root directory
 
 ---
 
-## Deploy
+## `Deploy`
 
 You need to deploy something from your source to the end-user.
 
