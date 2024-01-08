@@ -7,6 +7,7 @@ import {findDown} from "../lib/find/find-down.js";
 import {findPackageJson, readdir} from "../lib/find/index.js";
 import {loadPackageJson} from "../lib/resolve/index.js";
 import {from, toArray, firstValueFrom} from "rxjs";
+import {hasFile} from "./hasFile-test-helper.js";
 
 test("fromRandomAccessStorageCollection", async t => {
     const fileObject = {
@@ -81,4 +82,7 @@ test("Using a randomAccess creation function", async (t) => {
     t.is(martiniHasAJsonFile, "/martini/package.json", "We found that martini has a package.json");
     const loadJson = await loadPackageJson(files, {cwd: "/martini/"});
     t.is(loadJson.name, "in-memory-package-json-for-martini", "We can read the json file.");
+
+    const foundFiles = await readdir(files, {cwd: "/martini/",recursive: false});
+    t.ok(hasFile(foundFiles, "ginMartini") && foundFiles.length === 3, "Test cwd scopes things correctly returning the file name without slashes.");
 });
