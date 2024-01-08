@@ -51,8 +51,18 @@ Find directories up package.json resides in.</p>
 <dt><a href="#findPackageJson">findPackageJson()</a></dt>
 <dd><p>Convenience async version of findPackageJson$. Will return an array of all packages found.</p>
 </dd>
+<dt><a href="#list$">list$()</a> ⇒ <code>*</code></dt>
+<dd><p>Same as readdir$ but config.list = true</p>
+</dd>
+<dt><a href="#list">list()</a></dt>
+<dd><p>Convenience async method for list$</p>
+</dd>
 <dt><a href="#parseModuleSpecifier">parseModuleSpecifier(moduleId, config)</a> ⇒</dt>
 <dd><p>Parses a npm module specifier.</p>
+</dd>
+<dt><a href="#readdir$">readdir$(source, config)</a> ⇒</dt>
+<dd><p>readdir that wraps either  hyperdrive and hyperbee instance.
+Aimed to handle hypercore and hyperbee. But, plan on support for more</p>
 </dd>
 <dt><a href="#toPath">toPath(urlOrPath)</a> ⇒ <code>string</code></dt>
 <dd><p>Converts a file:// or buffer to path.</p>
@@ -247,6 +257,19 @@ Find package.json files into the parent directories.
 Convenience async version of findPackageJson$. Will return an array of all packages found.
 
 **Kind**: global function  
+<a name="list$"></a>
+
+## list$() ⇒ <code>\*</code>
+Same as readdir$ but config.list = true
+
+**Kind**: global function  
+**See**: readdir$  
+<a name="list"></a>
+
+## list()
+Convenience async method for list$
+
+**Kind**: global function  
 <a name="parseModuleSpecifier"></a>
 
 ## parseModuleSpecifier(moduleId, config) ⇒
@@ -296,6 +319,24 @@ Parses a npm module specifier.
                  // ]
 } = parseModuleSpecifier("@someScope/someModule@5.5.5/somePath/index", { host : "https://unpkg.com", type: "" });
 ```
+<a name="readdir$"></a>
+
+## readdir$(source, config) ⇒
+readdir that wraps either  hyperdrive and hyperbee instance.
+Aimed to handle hypercore and hyperbee. But, plan on support for more
+
+**Kind**: global function  
+**Returns**: observable emits files from the source.  
+
+| Param | Default | Description |
+| --- | --- | --- |
+| source |  | a hyperbee or hyperdrive (more coming) |
+| config |  |  |
+| [config.cwd] | <code>/</code> | Current working directory of the source. |
+| [config.list] |  | Whether to get a detailed list of the files. |
+| [config.recursive] |  | Whether to recursively dig into folders only applies if config.list is true |
+| [config.trimPath] | <code>true</code> | To trim the path of any dots and slashes, a db may not start with the leading chars. This is default true because Hyperdrive handles path prefixes |
+
 <a name="toPath"></a>
 
 ## toPath(urlOrPath) ⇒ <code>string</code>

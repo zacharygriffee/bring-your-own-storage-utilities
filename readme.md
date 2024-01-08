@@ -58,10 +58,10 @@ The find api functions mainly finding stuff in the source storage or making it e
 You could say this is pretty similar to find. But, query is more about `opening` and `loading` resources 
 from the source storage.
 
+### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/query-api.md)
+
 - Is it a file
 - Is it a folder
-
-### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/query-api.md)
 
 ---
 
