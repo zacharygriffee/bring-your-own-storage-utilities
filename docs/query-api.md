@@ -22,7 +22,7 @@ entry object will have at least:
 {
     isFile, // boolean
     isFolder, // boolean
-    key, // the name of the file or null if it doesn't exist.
+    key, // the name of the file
     value // details of the file, or undefined if it doesn't exist.
 }
 </pre></dd>
@@ -88,7 +88,7 @@ entry object will have at least:
 {
     isFile, // boolean
     isFolder, // boolean
-    key, // the name of the file or null if it doesn't exist.
+    key, // the name of the file
     value // details of the file, or undefined if it doesn't exist.
 }
 </pre>

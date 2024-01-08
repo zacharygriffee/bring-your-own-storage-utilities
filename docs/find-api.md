@@ -69,6 +69,9 @@ it still will work 99% of cases, still tests need to be done to ensure that.</p>
 <li><input checked="" disabled="" type="checkbox"> Incorporate query.getEntry</li>
 </ul>
 </dd>
+<dt><a href="#readdir">readdir()</a></dt>
+<dd><p>Async version of readdir$. Returns array of the files and folders</p>
+</dd>
 <dt><a href="#toPath">toPath(urlOrPath)</a> ⇒ <code>string</code></dt>
 <dd><p>Converts a file:// or buffer to path.</p>
 </dd>
@@ -348,6 +351,12 @@ it still will work 99% of cases, still tests need to be done to ensure that.
 | [config.recursive] |  | Whether to recursively dig into folders only applies if config.list is true |
 | [config.trimPath] | <code>true</code> | To trim the path of any dots and slashes, a db may not start with the leading chars. This is default true because Hyperdrive handles path prefixes |
 
+<a name="readdir"></a>
+
+## readdir()
+Async version of readdir$. Returns array of the files and folders
+
+**Kind**: global function  
 <a name="toPath"></a>
 
 ## toPath(urlOrPath) ⇒ <code>string</code>
