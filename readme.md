@@ -55,8 +55,8 @@ The find api functions mainly finding stuff in the source storage or making it e
 ---
 ## `Query`
 
-You could say this is pretty similar to find. But, query is more about `opening` and `loading` resources 
-from the source storage.
+You could say this is pretty similar to find. 
+But, query is where you've found a resource now you need to understand that resource
 
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/query-api.md)
 
