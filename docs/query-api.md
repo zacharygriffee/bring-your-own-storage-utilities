@@ -4,6 +4,28 @@
 ## Functions
 
 <dl>
+<dt><a href="#getEntry$">getEntry$(source, path, [config])</a></dt>
+<dd><p>Gets the entry details of the file</p>
+<ul>
+<li>source should have either a <code>get</code> or <code>entry</code> function.</li>
+<li>source should have a <code>readdir</code> function</li>
+</ul>
+<pre>
+getEntry$(someDrive, "\someFolder\someFile.txt")
+ .subscribe(
+     entry => {
+         // The entry object
+     }
+ );
+
+entry object will have at least:
+{
+    isFile, // boolean
+    isFolder, // boolean
+    key, // the name of the file or null if it doesn't exist.
+    value // details of the file, or undefined if it doesn't exist.
+}
+</pre></dd>
 <dt><a href="#isAbsolute">isAbsolute(x)</a> ⇒ <code>boolean</code></dt>
 <dd><p>Simple method to determine absolute path.</p>
 </dd>
@@ -15,23 +37,71 @@
 </dd>
 <dt><a href="#isFile$">isFile$(driveSource, path)</a> ⇒ <code>Observable.&lt;boolean&gt;</code> | <code>Observable.&lt;boolean&gt;</code></dt>
 <dd><p>Determines if from source this file exists.</p>
+<p>** this may return false for empty files (0 bytes) on some sources **</p>
 </dd>
 <dt><a href="#isFile">isFile(driveSource, path)</a> ⇒ <code>Promise.&lt;boolean&gt;</code></dt>
 <dd><p>Convenience async function for isFile$</p>
+<p>** this may return false for empty files (0 bytes) on some sources **</p>
 </dd>
 <dt><a href="#isFolder">isFolder(driveSource, path)</a> ⇒ <code>Promise.&lt;boolean&gt;</code></dt>
 <dd><p>Convenience async function for isFolder$. It will <strong>not</strong> test positive on some sources if the folder is empty.</p>
+<p>** Empty folders will return false here **</p>
 </dd>
 <dt><a href="#isFolder$">isFolder$(driveSource, path)</a> ⇒ <code>Observable.&lt;boolean&gt;</code> | <code>Observable.&lt;boolean&gt;</code></dt>
 <dd><p>Determines if from source this folder exists. It will <strong>not</strong> test positive on some sources if the folder is empty.</p>
+<p>** Empty folders will return false here **</p>
+<ul>
+<li><input disabled="" type="checkbox"> create a selector function to override default check</li>
+<li><input checked="" disabled="" type="checkbox"> incorporate readdir function from this library to support hyperbee file structures as well.</li>
+</ul>
 </dd>
 <dt><a href="#pathDetail$">pathDetail$(sourceDrive, absolutePath)</a> ⇒ <code>*</code></dt>
 <dd><p>Returns entry, isFile and isFolder of a path.</p>
-</dd>
+<pre>
+**isFile may return false for empty files (0 bytes) on some sources**
+**isFolder will return false here folders that are empty**
+</pre></dd>
 <dt><a href="#pathDetail">pathDetail()</a></dt>
-<dd><p>Async convenience method for pathDetail$</p>
+<dd><p>Async convenience method for pathDetail$
+** isFile may return false for empty files (0 bytes) on some sources **
+** isFolder will return false here folders that are empty **</p>
 </dd>
 </dl>
+
+<a name="getEntry$"></a>
+
+## getEntry$(source, path, [config])
+Gets the entry details of the file
+
+- source should have either a `get` or `entry` function.
+- source should have a `readdir` function
+
+<pre>
+getEntry$(someDrive, "\someFolder\someFile.txt")
+ .subscribe(
+     entry => {
+         // The entry object
+     }
+ );
+
+entry object will have at least:
+{
+    isFile, // boolean
+    isFolder, // boolean
+    key, // the name of the file or null if it doesn't exist.
+    value // details of the file, or undefined if it doesn't exist.
+}
+</pre>
+
+**Kind**: global function  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| source |  |  | source |
+| path | <code>string</code> |  | path from the cwd |
+| [config] |  |  |  |
+| [config.cwd] | <code>string</code> | <code>&quot;/&quot;</code> | cwd to resolve the path to |
+| [config.entrySelector] |  |  | Use your own selector to return information about a file, the bare minimum should be what is shown above to best interface with the other functions of this library. The entrySelector function will have three arguments, (source, path, config). This function will be coerced async if it isn't already. The default selector requires the source to have either an entry function or a get function. A get function is literally getting the contents of the file and analyzing it while an entry file gets the details of the file. So, storages with entry function are way more performant in these queries. |
 
 <a name="isAbsolute"></a>
 
@@ -71,6 +141,8 @@ Determines if folder is root.
 ## isFile$(driveSource, path) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;boolean&gt;</code>
 Determines if from source this file exists.
 
+** this may return false for empty files (0 bytes) on some sources **
+
 **Kind**: global function  
 **Todo**
 
@@ -87,6 +159,8 @@ Determines if from source this file exists.
 ## isFile(driveSource, path) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Convenience async function for isFile$
 
+** this may return false for empty files (0 bytes) on some sources **
+
 **Kind**: global function  
 
 | Param | Description |
@@ -98,6 +172,8 @@ Convenience async function for isFile$
 
 ## isFolder(driveSource, path) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Convenience async function for isFolder$. It will **not** test positive on some sources if the folder is empty.
+
+** Empty folders will return false here **
 
 **Kind**: global function  
 
@@ -111,12 +187,12 @@ Convenience async function for isFolder$. It will **not** test positive on some 
 ## isFolder$(driveSource, path) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;boolean&gt;</code>
 Determines if from source this folder exists. It will **not** test positive on some sources if the folder is empty.
 
-**Kind**: global function  
-**Todo**
+** Empty folders will return false here **
 
 - [ ] create a selector function to override default check
-- [ ] incorporate readdir function from this library to support hyperbee file structures as well.
+- [x] incorporate readdir function from this library to support hyperbee file structures as well.
 
+**Kind**: global function  
 
 | Param | Description |
 | --- | --- |
@@ -127,6 +203,11 @@ Determines if from source this folder exists. It will **not** test positive on s
 
 ## pathDetail$(sourceDrive, absolutePath) ⇒ <code>\*</code>
 Returns entry, isFile and isFolder of a path.
+
+<pre>
+**isFile may return false for empty files (0 bytes) on some sources**
+**isFolder will return false here folders that are empty**
+</pre>
 
 **Kind**: global function  
 
@@ -141,8 +222,6 @@ pathDetail$(drive, "/some/path/to/file.txt").subscribe(
      {
          isFolder: false,
          isFile: true,
-         entry: {} // Depends on source.entry.
-                   // Will also be empty object if source does not have entry function
      }
 );
 ```
@@ -150,5 +229,7 @@ pathDetail$(drive, "/some/path/to/file.txt").subscribe(
 
 ## pathDetail()
 Async convenience method for pathDetail$
+** isFile may return false for empty files (0 bytes) on some sources **
+** isFolder will return false here folders that are empty **
 
 **Kind**: global function  

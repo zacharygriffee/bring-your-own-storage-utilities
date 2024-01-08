@@ -65,6 +65,9 @@ Find directories up package.json resides in.</p>
 Aimed to handle hypercore and hyperbee. But, plan on support for more</p>
 <p>readdir will coerce a source to be listable (config.list = true). So even if a source doesn&#39;t have list function,
 it still will work 99% of cases, still tests need to be done to ensure that.</p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> Incorporate query.getEntry</li>
+</ul>
 </dd>
 <dt><a href="#toPath">toPath(urlOrPath)</a> ⇒ <code>string</code></dt>
 <dd><p>Converts a file:// or buffer to path.</p>
@@ -156,6 +159,7 @@ Files found will be absolute paths to the source's root.
 | [config.filter] | <code></code> | Optional filter to apply to the file search. |
 | [config.readdir$] |  | An rxjs observable that returns a list of files and folders from the source. Default behavior is to use source.readdir(path) |
 | [config.cwd] |  | Alias to fromDir. The working directory to begin searching upward (fromDir ---> root directory). If omitted or null, will find the common dir in the fileList to begin. |
+| [config.isFolderSelector] |  | Predicate of what entries are folders and what are not. Default behavior to treat any entry without an extension (e.g. .txt) a folder. |
 
 <a name="findNodeModule$"></a>
 
@@ -329,6 +333,8 @@ Aimed to handle hypercore and hyperbee. But, plan on support for more
 
 readdir will coerce a source to be listable (config.list = true). So even if a source doesn't have list function,
 it still will work 99% of cases, still tests need to be done to ensure that.
+
+- [x] Incorporate query.getEntry
 
 **Kind**: global function  
 **Returns**: observable emits files from the source.  

@@ -93,4 +93,6 @@ test("Using a randomAccess creation function", async (t) => {
 
     t.is(key, "/martini/ginMartini");
     t.is(blob.byteLength, b4a.byteLength("gin,vermouth"), "Get size of the blob apart of the list.");
+
+    t.absent(hasFile(foundFiles, "someNonExistentFile.txt"));
 });
