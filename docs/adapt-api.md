@@ -49,6 +49,7 @@ fromRandomAccess(
 * [fromRandomAccess(randomAccessFunction, readdir$)](#fromRandomAccess)
     * [.get(file, [config])](#fromRandomAccess.get) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [.exists(file, [config])](#fromRandomAccess.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.readdir([fromPath], [config])](#fromRandomAccess.readdir) ⇒ <code>Readable</code>
 
 <a name="fromRandomAccess.get"></a>
 
@@ -74,6 +75,21 @@ Whether the file exists in collection. An empty file does not exist to this func
 | --- | --- | --- |
 | file | <code>string</code> | File name to check |
 | [config] |  | a configuration object that is passed to the factory function |
+
+<a name="fromRandomAccess.readdir"></a>
+
+### fromRandomAccess.readdir([fromPath], [config]) ⇒ <code>Readable</code>
+Returns a readable stream of files in cwd.
+
+**Kind**: static method of [<code>fromRandomAccess</code>](#fromRandomAccess)  
+**Returns**: <code>Readable</code> - A streamx readable stream that emits the values.  
+
+| Param | Default | Description |
+| --- | --- | --- |
+| [fromPath] | <code>&quot;/&quot;</code> | A file path, defaults to root. |
+| [config] |  |  |
+| [config.cwd] |  | Same as fromPath |
+| [config.recursive] | <code>false</code> | If true, cwd is ignored and all files in the collection are returned. |
 
 <a name="fromRandomAccessCollection"></a>
 
@@ -108,25 +124,9 @@ fromRandomAccessStorageCollection({
 ```
 
 * [fromRandomAccessCollection(collection)](#fromRandomAccessCollection)
-    * [.readdir([fromPath], [config])](#fromRandomAccessCollection.readdir) ⇒ <code>Readable</code>
     * [.exists(file)](#fromRandomAccessCollection.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
     * [.get(file, [config])](#fromRandomAccessCollection.get) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [.readdir([fromPath], [config])](#fromRandomAccessCollection.readdir) ⇒ <code>Readable</code>
-
-<a name="fromRandomAccessCollection.readdir"></a>
-
-### fromRandomAccessCollection.readdir([fromPath], [config]) ⇒ <code>Readable</code>
-Returns a readable stream of files in cwd
-
-**Kind**: static method of [<code>fromRandomAccessCollection</code>](#fromRandomAccessCollection)  
-**Returns**: <code>Readable</code> - A streamx readable stream that emits the values.  
-
-| Param | Default | Description |
-| --- | --- | --- |
-| [fromPath] | <code>&quot;/&quot;</code> | A file path, defaults to root. |
-| [config] |  |  |
-| [config.cwd] |  | Same as fromPath |
-| [config.recursive] | <code>false</code> | If true, cwd is ignored and all files in the collection are returned. |
 
 <a name="fromRandomAccessCollection.exists"></a>
 
