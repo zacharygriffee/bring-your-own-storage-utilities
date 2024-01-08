@@ -91,6 +91,13 @@ You need to deploy something from your source to the end-user.
 
 ---
 
+## `Adapt`
+
+Any adaptors that can help to use common sources. Or any adaptors to pipe the source to be consumed by other API.
+
+### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/adapt-api.md)
+
+- Wrap a collection of [random-access-storage](https://github.com/random-access-storage) instances. 
 
 # Initial plan
 
@@ -119,8 +126,6 @@ You need to deploy something from your source to the end-user.
      todo: ensure rxjs traversals doesn't have memory leaks.
  
      todo: more tests
- 
-     todo: make random-access-storage adapter
  
      todo: test with hyperbee and make it more compatible
  */

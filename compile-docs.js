@@ -9,7 +9,7 @@ const __dirname = path.dirname(p);
 // const storageDrive = new LocalDrive(_.path.resolve(__dirname, ".."));
 const projectFolder = new LocalDrive(path.resolve(__dirname, "./"));
 
-for await (const lib of ["deploy", "find", "query", "resolve"]) {
+for await (const lib of ["deploy", "find", "query", "resolve", "adapt"]) {
     await jsdoc2md.render({ files: `lib/${lib}/**.js` }).then(
         data => {
             data = `

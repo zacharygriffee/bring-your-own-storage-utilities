@@ -23,11 +23,13 @@
     "minimatch": "^9.0.3",
     "rxjs": "^7.8.1",
     "rxjs-etc": "^10.6.2",
+    "streamx": "^2.15.6",
     "tiny-paths": "^1.0.2"
   },
   "devDependencies": {
     "brittle": "^3.3.2",
     "jsdoc-to-markdown": "^8.0.0",
-    "localdrive": "^1.11.1"
+    "localdrive": "^1.11.1",
+    "random-access-memory": "^6.2.0"
   }
 }
