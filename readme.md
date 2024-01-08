@@ -42,40 +42,55 @@ you can adapt your source storage for it.
 
 ## Find
 
-The find api functions mainly encompass directory traversals, node_module and package.json resolutions, and typical
-file operations on storage you bring. The first parameter of all functions will take a source storage.
+The find api functions mainly finding stuff in the source storage or making it easier to find stuff.
 
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/find-api.md)
 
-- collectModules
-- createImportMapFromModules
-- fileURLToPath
-- find-down
-- find-up
-- findNodeModule
-- findNodeModulesDirectory
-- findPackageDirectory
-- findPackageJson
-- list
-- loadPackageJson
-- parseModuleSpecifier
-- pathDetail
-- readdir
-- resolvePackageExportsImports
-- findPackageJson
-- and more... [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/find-api.md)
+- Find files from a child directory up to the parents
+- Find files from a parent to the child
+- Find package.json file parent to the current working directory
+- Find node_modules parent to current working directory
+- List recursively or read directory shallow.
+
+---
+## Query
+
+You could say this is pretty similar to find. But, query is more about `opening` and `loading` resources 
+from the source storage.
+
+- Is it a file
+- Is it a folder
+
+### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/query-api.md)
 
 ---
 
-## Resolvers
+## Resolve
 
-The resolvers api is all about resolving some sort of identifier or specifier or resource from the source. 
+Have an `id`, specifier, import, name, extension, hash table, whatever, this section should be for resolving these 
+identifiers and indexers to a resource.
 
-### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/resolvers-api.md)
+### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/resolve-api.md)
 
-- nodeLikeResolver 
+- Resolve an identifier similar to node's `require` or es6's `import` 
+- Collect modules from parent directories that have a `node_modules` folder
+- Load all `package.json` from child directory up to root directory
 
 ---
+
+## Deploy
+
+You need to deploy something from your source to the end-user.
+
+### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/deploy-api.md)
+
+- Turn javascript code or any blob into `data uri`
+- Create an import map of `data uri`'s collected by resolver for a webpage or other reasons.
+- Coming soon: turn any javascript code into web worker baked by protocol channels.
+- Coming soon: option to use `blob urls` as well as `data uri` 
+
+---
+
 
 # Initial plan
 

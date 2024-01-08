@@ -1,28 +1,31 @@
-import {test, solo, skip} from "brittle";
+import {skip, test} from "brittle";
 
 import * as rx from "rxjs";
-import * as _ from "lodash-es";
 import {findUp, findUp$, findUpMultiple$} from "../lib/find/find-up.js";
-import {findDown, findDown$, findDownMultiple$} from "../lib/find/find-down.js";
-import {findPackageJson$} from "../lib/find/findPackageJson.js";
+import {
+    findDown,
+    findDown$,
+    findDownMultiple$,
+    findNodeModule$,
+    findPackageDirectory$,
+    findPackageJson$,
+    parseModuleSpecifier,
+    readdir$,
+    list$
+} from "../lib/find/index.js";
 import fileURLToPath from "../lib/find/fileURLToPath.js";
 import path from "tiny-paths";
 
+import {hasFile} from "./hasFile-test-helper.js";
+
 import LocalDrive from "localdrive";
-import {findPackageDirectory$} from "../lib/find/findPackageDirectory.js";
-import {findNodeModule$} from "../lib/find/findNodeModule.js";
-import {findNodeModulesDirectory$} from "../lib/find/findNodeModulesDirectory.js";
-import {readdir$} from "../lib/find/readdir.js";
-import {parseModuleSpecifier} from "../lib/find/parseModuleSpecifier.js";
-import {loadPackageJson$} from "../lib/find/loadPackageJson.js";
-import {collectModules$} from "../lib/find/collectModules.js";
-import {createDataUri} from "../lib/find/createDataUri.js";
 
 const p = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(p);
 
 // const storageDrive = new LocalDrive(_.path.resolve(__dirname, ".."));
 const projectFolder = new LocalDrive(path.resolve(__dirname, "../"))
+
 
 test("Find one file up directory (into parent folders using glob (async version)", async t => {
     const [up1] = await findUp(projectFolder, ["*rules*"], "/tests/test-area/martini/");
@@ -80,7 +83,7 @@ test("find files down directory (into sub folders)", async t => {
         hasFile([fourthUpA, fourthUpB, fourthUpC], "snacks-in-margarita.txt") &&
         hasFile([fourthUpA, fourthUpB, fourthUpC], "standard-margarita.txt") &&
         fourthUpC === undefined,
-        "Fourth up contains two files, no test positives"
+        "Fourth up contains two files"
     );
 
     t.absent(fiveUp,  "Although there are snacks in sub-folders we limit with maxLevel option of 4 folder levels");
@@ -111,34 +114,6 @@ test("Find package directory (rxjs)", async t =>{
     t.ok(
         hasFile(packageFiles,  "/tests/test-area", true),
         "Found the mock package.json in the test-area folder"
-    );
-});
-
-test("List files", async t =>{
-    const packageFiles = await rx.firstValueFrom(readdir$(projectFolder, {cwd: "/tests/test-area/martini/", list: true}).pipe(rx.toArray()));
-
-    t.ok(
-        hasFile(packageFiles,  "/tests/test-area/martini/vermouth/vermouthTypes.txt", true, ({key}) => key),
-        "Of the files, vermouthTypes.txt was part of the result."
-    );
-
-    t.ok(
-        hasFile(packageFiles,  "/tests/test-area/martini/standard-martini", true, ({key}) => key),
-        "Of the files, standard-martini was part of the result."
-    );
-});
-
-test("readdir files (reads shallow directory non-recursively both files and directories)", async t =>{
-    const packageFiles = await rx.firstValueFrom(readdir$(projectFolder, {cwd: "/tests/test-area/martini/"}).pipe(rx.toArray()));
-
-    t.ok(
-        hasFile(packageFiles,  "vodkaMartini.txt", true),
-        "Of the files, vodkaMartini.txt file was part of the result."
-    );
-
-    t.ok(
-        hasFile(packageFiles,  "vermouth", true),
-        "Of the files, vermouth directory was part of the result."
     );
 });
 
@@ -247,29 +222,31 @@ test("Parse module specifier", async  t => {
     );
 });
 
-test("Load all package.json root folder towards the specified cwd directory", async t => {
-    const [pkg1, pkg2] = await rx.firstValueFrom(loadPackageJson$(projectFolder, {cwd: "/tests/test-area/martini/"}).pipe(rx.toArray()));
 
-    t.is(pkg1["a-test-key"], "just-testing", "Loaded this library's package.json and read the test key inside.");
-    t.is(pkg2["name"], "test-area-package", "Loaded the mock package.json in the test-area and read the name.");
+test("List files", async t =>{
+    const packageFiles = await rx.firstValueFrom(list$(projectFolder, {cwd: "/tests/test-area/martini/"}).pipe(rx.toArray()));
+
+    t.ok(
+        hasFile(packageFiles,  "/tests/test-area/martini/vermouth/vermouthTypes.txt", true, ({key}) => key),
+        "Of the files, vermouthTypes.txt was part of the result."
+    );
+
+    t.ok(
+        hasFile(packageFiles,  "/tests/test-area/martini/standard-martini", true, ({key}) => key),
+        "Of the files, standard-martini was part of the result."
+    );
 });
 
-test("Collect modules", async t => {
-    const {
-        lodashEs,
-        rxjs
-    } = await rx.firstValueFrom(collectModules$(projectFolder, ["lodash-es", "rxjs"]));
+test("readdir files (reads shallow directory non-recursively both files and directories)", async t =>{
+    const packageFiles = await rx.firstValueFrom(readdir$(projectFolder, {cwd: "/tests/test-area/martini/"}).pipe(rx.toArray()));
 
-    t.ok(_.isString(lodashEs), "We should have lodash main entry code suitable for bundler");
-    t.ok(_.isString(rxjs), "We should have rxjs main entry code suitable for bundler.");
+    t.ok(
+        hasFile(packageFiles,  "vodkaMartini.txt", true),
+        "Of the files, vodkaMartini.txt file was part of the result."
+    );
+
+    t.ok(
+        hasFile(packageFiles,  "vermouth", true),
+        "Of the files, vermouth directory was part of the result."
+    );
 });
-
-test("createDataUri",async (t) => {
-    const {default: theAnswer} = await import(createDataUri(`export default 42`));
-    t.is(theAnswer, 42);
-});
-
-
-function hasFile(arr, file, equals, mapper = x => x) {
-    return !!_.find(arr, (o) => equals ? file === mapper(o) : mapper(o.endsWith(file)));
-}

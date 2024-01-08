@@ -1,12 +1,13 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.21",
+  "version": "0.0.31",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "type": "module",
   "fundme": "bc1q9fpu6muvmg5fj76pyzg3ffjrmksnvfj3c0xva6",
   "scripts": {
-    "test": "node ./tests/all.js"
+    "test": "node ./tests/all.js",
+    "compile-docs": "node ./compile-docs.js"
   },
   "homepage": "https://github.com/zacharygriffee/bring-your-own-storage-utilities#",
   "keywords": [],
@@ -26,6 +27,7 @@
   },
   "devDependencies": {
     "brittle": "^3.3.2",
+    "jsdoc-to-markdown": "^8.0.0",
     "localdrive": "^1.11.1"
   }
 }

@@ -1,2 +1,4 @@
-import "./files.js";
-import "./resolvers.js";
+import "./find.js";
+import "./query.js";
+import "./deploy.js";
+import "./resolve.js";
