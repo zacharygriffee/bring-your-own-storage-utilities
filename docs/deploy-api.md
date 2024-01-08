@@ -54,7 +54,8 @@ for the browser.
 createImportMapFromModules$(myDrive, ["your-minified-library1", "your-minified-library2"], {
     includeBook: {
         "lodash-es": "https://esm.run/lodash-es"
-    }
+    },
+    createScriptEle: true
 }).subscribe(
      (result) => {
          result =
@@ -62,8 +63,8 @@ createImportMapFromModules$(myDrive, ["your-minified-library1", "your-minified-l
                  <script type="importmap">
                      {
                          imports: {
-                             "yourMinifiedLibrary1": "...dataUri",
-                             "yourMinifiedLibrary2": "...dataUri",
+                             "your-minified-library1": "...dataUri",
+                             "your-minified-library2": "...dataUri",
                              "lodash-es": "...dataUriOfLodash"
                          }
                      }
