@@ -61,8 +61,10 @@ Find directories up package.json resides in.</p>
 <dd><p>Parses a npm module specifier.</p>
 </dd>
 <dt><a href="#readdir$">readdir$(source, config)</a> ⇒</dt>
-<dd><p>readdir that wraps either  hyperdrive and hyperbee instance.
+<dd><p>readdir that wraps either hyperdrive and hyperbee instance.
 Aimed to handle hypercore and hyperbee. But, plan on support for more</p>
+<p>readdir will coerce a source to be listable (config.list = true). So even if a source doesn&#39;t have list function,
+it still will work 99% of cases, still tests need to be done to ensure that.</p>
 </dd>
 <dt><a href="#toPath">toPath(urlOrPath)</a> ⇒ <code>string</code></dt>
 <dd><p>Converts a file:// or buffer to path.</p>
@@ -322,15 +324,18 @@ Parses a npm module specifier.
 <a name="readdir$"></a>
 
 ## readdir$(source, config) ⇒
-readdir that wraps either  hyperdrive and hyperbee instance.
+readdir that wraps either hyperdrive and hyperbee instance.
 Aimed to handle hypercore and hyperbee. But, plan on support for more
+
+readdir will coerce a source to be listable (config.list = true). So even if a source doesn't have list function,
+it still will work 99% of cases, still tests need to be done to ensure that.
 
 **Kind**: global function  
 **Returns**: observable emits files from the source.  
 
 | Param | Default | Description |
 | --- | --- | --- |
-| source |  | a hyperbee or hyperdrive (more coming) |
+| source |  | source with functions readdir, get or entry |
 | config |  |  |
 | [config.cwd] | <code>/</code> | Current working directory of the source. |
 | [config.list] |  | Whether to get a detailed list of the files. |

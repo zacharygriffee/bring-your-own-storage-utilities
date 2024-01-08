@@ -4,7 +4,7 @@ import codec from "codecs";
 import b4a from "b4a";
 import {fromRandomAccess, fromRandomAccessCollection} from "../lib/adapt/fromRandomAccess.js";
 import {findDown} from "../lib/find/find-down.js";
-import {findPackageJson, readdir} from "../lib/find/index.js";
+import {findPackageJson, list, readdir} from "../lib/find/index.js";
 import {loadPackageJson} from "../lib/resolve/index.js";
 import {from, toArray, firstValueFrom} from "rxjs";
 import {hasFile} from "./hasFile-test-helper.js";
@@ -85,4 +85,12 @@ test("Using a randomAccess creation function", async (t) => {
 
     const foundFiles = await readdir(files, {cwd: "/martini/",recursive: false});
     t.ok(hasFile(foundFiles, "ginMartini") && foundFiles.length === 3, "Test cwd scopes things correctly returning the file name without slashes.");
+
+    const listOfFiles = await list(files);
+
+    t.is(listOfFiles.length, 4, "List works even though we don't have an explicit function yet for the adapter");
+    const {key, value: {blob}} = listOfFiles.find(({key}) => key === "/martini/ginMartini");
+
+    t.is(key, "/martini/ginMartini");
+    t.is(blob.byteLength, b4a.byteLength("gin,vermouth"), "Get size of the blob apart of the list.");
 });
