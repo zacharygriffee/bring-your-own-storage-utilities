@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.37",
+  "version": "0.0.38",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "type": "module",

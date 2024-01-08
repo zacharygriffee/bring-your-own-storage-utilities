@@ -22,7 +22,7 @@ test("fromRandomAccessStorageCollection", async t => {
 `))
     };
     const files = fromRandomAccessCollection(fileObject);
-    const howtoMakeWatermelonMargarita = await files.get("margarita/watermelon.txt", { valueEncoding: codec("hex") });
+    const howtoMakeWatermelonMargarita = await files.get("margarita/watermelon.txt", { encoding: codec("hex") });
     t.is(howtoMakeWatermelonMargarita, b4a.toString(b4a.from("tequila, triple sec, sour, watermelon puree"), "hex"),
         "get and encoding works! pow");
 
@@ -61,7 +61,7 @@ test("Using a randomAccess creation function", async (t) => {
 
     const files = fromRandomAccess(ramFolder, from(Object.keys(fileObject)));
 
-    const howToMakeGinMartini = await files.get("/martini/ginMartini", { valueEncoding: codec("hex") });
+    const howToMakeGinMartini = await files.get("/martini/ginMartini", { encoding: codec("hex") });
     t.is(howToMakeGinMartini, b4a.toString(b4a.from("gin,vermouth"), "hex"),
         "get and encoding works! pow");
 

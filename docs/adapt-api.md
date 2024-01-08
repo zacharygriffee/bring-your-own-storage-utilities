@@ -62,7 +62,7 @@ Get the entire content of the file. **Careful** with big files.
 | --- | --- | --- | --- |
 | file | <code>string</code> |  | File name to get |
 | [config] |  |  | as well as the configuration below, this is passed to the factory function. |
-| [config.encoding] | <code>string</code> \| <code>Object</code> | <code>&quot;\&quot;utf8\&quot;&quot;</code> | Either a `string` or an object containing an `encode` and `decode` function. |
+| [config.encoding] |  | <code>&#x27;binary&#x27;</code> | Either a `string`, compact-encoding, or codec |
 
 <a name="fromRandomAccess.exists"></a>
 
@@ -150,7 +150,7 @@ Get the entire content of the file. **Careful** with big files.
 | --- | --- | --- | --- |
 | file | <code>string</code> |  |  |
 | [config] |  |  |  |
-| [config.encoding] | <code>string</code> \| <code>Object</code> | <code>&quot;\&quot;utf8\&quot;&quot;</code> | Either a `string` or an object containing an `encode` and `decode` function. |
+| [config.encoding] |  | <code>&#x27;binary&#x27;</code> | Either a `string`, compact-encoding, or codec |
 
 <a name="fromRandomAccessCollection.readdir"></a>
 
