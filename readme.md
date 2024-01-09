@@ -62,6 +62,7 @@ But, query is where you've found a resource now you need to understand that reso
 
 - Is it a file
 - Is it a folder
+- Get entry details of file
 
 ---
 
@@ -84,10 +85,10 @@ You need to deploy something from your source to the end-user.
 
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/deploy-api.md)
 
-- Turn javascript code or any blob into `data uri`
+- [Rollup](https://rollupjs.org/) plugin to bundle files from your source
+  - including pack(inputName, outputName, rollupConfig) function to make the entire process easier
+- Turn javascript string code or any blob into `data uri`. Or just import module with importCode
 - Create an import map of `data uri`'s collected by resolver for a webpage or other reasons.
-- Coming soon: turn any javascript code into web worker baked by protocol channels.
-- Coming soon: option to use `blob urls` as well as `data uri` 
 
 ---
 
@@ -103,33 +104,23 @@ Any adaptors that can help to use common sources. Or any adaptors to pipe the so
 
 - I am aiming to make most of the API rxjs compatible. However, all the functions also have a promise based variation.
 - I am aiming to be completely browser-compatible.
-- I am planning rollup and bundling from the browser.
+- [x] I am planning rollup and bundling from the browser.
 
 
 ---
 
 ## Todo
 
-```ecmascript 6
-/**
-   
-     todo: examples for most functions
-     
-     todo: rollup-plugin for this library 
-           or make a separate library that utilizes
-           these functions
-     
-     todo: make tree-shakable package.json
-
-     todo: ensure browser support with tests
- 
-     todo: ensure rxjs traversals doesn't have memory leaks.
- 
-     todo: more tests
- 
-     todo: test with hyperbee and make it more compatible
- */
-```
+- [x] make random-access-storage adapter
+- [x] rollup-plugin for this library
+- [ ] todo: examples for most functions
+- [ ] todo: make tree-shakable package.json
+- [ ] todo: ensure browser support with tests
+- [ ] todo: ensure rxjs traversals doesn't have memory leaks.
+- [ ] todo: more coverage with tests including fails
+- [ ] todo: support db like structures like hyperbee
+ or make a separate library that utilizes
+ these functions
 
 ## Test it
 
