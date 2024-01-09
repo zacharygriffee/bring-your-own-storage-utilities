@@ -39,12 +39,12 @@ if you need specific way to list the files in the directory. Check the function 
 you can adapt your source storage for it.
 
 # API
-####`import * as BYOSU from "bring-your-own-storage-utilities"`
+#### `import * as BYOSU from "bring-your-own-storage-utilities"`
 Currently, the `deploy` requires a wasm file to be coupled with the javascript code. So the minified version of 
 `bring-your-own-storage-utilities` will need that coupled. I am working on a way to embed it into the minified version.
 
 ## `Find`
-####`import * as Find from "bring-your-own-storage-utilities/find"`
+#### `import * as Find from "bring-your-own-storage-utilities/find"`
 
 
 The find api functions mainly finding stuff in the source storage or making it easier to find stuff.
@@ -59,7 +59,7 @@ The find api functions mainly finding stuff in the source storage or making it e
 
 ---
 ## `Query`
-####`import * as Query from "bring-your-own-storage-utilities/query"`
+#### `import * as Query from "bring-your-own-storage-utilities/query"`
 
 You could say this is pretty similar to find.
 But, query is where you've found a resource now you need to understand that resource
@@ -74,7 +74,7 @@ But, query is where you've found a resource now you need to understand that reso
 ---
 
 ## `Resolve`
-####`import * as Resolve from "bring-your-own-storage-utilities/resolve"`
+#### `import * as Resolve from "bring-your-own-storage-utilities/resolve"`
 
 Have an id, specifier, import, name, extension, hash table, whatever, this section should be for resolving these 
 identifiers and indexers to a resource.
@@ -88,7 +88,7 @@ identifiers and indexers to a resource.
 ---
 
 ## `Deploy`
-####`import * as Deploy from "bring-your-own-storage-utilities/deploy"`
+#### `import * as Deploy from "bring-your-own-storage-utilities/deploy"`
 
 You need to deploy something from your source to the end-user.
 
