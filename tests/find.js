@@ -48,7 +48,7 @@ test("find files up directory (into parent folders) using glob pattern", async t
     t.absent(firstUp, "There are no snack files in the root directory.");
     t.ok(secondUp.endsWith("snacks-in-tests.ini") , "There are snacks in tests folder");
     t.ok(thirdUp.endsWith("snacks-in-test-area.txt"), "There are snacks in the test-area folder");
-    t.ok(fourthUp.endsWith("snacks-in-margarita.txt"), "There are snacks in the folder we started from, margaritas folder.");
+    t.ok(fourthUp.endsWith("snacks-in-margarita.js"), "There are snacks in the folder we started from, margaritas folder.");
     t.absent(fifthUp, "Although there are snacks in sub-folders of /tests/test-area/margaritas/ it is beyond the scope of the traversal.");
 });
 
@@ -80,7 +80,7 @@ test("find files down directory (into sub folders)", async t => {
     );
 
     t.ok(
-        hasFile([fourthUpA, fourthUpB, fourthUpC], "snacks-in-margarita.txt") &&
+        hasFile([fourthUpA, fourthUpB, fourthUpC], "snacks-in-margarita.js") &&
         hasFile([fourthUpA, fourthUpB, fourthUpC], "standard-margarita.txt") &&
         fourthUpC === undefined,
         "Fourth up contains two files"

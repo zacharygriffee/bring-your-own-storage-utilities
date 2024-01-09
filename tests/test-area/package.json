@@ -1,3 +1,4 @@
 {
-  "name": "test-area-package"
+  "name": "test-area-package",
+  "type": "module"
 }
