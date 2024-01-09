@@ -1,13 +1,15 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.61",
+  "version": "0.0.7",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
+  "browser": "index.bundle.js",
   "type": "module",
   "fundme": "bc1q9fpu6muvmg5fj76pyzg3ffjrmksnvfj3c0xva6",
   "scripts": {
     "test": "node ./tests/all.js",
-    "compile-docs": "node ./compile-docs.js"
+    "compile-docs": "node ./compile-docs.js",
+    "bundle": "node ./bundle.js"
   },
   "homepage": "https://github.com/zacharygriffee/bring-your-own-storage-utilities#",
   "keywords": [],
@@ -29,7 +31,36 @@
     "streamx": "^2.15.6",
     "tiny-paths": "^1.0.2"
   },
+  "exports": {
+    ".": {
+      "default": "./index.js",
+      "browser": "./index.bundle.js"
+    },
+    "./adapt": {
+      "default": "./adapt/index.js",
+      "browser": "./adapt/index.bundle.js"
+    },
+    "./deploy": {
+      "default": "./deploy/index.js",
+      "browser": "./deploy/index.bundle.js"
+    },
+    "./find": {
+      "default": "./find/index.js",
+      "browser": "./find/index.bundle.js"
+    },
+    "./query": {
+      "default": "./query/index.js",
+      "browser": "./query/index.bundle.js"
+    },
+    "./resolve": {
+      "default": "./resolve/index.js",
+      "browser": "./resolve/index.bundle.js"
+    }
+  },
   "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-terser": "^0.4.4",
+    "@rollup/plugin-wasm": "^6.2.2",
     "brittle": "^3.3.2",
     "jsdoc-to-markdown": "^8.0.0",
     "localdrive": "^1.11.1",

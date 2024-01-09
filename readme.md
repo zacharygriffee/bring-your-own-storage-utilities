@@ -39,8 +39,13 @@ if you need specific way to list the files in the directory. Check the function 
 you can adapt your source storage for it.
 
 # API
+####`import * as BYOSU from "bring-your-own-storage-utilities"`
+Currently, the `deploy` requires a wasm file to be coupled with the javascript code. So the minified version of 
+`bring-your-own-storage-utilities` will need that coupled. I am working on a way to embed it into the minified version.
 
 ## `Find`
+####`import * as Find from "bring-your-own-storage-utilities/find"`
+
 
 The find api functions mainly finding stuff in the source storage or making it easier to find stuff.
 
@@ -54,11 +59,13 @@ The find api functions mainly finding stuff in the source storage or making it e
 
 ---
 ## `Query`
+####`import * as Query from "bring-your-own-storage-utilities/query"`
 
-You could say this is pretty similar to find. 
+You could say this is pretty similar to find.
 But, query is where you've found a resource now you need to understand that resource
 
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/query-api.md)
+
 
 - Is it a file
 - Is it a folder
@@ -67,6 +74,7 @@ But, query is where you've found a resource now you need to understand that reso
 ---
 
 ## `Resolve`
+####`import * as Resolve from "bring-your-own-storage-utilities/resolve"`
 
 Have an id, specifier, import, name, extension, hash table, whatever, this section should be for resolving these 
 identifiers and indexers to a resource.
@@ -80,6 +88,7 @@ identifiers and indexers to a resource.
 ---
 
 ## `Deploy`
+####`import * as Deploy from "bring-your-own-storage-utilities/deploy"`
 
 You need to deploy something from your source to the end-user.
 
@@ -89,6 +98,9 @@ You need to deploy something from your source to the end-user.
   - including pack(inputName, outputName, rollupConfig) function to make the entire process easier
 - Turn javascript string code or any blob into `data uri`. Or just import module with importCode
 - Create an import map of `data uri`'s collected by resolver for a webpage or other reasons.
+
+Currently, the `deploy` requires a wasm file to be coupled with the javascript code. So it cannot be ran by itself without it. 
+I am working on a way to embed the wasm into the minified version of deploy.
 
 ---
 
@@ -100,13 +112,6 @@ Any adaptors that can help to use common sources. Or any adaptors to pipe the so
 
 - Wrap a collection of [random-access-storage](https://github.com/random-access-storage) instances. 
 
-# Initial plan
-
-- I am aiming to make most of the API rxjs compatible. However, all the functions also have a promise based variation.
-- I am aiming to be completely browser-compatible.
-- [x] I am planning rollup and bundling from the browser.
-
-
 ---
 
 ## Todo
@@ -114,8 +119,8 @@ Any adaptors that can help to use common sources. Or any adaptors to pipe the so
 - [x] make random-access-storage adapter
 - [x] rollup-plugin for this library
 - [ ] todo: examples for most functions
-- [ ] todo: make tree-shakable package.json
-- [ ] todo: ensure browser support with tests
+- [x] todo: make tree-shakable package.json
+- [x] todo: ensure browser support with tests
 - [ ] todo: ensure rxjs traversals doesn't have memory leaks.
 - [ ] todo: more coverage with tests including fails
 - [ ] todo: support db like structures like hyperbee

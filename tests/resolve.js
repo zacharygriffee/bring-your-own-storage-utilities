@@ -1,18 +1,27 @@
-import {test} from "brittle";
-import {nodeLikeResolver, nodeLikeResolver$} from "../lib/resolve/nodeLike.js";
-// import {resolve$ as cascadeResolve$} from "../cascade.js";
+import {test, solo} from "brittle";
 import * as rx from "rxjs";
 import LocalDrive from "localdrive";
-import path from "tiny-paths";
+import path from "../lib/tiny-paths.js";
 import fileURLToPath from "../lib/find/fileURLToPath.js";
-import {collectModules$, loadPackageJson$} from "../lib/resolve/index.js";
+import {
+    collectModules$,
+    loadPackageJson$,
+    nodeLikeResolver,
+    nodeLikeResolver$
+} from "../lib/resolve/index.js";
 import * as _ from "lodash-es";
+import b4a from "b4a";
 
-const p = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(p);
-const projectFolder = new LocalDrive(path.resolve(__dirname, "../"))
+let projectFolder;
+if (globalThis.testHyperDrive) {
+    projectFolder = globalThis.testHyperDrive
+} else {
+    const p = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(p);
+    projectFolder = new LocalDrive(path.resolve(__dirname, "../"));
+}
 
-test("node like resolve",async t => {
+test("node like resolve", async t => {
     const b4a = await rx.firstValueFrom(nodeLikeResolver$(projectFolder, "b4a", "/"));
     const rxjs = await rx.firstValueFrom(nodeLikeResolver$(projectFolder, "rxjs", "/"));
 
@@ -37,8 +46,7 @@ test("Load all package.json root folder towards the specified cwd directory", as
 
 test("Collect modules", async t => {
     const {
-        lodashEs,
-        rxjs
+        lodashEs, rxjs
     } = await rx.firstValueFrom(collectModules$(projectFolder, ["lodash-es", "rxjs"]));
 
     t.ok(_.isString(lodashEs), "We should have lodash main entry code suitable for bundler");

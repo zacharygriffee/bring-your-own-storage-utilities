@@ -1,15 +1,18 @@
-import {solo, test} from "brittle";
-import {createDataUri, rollupFromSourcePlugin} from "../lib/deploy/index.js";
+import {test} from "brittle";
+import {createDataUri, rollupFromSourcePlugin, rollupVirtualPlugin} from "../lib/deploy/index.js";
 import fileURLToPath from "../lib/find/fileURLToPath.js";
-import path from "tiny-paths";
+import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
-import {rollupVirtualPlugin} from "../lib/deploy/rollup-virtual-plugin.js";
 import {pack} from "../lib/deploy/pack.js";
 
-const p = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(p);
-const projectFolder = new LocalDrive(__dirname);
-
+let projectFolder;
+if (globalThis.testHyperDrive) {
+    projectFolder = globalThis.testHyperDrive
+} else {
+    const p = fileURLToPath(import.meta.url);
+    const __dirname = path.dirname(p);
+    projectFolder = new LocalDrive(path.resolve(__dirname, "../"));
+}
 
 test("Rollup from virtual", async t => {
     const result = await pack(
@@ -30,8 +33,8 @@ test("Rollup from virtual", async t => {
 
 test("Rollup with drive source.", async t => {
     const result = await pack(
-        "./test-area/margaritas/makeMargarita.js",
-        "./test-area/margaritas/makeMargarita-bundle.js",
+        "/tests/test-area/margaritas/makeMargarita.js",
+        "/tests/test-area/margaritas/makeMargarita-bundle.js",
         {
             plugins: [
                 // Import string code to be usable in source plugin.
