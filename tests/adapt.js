@@ -1,12 +1,11 @@
-import {test, solo} from "brittle";
+import {test} from "brittle";
 import RAM from "random-access-memory";
 import codec from "codecs";
 import b4a from "b4a";
-import {fromRandomAccess, fromRandomAccessCollection} from "../lib/adapt/fromRandomAccess.js";
-import {findDown} from "../lib/find/find-down.js";
-import {findPackageJson, list, readdir} from "../lib/find/index.js";
-import {loadPackageJson} from "../lib/resolve/index.js";
-import {from, toArray, firstValueFrom} from "rxjs";
+import {fromRandomAccess, fromRandomAccessCollection} from "../dist/adapt.min.js";
+import {findDown, findPackageJson, list, readdir} from "../dist/find.min.js";
+import {loadPackageJson} from "../dist/resolve.min.js";
+import {from} from "rxjs";
 import {hasFile} from "./hasFile-test-helper.js";
 
 test("fromRandomAccessStorageCollection", async t => {

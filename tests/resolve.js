@@ -2,13 +2,13 @@ import {test, solo} from "brittle";
 import * as rx from "rxjs";
 import LocalDrive from "localdrive";
 import path from "../lib/tiny-paths.js";
-import fileURLToPath from "../lib/find/fileURLToPath.js";
+import {fileURLToPath} from "../dist/find.min.js";
 import {
     collectModules$,
     loadPackageJson$,
     nodeLikeResolver,
     nodeLikeResolver$
-} from "../lib/resolve/index.js";
+} from "../dist/resolve.min.js";
 import * as _ from "lodash-es";
 import b4a from "b4a";
 

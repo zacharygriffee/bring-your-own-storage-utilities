@@ -10,29 +10,16 @@
             "imports": {
                 "brittle": "https://ga.jspm.io/npm:brittle@3.3.2/index.js",
                 "ALLTESTS": "./tests/all.js",
-                "./importRollupForNode.js": "./importRollupForBrowser.js",
-                "../lib/adapt/index.js": "../lib/adapt/index.bundle.js",
-                "../lib/deploy/index.js": "../lib/deploy/index.bundle.js",
-                "../lib/find/index.js": "../lib/find/index.bundle.js",
-                "../lib/query/index.js": "../lib/query/index.bundle.js",
-                "../lib/resolve/index.js": "../lib/resolve/index.bundle.js",
+                "rxjs": "https://esm.run/rxjs",
+                "lodash-es": "https://esm.run/lodash-es",
                 "localdrive": "data:text/javascript;charset=utf-8;base64,ZXhwb3J0IGRlZmF1bHQgbnVsbDs=",
                 "random-access-memory": "https://cdn.jsdelivr.net/npm/random-access-memory/+esm",
                 "corestore": "https://cdn.jsdelivr.net/npm/corestore/+esm",
                 "hyperdrive": "https://cdn.jsdelivr.net/npm/hyperdrive/+esm",
-                "rxjs": "https://cdn.jsdelivr.net/npm/rxjs/+esm",
-                "lodash-es": "https://cdn.jsdelivr.net/npm/lodash-es/+esm",
-                "minimatch": "https://esm.run/minimatch",
-                "glob-parent": "https://esm.run/minimatch",
-                "common-dir": "https://ga.jspm.io/npm:common-dir@3.0.1/index.js",
-                "rxjs-etc": "https://esm.run/rxjs-etc",
                 "b4a": "https://esm.run/b4a",
                 "codecs": "https://esm.run/codecs",
                 "tiny-paths": "https://esm.run/tiny-paths",
-                "streamx": "https://esm.run/streamx",
-                "nanoid": "https://esm.run/nanoid",
-                "@rollup/browser": "https://cdn.jsdelivr.net/npm/@rollup/browser@4.9.4/dist/rollup.browser.js/+esm",
-                "rollup": "https://cdn.jsdelivr.net/npm/@rollup/browser@4.9.4/dist/rollup.browser.js/+esm"
+                "@zacharygriffee/rollup-plugin-external-globals": "https://cdn.jsdelivr.net/npm/@zacharygriffee/rollup-plugin-external-globals@0.0.5/+esm"
             },
             "scopes": {
               "https://ga.jspm.io/": {
@@ -89,6 +76,7 @@
         await hyperdrive.put(file, blob);
     }
 
+    console.log("Imports from the import map are there to support the tests.");
     console.time("Time of all tests");
     await import("ALLTESTS");
     test("Test Complete", async t => {

@@ -1,11 +1,16 @@
 import {solo, test} from "brittle";
-import {createDataUri, importCode, rollupFromSourcePlugin, rollupVirtualPlugin, externalGlobals} from "../lib/deploy/index.js";
-import fileURLToPath from "../lib/find/fileURLToPath.js";
+import {
+    createDataUri,
+    importCode,
+    rollupFromSourcePlugin,
+    rollupVirtualPlugin,
+    rollupExternalGlobalsPlugin,
+    pack,
+    svelteCompile$
+} from "../dist/deploy.min.js";
+import {fileURLToPath} from "../dist/find.min.js";
 import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
-import {pack} from "../lib/deploy/pack.js";
-import {svelteCompile$} from "../lib/deploy/svelte-compile.js";
-import * as rx from "rxjs";
 
 let projectFolder;
 if (globalThis.testHyperDrive) {
@@ -84,7 +89,7 @@ test("test externalGlobalsPlugin also test autoImport", async t => {
                         export default theAnswer;
                     `
                 }),
-                externalGlobals({
+                rollupExternalGlobalsPlugin({
                     "some-mysterious-place": "deepThought"
                 }),
             ],

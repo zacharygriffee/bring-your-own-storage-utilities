@@ -13,9 +13,9 @@ import {
     readdir$,
     findUp,
     findUp$,
-    findUpMultiple$
-} from "../lib/find/index.js";
-import fileURLToPath from "../lib/find/fileURLToPath.js";
+    findUpMultiple$,
+    fileURLToPath
+} from "../dist/find.min.js";
 import path from "../lib/tiny-paths.js";
 
 import {hasFile} from "./hasFile-test-helper.js";

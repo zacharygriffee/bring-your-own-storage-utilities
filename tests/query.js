@@ -1,6 +1,6 @@
 import {test} from "brittle";
-import {getEntry} from "../lib/query/index.js";
-import fileURLToPath from "../lib/find/fileURLToPath.js";
+import {getEntry} from "../dist/query.min.js";
+import {fileURLToPath} from "../dist/find.min.js";
 import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
 

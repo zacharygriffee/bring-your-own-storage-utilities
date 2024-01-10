@@ -36,7 +36,7 @@ development when sources may not be always available.</p>
 <dd><p>Built in to deploy.pack but it tells you what id doesn&#39;t resolve in the case of error.
 This is especially helpful when building in browser.</p>
 </dd>
-<dt><a href="#externalGlobals">externalGlobals(globals, [config])</a></dt>
+<dt><a href="#rollupExternalGlobalsPlugin">rollupExternalGlobalsPlugin(globals, [config])</a></dt>
 <dd><p>Replace imports with a variable that is in global scope.</p>
 </dd>
 <dt><a href="#rollupFromSourcePlugin">rollupFromSourcePlugin(source, config)</a></dt>
@@ -217,9 +217,9 @@ couldntResolve((result) => {
     console.error("Couldn't resolve id", result.id, result.from, result);
 })
 ```
-<a name="externalGlobals"></a>
+<a name="rollupExternalGlobalsPlugin"></a>
 
-## externalGlobals(globals, [config])
+## rollupExternalGlobalsPlugin(globals, [config])
 Replace imports with a variable that is in global scope.
 
 **Kind**: global function  
