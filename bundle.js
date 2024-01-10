@@ -1,7 +1,7 @@
 import path from "tiny-paths";
 import LocalDrive from "localdrive";
 import * as rx from "rxjs";
-import {capitalize, camelCase} from "lodash-es";
+import {capitalize, camelCase, toArray} from "lodash-es";
 import {nanoid} from "nanoid";
 import {Find, Adapt, Deploy, Query, Resolve} from "./index.js";
 import terser from "@rollup/plugin-terser";

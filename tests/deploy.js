@@ -1,5 +1,18 @@
 import {solo, test} from "brittle";
-import {
+import {fileURLToPath} from "../dist/find.min.js";
+import path from "../lib/tiny-paths.js";
+import LocalDrive from "localdrive";
+
+// WASM kicking my butt on being 'iso support'
+// Will have to handle another time.
+let deployPkg;
+if (typeof process !== "undefined" && process?.versions?.node) {
+    deployPkg = await import("../lib/deploy/index.js".toString());
+} else {
+    deployPkg = await import("../dist/deploy.min.js");
+}
+
+const {
     createDataUri,
     importCode,
     rollupFromSourcePlugin,
@@ -7,10 +20,7 @@ import {
     rollupExternalGlobalsPlugin,
     pack,
     svelteCompile$
-} from "../dist/deploy.min.js";
-import {fileURLToPath} from "../dist/find.min.js";
-import path from "../lib/tiny-paths.js";
-import LocalDrive from "localdrive";
+} = deployPkg;
 
 let projectFolder;
 if (globalThis.testHyperDrive) {
@@ -20,6 +30,7 @@ if (globalThis.testHyperDrive) {
     const __dirname = path.dirname(p);
     projectFolder = new LocalDrive(path.resolve(__dirname, "../"));
 }
+
 
 test("Rollup from virtual", async t => {
     const result = await pack(
