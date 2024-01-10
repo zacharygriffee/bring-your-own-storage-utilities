@@ -3,9 +3,10 @@ import LocalDrive from "localdrive";
 import * as rx from "rxjs";
 import {capitalize, camelCase} from "lodash-es";
 import {nanoid} from "nanoid";
-import {fileURLToPath, pack, rollupFromSourcePlugin, rollupVirtualPlugin} from "./index.js";
+import {Find, Adapt, Deploy, Query, Resolve} from "./index.js";
 import terser from "@rollup/plugin-terser";
-const p = fileURLToPath(import.meta.url);
+
+const p = Find.fileURLToPath(import.meta.url);
 const __dirname = path.dirname(p);
 
 const projectFolder = new LocalDrive(path.resolve(__dirname, "./"));
@@ -26,16 +27,16 @@ findDownMultiple$(projectFolder, "bundle*.js")
             (codeBook) => {
                 const entryName = "e" + camelCase(nanoid());
                 const entry = Object.keys(codeBook).map(o => `export * as ${capitalize(camelCase(o))} from '${o}'`).join(";");
-                return pack(entryName, "./index.bundle.js", {
+                return Deploy.pack(entryName, "./dist/all.min.js", {
                     plugins: [
-                        rollupVirtualPlugin(
+                        Deploy.rollupVirtualPlugin(
                             {
                                 ...codeBook,
                                 [entryName]: entry
                             }
                         ),
                         terser(),
-                        rollupFromSourcePlugin(projectFolder, {asInput: false, asOutput: true})
+                        Deploy.rollupFromSourcePlugin(projectFolder, {asInput: false, asOutput: true})
                     ]
                 })
             }

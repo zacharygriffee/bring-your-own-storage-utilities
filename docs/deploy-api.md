@@ -36,9 +36,15 @@ development when sources may not be always available.</p>
 <dd><p>Built in to deploy.pack but it tells you what id doesn&#39;t resolve in the case of error.
 This is especially helpful when building in browser.</p>
 </dd>
+<dt><a href="#externalGlobals">externalGlobals(globals, [config])</a></dt>
+<dd><p>Replace imports with a variable that is in global scope.</p>
+</dd>
 <dt><a href="#rollupFromSourcePlugin">rollupFromSourcePlugin(source, config)</a></dt>
 <dd><p>Rollup scripts from a drive source that has <code>get</code> and <code>readdir</code> function.</p>
 <p>Does not currently support code splitting which is something I am very adamant to support.</p>
+</dd>
+<dt><a href="#rollupReplaceThesePlugin">rollupReplaceThesePlugin(globBook)</a> ⇒ <code>string</code> | <code>Object</code></dt>
+<dd><p>Will replace keys with ids.</p>
 </dd>
 <dt><a href="#rollupVirtualPlugin">rollupVirtualPlugin(codeBook, config)</a></dt>
 <dd><p>Rollup virtual code from an object of key/value where key is the module specifier or file name of the code, and value
@@ -183,8 +189,8 @@ This is a wrapper and convenience for the rollup$ and generate$ function.
 | entryName |  | The entry point to begin bundling. Multiple entry points not supported and not planned to be supported. |
 | [outputName] |  | Choose the output name, default is [entryName]-bundle.js |
 | [config] |  | The [configuration for rollup](https://rollupjs.org/javascript-api/), in addition to the following. |
-| [config.autoImport] | <code>false</code> | Will auto import the module into 'module' field. Make sure you trust the modules and source of modules as this can create similar security issues as `eval`. |
-| [config.createUri] | <code>true</code> | Will automatically create [data-uri](#createDataUri) of the bundle for you to share or pack up to an importmap or just execute it by const yourBundledModule = await import(bundleResult.uri). |
+| [config.autoImport] | <code>false</code> | Will auto import the module into 'module' field. Make sure you trust the modules and source of modules as this can create similar security issues as `eval`. As well, turning this to true will make the result object not serializable. |
+| [config.createUri] | <code>true</code> | Will automatically create [data-uri](#createDataUri) of the bundle for you to share or pack up to an importmap or just execute it by const yourBundledModule = await import(bundleResult.uri). If your bundling something very large, you should probably turn this off, as this could be very taxing to memory and space. |
 | [config.libraryName] |  | This is really metadata for end-user to add to the bundle result. This helped me to index in some situations. |
 
 <a name="pack"></a>
@@ -211,6 +217,45 @@ couldntResolve((result) => {
     console.error("Couldn't resolve id", result.id, result.from, result);
 })
 ```
+<a name="externalGlobals"></a>
+
+## externalGlobals(globals, [config])
+Replace imports with a variable that is in global scope.
+
+**Kind**: global function  
+**See**: https://github.com/zacharygriffee/rollup-plugin-external-globals  
+
+| Param | Description |
+| --- | --- |
+| globals | is a moduleId/variableName map. |
+| [config] |  |
+| [config.include] | is an array of glob patterns. If defined, only matched files would be transformed. |
+| [config.exclude] | an array of glob patterns. Matched files would not be transformed. |
+| [config.dynamicWrapper] | is used to specify dynamic imports. |
+
+**Example**  
+```js
+{
+    entry: "main.js",
+    plugins: [
+        rollupVirtual(
+            {
+                "the-answer": `
+  import theAnswer from "some-mysterious-place";
+  globalThis.deepThought = 42;
+  export default theAnswer;
+  `
+            }
+        ),
+        externalGlobals(
+            {
+                // This replaces the import above with the global var deepThought
+                "some-mysterious-place": "deepThought"
+            }
+        )
+    ]
+}
+```
 <a name="rollupFromSourcePlugin"></a>
 
 ## rollupFromSourcePlugin(source, config)
@@ -232,6 +277,17 @@ Does not currently support code splitting which is something I am very adamant t
 | [config.asOutput] | <code>!!source.put</code> | Whether this source serves as an output of the bundle. Currently, only supports sources with a put function. Will automatically detect whether the source has put function. This will detect the output name from the rollup.output configuration. |
 | [config.excludes] |  | Exclude ids / specifiers from being imported from this source. |
 | [config.jsCode] |  | Mapper to handle post processing of code before being sent to the output source. |
+
+<a name="rollupReplaceThesePlugin"></a>
+
+## rollupReplaceThesePlugin(globBook) ⇒ <code>string</code> \| <code>Object</code>
+Will replace keys with ids.
+
+**Kind**: global function  
+
+| Param | Description |
+| --- | --- |
+| globBook | A key/value of glob in which to replace, and the id/moduleName to replace it with. |
 
 <a name="rollupVirtualPlugin"></a>
 

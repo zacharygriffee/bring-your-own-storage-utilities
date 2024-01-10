@@ -1,9 +1,11 @@
-import {test} from "brittle";
-import {createDataUri, rollupFromSourcePlugin, rollupVirtualPlugin} from "../lib/deploy/index.js";
+import {solo, test} from "brittle";
+import {createDataUri, importCode, rollupFromSourcePlugin, rollupVirtualPlugin, externalGlobals} from "../lib/deploy/index.js";
 import fileURLToPath from "../lib/find/fileURLToPath.js";
 import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
 import {pack} from "../lib/deploy/pack.js";
+import {svelteCompile$} from "../lib/deploy/svelte-compile.js";
+import * as rx from "rxjs";
 
 let projectFolder;
 if (globalThis.testHyperDrive) {
@@ -18,14 +20,14 @@ test("Rollup from virtual", async t => {
     const result = await pack(
         "index.js",
         {
-        plugins: [
-            rollupVirtualPlugin({
-                "index.js": `
+            plugins: [
+                rollupVirtualPlugin({
+                    "index.js": `
                     export default 42;
                 `
-            })
-        ]
-    });
+                })
+            ]
+        });
 
     const {default: theAnswer} = await import(result.uri);
     t.is(theAnswer, 42);
@@ -70,7 +72,46 @@ test("Rollup with drive source.", async t => {
     t.comment("You can view the bundled result at tests/test-area/maragritas/makeMargarita-bundle.js");
 });
 
-test("createDataUri",async (t) => {
+test("test externalGlobalsPlugin also test autoImport", async t => {
+    const {module: {default: result}} = await pack(
+        "the-answer",
+        {
+            plugins: [
+                rollupVirtualPlugin({
+                    "the-answer": `
+                        import theAnswer from "some-mysterious-place";
+                        globalThis.deepThought = 42;
+                        export default theAnswer;
+                    `
+                }),
+                externalGlobals({
+                    "some-mysterious-place": "deepThought"
+                }),
+            ],
+            autoImport: true
+        }
+    );
+
+    t.is(result, 42, "Override an import with global and we auto import module to the module field..");
+});
+
+// solo("Compile svelte", async (t) => {
+//
+//
+//     const compileInfo = await rx.firstValueFrom(
+//         svelteCompile$(`
+//             <script>
+//                 export let x = 5;
+//             </script>
+//
+//             <h1>The Number is {x}!</h1>
+//         `)
+//     );
+//
+//     debugger;
+// });
+
+test("createDataUri", async (t) => {
     const {default: theAnswer} = await import(createDataUri(`export default 42`));
     t.is(theAnswer, 42);
 });
