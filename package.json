@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.73",
+  "version": "0.0.74",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "browser": "index.bundle.js",
@@ -37,24 +37,24 @@
       "browser": "./index.bundle.js"
     },
     "./adapt": {
-      "default": "./adapt/lib/index.js",
-      "browser": "./adapt/lib/index.bundle.js"
+      "default": "./lib/adapt/index.js",
+      "browser": "./lib/adapt/index.bundle.js"
     },
     "./deploy": {
-      "default": "./deploy/lib/index.js",
-      "browser": "./deploy/lib/index.bundle.js"
+      "default": "./lib/deploy/index.js",
+      "browser": "./lib/deploy/index.bundle.js"
     },
     "./find": {
-      "default": "./find/lib/index.js",
-      "browser": "./find/lib/index.bundle.js"
+      "default": "./lib/find/index.js",
+      "browser": "./lib/find/index.bundle.js"
     },
     "./query": {
-      "default": "./query/lib/index.js",
-      "browser": "./query/lib/index.bundle.js"
+      "default": "./lib/query/index.js",
+      "browser": "./lib/query/index.bundle.js"
     },
     "./resolve": {
-      "default": "./resolve/lib/index.js",
-      "browser": "./resolve/lib/index.bundle.js"
+      "default": "./lib/resolve/index.js",
+      "browser": "./lib/resolve/index.bundle.js"
     }
   },
   "devDependencies": {
