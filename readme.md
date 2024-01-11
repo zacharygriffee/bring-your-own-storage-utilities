@@ -40,8 +40,9 @@ you can adapt your source storage for it.
 
 # API
 #### `import * as BYOSU from "bring-your-own-storage-utilities"`
-Currently, the `deploy` requires a wasm file to be coupled with the javascript code. So the minified version of 
-`bring-your-own-storage-utilities` will need that coupled. I am working on a way to embed it into the minified version.
+#### `import {Adapt, Deploy, Find, Query, Resolve} from "bring-your-own-storage-utilities"`
+
+> Deploy makes the 'all import' above large. If you don't need deploy, import the ones below individually.
 
 ## `Find`
 #### `import * as Find from "bring-your-own-storage-utilities/find"`
@@ -92,15 +93,15 @@ identifiers and indexers to a resource.
 
 You need to deploy something from your source to the end-user.
 
+
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/deploy-api.md)
 
 - [Rollup](https://rollupjs.org/) plugin to bundle files from your source
   - including pack(inputName, outputName, rollupConfig) function to make the entire process easier
-- Turn javascript string code or any blob into `data uri`. Or just import module with importCode
-- Create an import map of `data uri`'s collected by resolver for a webpage or other reasons.
+- [Svelte](https://svelte.dev/) plugin to compile .svelte files from browser for sources in the browser.
+- [Terser](https://terser.org/) plugin for rollup that works in browser.
 
-Currently, the `deploy` requires a wasm file to be coupled with the javascript code. So it cannot be ran by itself without it. 
-I am working on a way to embed the wasm into the minified version of deploy.
+> Deploy is like an SDK. So, of course it's going to be a large script.
 
 ---
 
@@ -116,16 +117,12 @@ Any adaptors that can help to use common sources. Or any adaptors to pipe the so
 
 ## Todo
 
-- [x] make random-access-storage adapter
-- [x] rollup-plugin for this library
 - [ ] todo: examples for most functions
-- [x] todo: make tree-shakable package.json
-- [x] todo: ensure browser support with tests
 - [ ] todo: ensure rxjs traversals doesn't have memory leaks.
 - [ ] todo: more coverage with tests including fails
+- [ ] todo: adapter to transform source into a node:fs interface
 - [ ] todo: support db like structures like hyperbee
- or make a separate library that utilizes
- these functions
+- [ ] todo: document on how sources are consumed and interfaces they should have
 
 ## Test it
 
