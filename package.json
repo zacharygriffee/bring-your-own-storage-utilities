@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.76",
+  "version": "0.0.78",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "browser": "index.bundle.js",
@@ -32,6 +32,7 @@
     "rxjs-etc": "^10.6.2",
     "streamx": "^2.15.6",
     "svelte": "^4.2.8",
+    "terser": "^5.26.0",
     "tiny-paths": "^1.0.2"
   },
   "exports": {
@@ -46,6 +47,10 @@
     "./deploy": {
       "default": "./lib/deploy/index.js",
       "browser": "./dist/deploy.min.js"
+    },
+    "./dist/**/*.js": {
+      "default": "./dist/**/*.js",
+      "browser": "./dist/**/*.js"
     },
     "./find": {
       "default": "./lib/find/index.js",
