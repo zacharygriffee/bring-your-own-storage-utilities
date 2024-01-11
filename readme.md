@@ -22,6 +22,16 @@ attempt to reduce dependency. They work just fine right now, but more can be don
 ---
 ---
 
+## Demonstration
+
+You can test this repo right now, in your browser. You can view the developer console (F12) when you enter to see the
+very tests you can run in node. It takes a bit of startup time because of the supporting test tools.
+
+[Live test in the browser](https://rawcdn.githack.com/zacharygriffee/bring-your-own-storage-utilities/4dc361ab099aad1488879428cc6876e524d1fa65/browser-tests.html)
+
+- Loads an in-memory drive source in the browser
+- Tests every API listed below
+- Rollup and Svelte both compile and run right in the browser.
 
 ## Installation
 
