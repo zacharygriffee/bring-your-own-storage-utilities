@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.85",
+  "version": "0.0.86",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "browser": "index.bundle.js",
@@ -18,7 +18,7 @@
   "a-test-key": "just-testing",
   "dependencies": {
     "@rollup/browser": "^4.9.4",
-    "@rollup/plugin-replace": "^5.0.5",
+    "@rollup/plugin-terser": "^0.4.4",
     "@zacharygriffee/rollup-plugin-external-globals": "^0.0.5",
     "b4a": "^1.6.4",
     "codecs": "^3.1.0",
@@ -66,15 +66,11 @@
     }
   },
   "devDependencies": {
+    "@rollup/plugin-replace": "^5.0.5",
     "@rollup/plugin-commonjs": "^25.0.7",
-    "@rollup/plugin-terser": "^0.4.4",
-    "@rollup/plugin-wasm": "^6.2.2",
     "brittle": "^3.3.2",
     "jsdoc-to-markdown": "^8.0.0",
     "localdrive": "^1.11.1",
-    "node-fetch": "^3.3.2",
-    "random-access-memory": "^6.2.0",
-    "rollup-plugin-base64": "^1.0.1",
-    "undici": "^6.3.0"
+    "random-access-memory": "^6.2.0"
   }
 }
