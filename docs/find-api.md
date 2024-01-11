@@ -373,8 +373,6 @@ const sourceInterface = (source, defaultProps) => ({
 
 const sourceInstance = new WhateverSource();
 readdir$(sourceInterface(sourceInstance, { getProps }));
-
-- [x] Incorporate query.getEntry
 ```
 <a name="readdir"></a>
 
