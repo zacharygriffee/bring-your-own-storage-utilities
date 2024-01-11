@@ -2,7 +2,7 @@ import {solo, test} from "brittle";
 import {fileURLToPath} from "../dist/find.min.js";
 import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
-
+import * as rx from "rxjs";
 // WASM kicking my butt on being 'iso support'
 // Will have to handle another time.
 let deployPkg;
@@ -19,7 +19,9 @@ const {
     rollupVirtualPlugin,
     rollupExternalGlobalsPlugin,
     pack,
-    svelteCompile$
+    svelteCompile$,
+    rollupSveltePluginNoServer,
+    rollupTerserBrowserPlugin
 } = deployPkg;
 
 let projectFolder;
@@ -111,21 +113,59 @@ test("test externalGlobalsPlugin also test autoImport", async t => {
     t.is(result, 42, "Override an import with global and we auto import module to the module field..");
 });
 
-// solo("Compile svelte", async (t) => {
-//
-//
-//     const compileInfo = await rx.firstValueFrom(
-//         svelteCompile$(`
-//             <script>
-//                 export let x = 5;
-//             </script>
-//
-//             <h1>The Number is {x}!</h1>
-//         `)
-//     );
-//
-//     debugger;
-// });
+test("Compile svelte", async (t) => {
+    const result = await pack("entry.js", {
+        plugins: [
+            rollupVirtualPlugin({
+                "component.svelte": `
+                        <script context="module">
+                            export function eatSnacks(snack) {
+                                return \`You ate \${snack}\`
+                            }
+                        <\/script>
+                        <script>
+                            export let theAnswer = 5;
+                        <\/script>
+                        
+                        <h1>deepThought says the answer is: {theAnswer}</h1>
+                        <h2>Brought to you by svelte.</h2>
+                 `,
+                "entry.js": `
+                    // This only really has to happen once per page/SPA, but adds around 40k bytes.
+                    // See docs for rollupSveltePluginNoServer about how these specific minified versions add 
+                    // Svelte to the global scope to keep the instances correct.
+                    // to import these for each and every component like svelte does which is okay for normal operations
+                    // but for p2p ops or in browser ops, component being small with a heavier 'initial' load is I feel better.
+                    import "./dist/svelte/svelte-internal.min.js";
+                    import "./dist/svelte/disclose-version.js";
+                   
+                    export {default, eatSnacks} from "component.svelte";
+                `
+            }),
+            rollupSveltePluginNoServer(),
+            // we not gonna have a physical copy of this stored so asOutput false
+            rollupFromSourcePlugin(projectFolder, {asOutput: false}),
+            // If you're going to use terser in browser, use this not rollup version.
+            rollupTerserBrowserPlugin()
+        ],
+        autoImport: true
+    });
+    t.absent(result.code.includes("svelte/internal"), "Svelte imports internal files at top of each component, we don't do that here.");
+    t.ok(result.module.eatSnacks('french fries'), "You ate french fries. Proof svelte is in.");
+    if (typeof window !== "undefined" && typeof document !== "undefined") {
+        const ele = document.getElementById("placeToPutSvelteTestStuff");
+        const {default: SvelteComponent} = result.module;
+
+        const svelteInstance = new SvelteComponent({
+            target: ele,
+            props: {
+                theAnswer: 42
+            }
+        });
+
+        t.is(svelteInstance.theAnswer, 42);
+    }
+});
 
 test("createDataUri", async (t) => {
     const {default: theAnswer} = await import(createDataUri(`export default 42`));

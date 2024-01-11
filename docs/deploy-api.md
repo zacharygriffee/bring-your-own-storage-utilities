@@ -76,6 +76,9 @@ modified minification of svelte files that globalizes itself to match the global
 <p>Or you can import your own svelte files (e.g. import map or script ele tag) and ensure that you add them to global scope
 under the names of the above list.</p>
 </dd>
+<dt><a href="#rollupTerserBrowserPlugin">rollupTerserBrowserPlugin([comments])</a></dt>
+<dd><p>Terser plugin that works with browser.</p>
+</dd>
 <dt><a href="#rollupVirtualPlugin">rollupVirtualPlugin(codeBook, config)</a></dt>
 <dd><p>Rollup virtual code from an object of key/value where key is the module specifier or file name of the code, and value
 is where the code of the module is. Imports work as well, where you can import from another virtual or from an id
@@ -91,6 +94,9 @@ and value is the module specifier to pull from. Sometimes all you need is to rem
 </dd>
 <dt><a href="#svelteCompile$">svelteCompile$(code, config)</a></dt>
 <dd><p>Compile svelte code into javascript, css, and code map.</p>
+</dd>
+<dt><a href="#terser">terser(code, [comments])</a> ⇒ <code>Promise.&lt;MinifyOutput&gt;</code></dt>
+<dd><p>Exposure of terser plugin. Operates only on module.Leaves in &#39;debugger&#39;.</p>
 </dd>
 </dl>
 
@@ -368,6 +374,17 @@ under the names of the above list.
 | --- | --- |
 | config | This is the same configuration as [svelteCompile$](#svelteCompile$) |
 
+<a name="rollupTerserBrowserPlugin"></a>
+
+## rollupTerserBrowserPlugin([comments])
+Terser plugin that works with browser.
+
+**Kind**: global function  
+
+| Param | Default | Description |
+| --- | --- | --- |
+| [comments] | <code>false</code> | Whether comments are left in. |
+
 <a name="rollupVirtualPlugin"></a>
 
 ## rollupVirtualPlugin(codeBook, config)
@@ -460,4 +477,16 @@ Compile svelte code into javascript, css, and code map.
 | [config.dev] | <code>false</code> | Whether to compile in dev mode (see svelte.compiler docs) |
 | [config.accessors] | <code>true</code> | In svelte.compiler this is default false. To work between components from p2p land, accessors=true made it easier for me. |
 | [config.injectCss] | <code>true</code> | Non-worker browser only option; this will be automatically become false if ran in node.js or webworker. Will inject the css directly into the dom. If you are running a long term app, with many different changes, you might want to declare this false due to the fact that, css is only appended to the doc, but never removed. So you may want to handle th is differently if that is your use-case. |
+
+<a name="terser"></a>
+
+## terser(code, [comments]) ⇒ <code>Promise.&lt;MinifyOutput&gt;</code>
+Exposure of terser plugin. Operates only on module.Leaves in 'debugger'.
+
+**Kind**: global function  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| code | <code>string</code> |  | code |
+| [comments] | <code>boolean</code> | <code>false</code> | Keep the comments around? |
 

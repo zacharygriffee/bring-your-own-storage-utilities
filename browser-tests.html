@@ -18,7 +18,8 @@
                 "hyperdrive": "https://cdn.jsdelivr.net/npm/hyperdrive/+esm",
                 "b4a": "https://esm.run/b4a",
                 "codecs": "https://esm.run/codecs",
-                "tiny-paths": "https://esm.run/tiny-paths"
+                "tiny-paths": "https://esm.run/tiny-paths",
+                "@rollup/plugin-terser": "https://esm.run/@rollup/plugin-terser"
             },
             "scopes": {
               "https://ga.jspm.io/": {
@@ -47,7 +48,18 @@
     // Emulate the test-area
     const zeroByte = b4a.alloc(0);
 
+    // This is merely to demonstrate the minified scripts being pulled from the hyperdrive.
+    // you could just as easily import from the import map, or whatever way to get svelte into
+    // global scope.
+    const svelteInternalResponse = await fetch("https://cdn.jsdelivr.net/npm/bring-your-own-storage-utilities/dist/svelte/svelte-internal.min.js");
+    const svelteInternalCode = b4a.from(await svelteInternalResponse.arrayBuffer());
+    const svelteVersionResponse = await fetch("https://cdn.jsdelivr.net/npm/bring-your-own-storage-utilities/dist/svelte/disclose-version.js")
+    const svelteVersionCode = b4a.from(await svelteVersionResponse.arrayBuffer());
+
     const emulateThis = {
+        // Lets demonstrate pulling live scripts from hyperdrive
+        "./dist/svelte/svelte-internal.min.js": svelteInternalCode,
+        "./dist/svelte/disclose-version.js": svelteVersionCode,
         // Mocked node_modules to satisfy tests.
         "/node_modules/lodash-es/package.json": b4a.from(`{"browser":"index.js","main":"index.js"}`),
         "/node_modules/b4a/package.json": b4a.from(`{"browser":"index.js","main":"index.js"}`),
@@ -89,5 +101,6 @@
 <h1>Testing -- be patient while bootstraping the test page with test tools.</h1>
 <h2>Background will go green once test is complete</h2>
 <h3>Keep dev tools closed until test complete for better time stamps</h3>
+<div id="placeToPutSvelteTestStuff"></div>
 </body>
 </html>
