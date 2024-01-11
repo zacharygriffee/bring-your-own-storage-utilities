@@ -65,9 +65,9 @@ Find directories up package.json resides in.</p>
 Aimed to handle hypercore and hyperbee. But, plan on support for more</p>
 <p>readdir will coerce a source to be listable (config.list = true). So even if a source doesn&#39;t have list function,
 it still will work 99% of cases, still tests need to be done to ensure that.</p>
-<ul>
-<li><input checked="" disabled="" type="checkbox"> Incorporate query.getEntry</li>
-</ul>
+<p>the readdir of the source can be a <code>cold observable</code> an <code>async iterable</code> an <code>array of keys</code> an <code>async generator</code>,
+anything that <a href="https://rxjs.dev/api/index/function/from">rxjs.from</a> will accept. You could also design the source
+as an interface like in this pseudocode example</p>
 </dd>
 <dt><a href="#readdir">readdir()</a></dt>
 <dd><p>Async version of readdir$. Returns array of the files and folders</p>
@@ -337,7 +337,9 @@ Aimed to handle hypercore and hyperbee. But, plan on support for more
 readdir will coerce a source to be listable (config.list = true). So even if a source doesn't have list function,
 it still will work 99% of cases, still tests need to be done to ensure that.
 
-- [x] Incorporate query.getEntry
+the readdir of the source can be a `cold observable` an `async iterable` an `array of keys` an `async generator`,
+anything that [rxjs.from](https://rxjs.dev/api/index/function/from) will accept. You could also design the source
+as an interface like in this pseudocode example
 
 **Kind**: global function  
 **Returns**: observable emits files from the source.  
@@ -345,12 +347,35 @@ it still will work 99% of cases, still tests need to be done to ensure that.
 | Param | Default | Description |
 | --- | --- | --- |
 | source |  | source with functions readdir, get or entry |
-| config |  |  |
+| config |  | These configuration options apply to the readdir$ AND they are passed to the source.readdir second argument |
 | [config.cwd] | <code>/</code> | Current working directory of the source. |
 | [config.list] |  | Whether to get a detailed list of the files. |
 | [config.recursive] |  | Whether to recursively dig into folders only applies if config.list is true |
 | [config.trimPath] | <code>true</code> | To trim the path of any dots and slashes, a db may not start with the leading chars. This is default true because Hyperdrive handles path prefixes |
 
+**Example**  
+```js
+const sourceInterface = (source, defaultProps) => ({
+      exists(filePath) {
+          // Having an exist function will help speed up
+          // some find and query functions
+          return !!source.exists(filePath);
+      }.
+      get(filePath, config = {}) {
+          return source.get(filePath, {...(defaultProps.getProps ?? {}), ... config});
+      },
+    * readdir(path, config = {}) {
+        for (const file of source.pathKeys) {
+            yield file;
+        }
+    }
+});
+
+const sourceInstance = new WhateverSource();
+readdir$(sourceInterface(sourceInstance, { getProps }));
+
+- [x] Incorporate query.getEntry
+```
 <a name="readdir"></a>
 
 ## readdir()
