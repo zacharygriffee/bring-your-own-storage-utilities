@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.83",
+  "version": "0.0.84",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "browser": "index.bundle.js",
