@@ -57,12 +57,12 @@ const sourceInterface = (source, defaultProps) => ({
     async exists(filePath) {
       // Having an exist function will help speed up 
       // some find and query functions
-      return mapStorage.has(filePath);
+      return source.has(filePath);
     },
     async get(filePath, config = {}) {
         const {
             capitalize
-        } = config;
+        } = {...defaultProps, ...config};
         
         if (capitalize) filePath = capitalizeFunction(filePath);
         
@@ -71,18 +71,22 @@ const sourceInterface = (source, defaultProps) => ({
     // readdir can be a cold observable, array, iterable, async iterable, readable stream,
     // async generator, regular generator, pretty much anything rxjs.from will accept.
     // But the first argument will be a path that will be queried and a config object.
-    // and it should return just the filename no paths. 
+    // and it should return just the filename (no paths) in directory `path`  
     * readdir(path, config = {}) {
-        // Map.prototype.keys() is enough alone to return as a readdir, but
-        // over-engineering for the example
         for (const file of source.keys()) {
+            // You would do the path handling here.
             yield file;
         }
     }
 });
 
-const sourceInstance = new WhateverSource();
-readdir$(sourceInterface(sourceInstance, { getProps: config }));
+readdir$(
+    sourceInterface(mapStorage, { capitalize: true })
+).subscribe(
+    file => {
+        // files enumerated
+    }
+);
 ```
 
 # API
