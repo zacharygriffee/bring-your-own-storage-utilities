@@ -42,6 +42,8 @@ This is especially helpful when building in browser.</p>
 <dt><a href="#rollupFromSourcePlugin">rollupFromSourcePlugin(source, config)</a></dt>
 <dd><p>Rollup scripts from a drive source that has <code>get</code> and <code>readdir</code> function.</p>
 <p>Does not currently support code splitting which is something I am very adamant to support.</p>
+<p>if config.asOutput=true and the source supports metadata e.g. source.put(key, value, { metadata })
+result information of the bundle will be added there.</p>
 </dd>
 <dt><a href="#rollupReplaceThesePlugin">rollupReplaceThesePlugin(globBook)</a> ⇒ <code>string</code> | <code>Object</code></dt>
 <dd><p>Will replace keys with ids.</p>
@@ -305,6 +307,9 @@ Rollup scripts from a drive source that has `get` and `readdir` function.
 
 Does not currently support code splitting which is something I am very adamant to support.
 
+if config.asOutput=true and the source supports metadata e.g. source.put(key, value, { metadata })
+result information of the bundle will be added there.
+
 **Kind**: global function  
 **Todo**
 
@@ -313,7 +318,7 @@ Does not currently support code splitting which is something I am very adamant t
 
 | Param | Default | Description |
 | --- | --- | --- |
-| source |  | A source that has at least a `get` and `readdir` function |
+| source |  | A source that has at least a `get` function |
 | config |  |  |
 | [config.asInput] | <code>true</code> | Whether this source serves as an input of scripts. |
 | [config.asOutput] | <code>!!source.put</code> | Whether this source serves as an output of the bundle. Currently, only supports sources with a put function. Will automatically detect whether the source has put function. This will detect the output name from the rollup.output configuration. |
