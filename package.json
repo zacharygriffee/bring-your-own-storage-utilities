@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.89",
+  "version": "0.0.90",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "browser": "index.bundle.js",
@@ -27,6 +27,8 @@
     "lodash-es": "^4.17.21",
     "minimatch": "^9.0.3",
     "nanoid": "^5.0.4",
+    "path-to-regexp": "^6.2.1",
+    "query-string": "^8.1.0",
     "rollup": "^4.9.4",
     "rxjs": "^7.8.1",
     "rxjs-etc": "^10.6.2",
@@ -66,8 +68,8 @@
     }
   },
   "devDependencies": {
-    "@rollup/plugin-replace": "^5.0.5",
     "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-replace": "^5.0.5",
     "brittle": "^3.3.2",
     "jsdoc-to-markdown": "^8.0.0",
     "localdrive": "^1.11.1",
