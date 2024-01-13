@@ -1,14 +1,11 @@
 import {solo, test} from "brittle";
-import {getEntry, createReadStream$, createReadStream} from "../dist/query.min.js";
+import {getEntry, createReadStream$, createReadStream, getType, getType$} from "../dist/query.min.js";
 import {fileURLToPath} from "../dist/find.min.js";
 import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
 import {firstValueFrom} from "rxjs";
 import b4a from "b4a";
-
-import {} from "../lib/query/index.js";
 import * as rx from "rxjs";
-import {getType, getType$} from "../lib/query/get-type.js";
 
 let projectFolder;
 if (globalThis.testHyperDrive) {
