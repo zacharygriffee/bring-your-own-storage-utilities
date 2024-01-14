@@ -143,6 +143,25 @@ identifiers and indexers to a resource.
 
 ---
 
+## `Adapt`
+
+Any adaptors that can help to use common sources. Or any adaptors to pipe the source to be consumed by other API.
+
+### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/adapt-api.md)
+
+- Wrap a collection of [random-access-storage](https://github.com/random-access-storage) instances.
+
+---
+## `Transport`
+
+You need data from your source to go from point A to point B. Transport will help.
+
+### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/transport-api.md)
+
+- Fetch hook to fetch from your source or to create your own hooks.
+
+---
+
 ## `Deploy`
 
 #### `import * as Deploy from "bring-your-own-storage-utilities/deploy"`
@@ -152,21 +171,12 @@ You need to deploy something from your source to the end-user.
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/deploy-api.md)
 
 - [Rollup](https://rollupjs.org/) plugin to bundle files from your source
-    - including pack(inputName, outputName, rollupConfig) function to make the entire process easier
+  - including pack(inputName, outputName, rollupConfig) function to make the entire process easier
 - [Svelte](https://svelte.dev/) plugin to compile .svelte files from browser for sources in the browser.
-- [Terser](https://terser.org/) plugin for rollup that works in browser.
+- [Terser](https://terser.org/) plugin for rollup that works in browser 
 
-> Deploy is like an SDK. So, of course it's going to be a large script.
-
----
-
-## `Adapt`
-
-Any adaptors that can help to use common sources. Or any adaptors to pipe the source to be consumed by other API.
-
-### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/adapt-api.md)
-
-- Wrap a collection of [random-access-storage](https://github.com/random-access-storage) instances.
+> It is on the todo list to separate deploy from the 'all' import bundle. 
+> It may be necessary in the future to import deploy separately due to its size. 
 
 ---
 
@@ -178,6 +188,8 @@ Any adaptors that can help to use common sources. Or any adaptors to pipe the so
 - [ ] todo: adapter to transform source into a node:fs interface
 - [ ] todo: support db like structures like hyperbee
 - [ ] todo: document on how sources are consumed and interfaces they should have
+- [ ] todo: separate very large deploy (currently 4mb) from the rest as a `sdk`
+- [ ] todo: Transport: implement service worker proxy to source for proper import support
 
 ## Test it
 

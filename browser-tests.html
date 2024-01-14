@@ -47,6 +47,7 @@
 
     // Emulate the test-area
     const zeroByte = b4a.alloc(0);
+    const oneByte = b4a.alloc(1);
 
     // This is merely to demonstrate the minified scripts being pulled from the hyperdrive.
     // you could just as easily import from the import map, or whatever way to get svelte into
@@ -55,6 +56,7 @@
     const svelteInternalCode = b4a.from(await svelteInternalResponse.arrayBuffer());
     const svelteVersionResponse = await fetch("https://cdn.jsdelivr.net/npm/bring-your-own-storage-utilities/dist/svelte/disclose-version.js")
     const svelteVersionCode = b4a.from(await svelteVersionResponse.arrayBuffer());
+    const getSelfHtml = b4a.from(document.getElementsByTagName("html")[0].outerHTML.slice(0, 100));
 
     const emulateThis = {
         // Lets demonstrate pulling live scripts from hyperdrive
@@ -79,8 +81,10 @@
         "/tests/test-area/margaritas/standard-margarita.txt": zeroByte,
         "/tests/test-area/margaritas/watermelon/snacks-in-watermelon-margarita.txt": zeroByte,
         "tests/test-area/martini/standard-martini": zeroByte,
-        "tests/test-area/martini/vodkaMartini.txt": zeroByte,
-        "tests/test-area/martini/vermouth/vermouthTypes.txt": zeroByte
+        "tests/test-area/martini/vodkaMartini.txt": b4a.from("2.5 vodka, 0.75 vermouth"),
+        "tests/test-area/martini/vermouth/vermouthTypes.txt": zeroByte,
+        "browser-tests.html": getSelfHtml,
+        "readme.md": oneByte
     };
 
     for await (const [file, blob] of Object.entries(emulateThis)) {

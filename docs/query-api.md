@@ -35,7 +35,7 @@ entry object will have at least:
     value // details of the file, or undefined if it doesn't exist.
 }
 </pre></dd>
-<dt><a href="#getType$">getType$(source, key)</a> ⇒ <code>Observable.&lt;string&gt;</code></dt>
+<dt><a href="#getType$">getType$(source, key, [config])</a> ⇒ <code>Observable.&lt;string&gt;</code></dt>
 <dd><p>Gets the mime type of the file. This function analyzes the first 100 bytes of the file for the magic bytes, if it
 cannot be determined by the byte data, it will then be inferred from the extension of the key. If still it cannot
 be determined a null will be returned.</p>
@@ -115,6 +115,7 @@ does not have a native createReadStream function e.g. one that only has source.g
 | [config.end] | <code>data.length</code> | Inclusive byte end of read stream. |
 | [config.length] |  | If config.end is not set, how many bytes from config.start not inclusive. |
 | [config.highWaterMark] |  | createReadStream will automatically chunkify to the highWaterMark any stream passed through. This will help to control the flow. |
+| [config.wait] | <code>false</code> | a common setting on network storage sources, unless you really want to wait, I have set the default automatically false to only queue locally cached resources. |
 
 <a name="getEntry$"></a>
 
@@ -153,17 +154,19 @@ entry object will have at least:
 
 <a name="getType$"></a>
 
-## getType$(source, key) ⇒ <code>Observable.&lt;string&gt;</code>
+## getType$(source, key, [config]) ⇒ <code>Observable.&lt;string&gt;</code>
 Gets the mime type of the file. This function analyzes the first 100 bytes of the file for the magic bytes, if it
 cannot be determined by the byte data, it will then be inferred from the extension of the key. If still it cannot
 be determined a null will be returned.
 
 **Kind**: global function  
 
-| Param | Description |
-| --- | --- |
-| source | The source |
-| key | The key or filename or indexor of the resource. |
+| Param | Default | Description |
+| --- | --- | --- |
+| source |  | The source |
+| key |  | The key or filename or indexor of the resource. |
+| [config] |  | Any additional configuration to pass to the createReadStream of the source. The start and length are non-optional. |
+| [config.wait] | <code>false</code> | Some sources.createReadStream have this argument where they wait for the resource to be available. You can override this behavior and wait, some sources also may have a timeout argument to limit the wait. You should view the documentation for the source you pass. If you do decide to wait, some things may hang until the resource is available. |
 
 <a name="getType"></a>
 
