@@ -19,7 +19,8 @@
                 "b4a": "https://esm.run/b4a",
                 "codecs": "https://esm.run/codecs",
                 "tiny-paths": "https://esm.run/tiny-paths",
-                "@rollup/plugin-terser": "https://esm.run/@rollup/plugin-terser"
+                "@rollup/plugin-terser": "https://esm.run/@rollup/plugin-terser",
+                "components": "./dist/components.min.js"
             },
             "scopes": {
               "https://ga.jspm.io/": {
@@ -42,6 +43,7 @@
     import Corestore from "corestore";
     import Hyperdrive from "hyperdrive";
     import b4a from "b4a";
+    import * as Components from "components";
     const corestore = new Corestore(RAM);
     const hyperdrive = globalThis.testHyperDrive = new Hyperdrive(corestore);
 
@@ -94,6 +96,17 @@
     console.log("Imports from the import map are there to support the tests.");
     console.time("Time of all tests");
     await import("ALLTESTS");
+    test("make file explorer", async t => {
+        new Components.FileExplorerComponent({
+            target: document.getElementById("fileExplorerTest"),
+            props: {
+                source: hyperdrive,
+                cwd: "/"
+            }
+        });
+        t.pass();
+    });
+
     test("Test Complete", async t => {
         console.timeEnd("Time of all tests");
         const [bodyEle] = document.getElementsByTagName("body");
@@ -106,5 +119,9 @@
 <h2>Background will go green once test is complete</h2>
 <h3>Keep dev tools closed until test complete for better time stamps</h3>
 <div id="placeToPutSvelteTestStuff"></div>
+<div id="fileExplorerTest" style="background-color: white">
+    <h3>File Explorer</h3>
+
+</div>
 </body>
 </html>
