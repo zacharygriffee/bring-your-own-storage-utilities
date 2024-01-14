@@ -171,7 +171,3 @@ test("createDataUri", async (t) => {
     const {default: theAnswer} = await import(createDataUri(`export default 42`));
     t.is(theAnswer, 42);
 });
-
-export function aTestExport() {
-    return 42;
-}

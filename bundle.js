@@ -22,7 +22,13 @@ findDownMultiple$(projectFolder, "bundle*.js")
         rx.filter(o => o && !o.includes("node_modules") && o !== path.resolve(__dirname, "bundle.js")),
         rx.mergeMap(async o => await import(o)),
         rx.map(({default: module, name}) => [module.code, name]),
-        rx.reduce((acc, [code, name]) => { acc[name] = code; return acc; }, {}),
+        rx.reduce((acc, [code, name]) => {
+            if (name === "deploy") {
+                return acc;
+            }
+            acc[name] = code;
+            return acc;
+            }, {}),
         rx.switchMap(
             (codeBook) => {
                 const entryName = "e" + camelCase(nanoid());
