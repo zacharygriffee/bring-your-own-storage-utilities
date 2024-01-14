@@ -24,14 +24,12 @@ right now, but more can be done.
 You can test this repo right now, in your browser. You can view the developer console (F12) when you enter to see the
 very tests you can run in node. It takes a bit of startup time because of the supporting test tools.
 
-[Live test in the browser](https://raw.githack.com/zacharygriffee/bring-your-own-storage-utilities/4dc361ab099aad1488879428cc6876e524d1fa65/browser-tests.html)
+[Live test in the browser](https://raw.githack.com/zacharygriffee/bring-your-own-storage-utilities/4b8492d8bce39f212f1ff6c712af71cf238f620e/browser-tests.html)
 
 - Loads an in-memory drive source in the browser
 - Tests every API listed below
 - Rollup and Svelte both compile and run right in the browser.
-
-> Tests in-browser are disabled for `deploy` due to wasm bundling issues. Most functions that don't depend on rollup
-> still work in-browser via `deploy`. These tests work fine on node.
+- Shows alpha tests of wip source explorer component.
 
 ## Installation
 
@@ -192,7 +190,6 @@ Svelte components for handling source storages.
 - [ ] todo: support db like structures like hyperbee
 - [ ] todo: document on how sources are consumed and interfaces they should have
 - [x] todo: separate very large deploy (currently 4mb) from the rest as a `sdk`
-- [ ] todo: Transport: implement service worker proxy to source for proper import support
 
 ## Test it
 
