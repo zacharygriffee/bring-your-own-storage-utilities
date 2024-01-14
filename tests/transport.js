@@ -16,26 +16,30 @@ if (globalThis.testHyperDrive) {
     projectFolder = new LocalDrive(path.resolve(__dirname, "../"));
 }
 
-test("Hook for fetch to access source storage with special path modifier", async t => {
-    fetchHookOfSource(projectFolder, "/public/:path+");
-    const resp = await fetch("/public/tests/test-area/package.json");
-    const txt = await resp.json();
-    t.is(txt.name, "test-area-package");
-});
+if (typeof fetch !== "undefined") {
+    test("Hook for fetch to access source storage with special path modifier", async t => {
+        fetchHookOfSource(projectFolder, "/public/:path+");
+        const resp = await fetch("/public/tests/test-area/package.json");
+        const txt = await resp.json();
+        t.is(txt.name, "test-area-package");
+    });
 
-test("Hook for fetch with special protocol", async t => {
-    try {
-        fetchHookOfSource(projectFolder, "/:path+", {
-            protocol: "martini",
-            mapper(match) {
-                match.path = path.join("/tests/test-area/martini/", match.path);
-                return match;
-            }
-        });
-        const resp = await fetch("martini:///vodkaMartini.txt");
-        const result = await resp.text();
-        t.is(result, "2.5 vodka, 0.75 vermouth");
-    } catch (e) {
-        console.log("found this error: ", e.message);
-    }
-});
+    test("Hook for fetch with special protocol", async t => {
+        try {
+            fetchHookOfSource(projectFolder, "/:path+", {
+                protocol: "martini",
+                mapper(match) {
+                    match.path = path.join("/tests/test-area/martini/", match.path);
+                    return match;
+                }
+            });
+            const resp = await fetch("martini:///vodkaMartini.txt");
+            const result = await resp.text();
+            t.is(result, "2.5 vodka, 0.75 vermouth");
+        } catch (e) {
+            console.log("found this error: ", e.message);
+        }
+    });
+} else {
+    console.warn("Fetch not supported in your environment. Tests are disabled for transport.")
+}
