@@ -94,8 +94,6 @@ readdir$(
 
 #### `import {Adapt, Find, Query, Resolve, Transport} from "bring-your-own-storage-utilities"`
 
-> `deploy` exists in its own package now. So to use `deploy`, you have to import it as well.
-
 ## `Find`
 
 #### `import * as Find from "bring-your-own-storage-utilities/find"`
@@ -160,6 +158,7 @@ You need data from your source to go from point A to point B. Transport will hel
 - Fetch hook to fetch from your source or to create your own hooks.
 
 ---
+## API included separately
 
 ## `Deploy`
 
@@ -174,10 +173,14 @@ You need to deploy something from your source to the end-user.
 - [Svelte](https://svelte.dev/) plugin to compile .svelte files from browser for sources in the browser.
 - [Terser](https://terser.org/) plugin for rollup that works in browser 
 
-> `deploy` is not included in the main import. If you want to use the `deploy`, you have to import it separately.
+---
 
-> Tests in-browser are disabled for `deploy` due to wasm bundling issues. Most functions that don't depend on rollup
-> still work in-browser via `deploy`. These tests work fine on node.
+## `Components`
+
+Svelte components for handling source storages.
+
+- File explorer coming soon
+
 ---
 
 ## Todo
