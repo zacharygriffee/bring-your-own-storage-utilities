@@ -16,10 +16,6 @@ bitcoin: bc1q9fpu6muvmg5fj76pyzg3ffjrmksnvfj3c0xva6
 Currently, most functions are prototypes that need to be optimized and attempt to reduce dependency. They work just fine
 right now, but more can be done.
 
-> Originally designed for [hyperdrive](https://docs.holepunch.to/building-blocks/hyperdrive) |
-> [localdrive](https://docs.holepunch.to/helpers/localdrive) but this library strives to be usable for any
-> storage source that is available.
-
 ---
 ---
 
@@ -33,6 +29,9 @@ very tests you can run in node. It takes a bit of startup time because of the su
 - Loads an in-memory drive source in the browser
 - Tests every API listed below
 - Rollup and Svelte both compile and run right in the browser.
+
+> Tests in-browser are disabled for `deploy` due to wasm bundling issues. Most functions that don't depend on rollup
+> still work in-browser via `deploy`. These tests work fine on node.
 
 ## Installation
 
@@ -93,9 +92,9 @@ readdir$(
 
 #### `import * as BYOSU from "bring-your-own-storage-utilities"`
 
-#### `import {Adapt, Deploy, Find, Query, Resolve} from "bring-your-own-storage-utilities"`
+#### `import {Adapt, Find, Query, Resolve, Transport} from "bring-your-own-storage-utilities"`
 
-> Deploy makes the 'all import' above large. If you don't need deploy, import the ones below individually.
+> `deploy` exists in its own package now. So to use `deploy`, you have to import it as well.
 
 ## `Find`
 
@@ -175,9 +174,10 @@ You need to deploy something from your source to the end-user.
 - [Svelte](https://svelte.dev/) plugin to compile .svelte files from browser for sources in the browser.
 - [Terser](https://terser.org/) plugin for rollup that works in browser 
 
-> It is on the todo list to separate deploy from the 'all' import bundle. 
-> It may be necessary in the future to import deploy separately due to its size. 
+> `deploy` is not included in the main import. If you want to use the `deploy`, you have to import it separately.
 
+> Tests in-browser are disabled for `deploy` due to wasm bundling issues. Most functions that don't depend on rollup
+> still work in-browser via `deploy`. These tests work fine on node.
 ---
 
 ## Todo
@@ -188,7 +188,7 @@ You need to deploy something from your source to the end-user.
 - [ ] todo: adapter to transform source into a node:fs interface
 - [ ] todo: support db like structures like hyperbee
 - [ ] todo: document on how sources are consumed and interfaces they should have
-- [ ] todo: separate very large deploy (currently 4mb) from the rest as a `sdk`
+- [x] todo: separate very large deploy (currently 4mb) from the rest as a `sdk`
 - [ ] todo: Transport: implement service worker proxy to source for proper import support
 
 ## Test it
