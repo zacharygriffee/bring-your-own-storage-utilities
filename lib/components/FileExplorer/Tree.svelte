@@ -1,6 +1,7 @@
 <script>
     import * as Query from "../../../dist/query.min.js";
     import * as Find from "../../../dist/find.min.js";
+    import UploadTo from "../../../dist/components/UploadTo.min.js"
     import Directory from './Directory.svelte';
     import File from './File.svelte';
     import * as rx from "rxjs";
@@ -12,12 +13,14 @@
     export let expanded
     export let selected
     export let iconSize;
+    export let updated = 0;
 
     const loaders = {}
     const opened = {}
 
     let files$;
     $: files$ = openCwd(cwd);
+    $: if (updated) openCwd(cwd);
 
     function breadcrumb(cwd = "") {
         return cwd.split("/").reduce(
@@ -29,7 +32,6 @@
                     fullPath: path.join("/", acc.map(o => o.name).join("/"), val)
                 });
 
-                console.log("Path change: ", acc);
                 return acc;
             }, []
         );
@@ -69,6 +71,7 @@
             <a style:cursor="pointer" on:click={() => cwd = fullPath || "/"}>{name || ""}/</a>
         {/each}
     </h3>
+    <UploadTo {cwd} {source} bind:updated color="secondary" />
     <ul>
         {#if $files$}
             {#each $files$ as detail, index}
@@ -82,7 +85,6 @@
                                 { iconSize }
                         />
                     {:else}
-                        <!-- TODO need to make sure File knows full path -->
                         <File
                                 { selected }
                                 { detail }
