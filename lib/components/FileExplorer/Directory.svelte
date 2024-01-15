@@ -5,8 +5,7 @@
 	const dispatch = createEventDispatcher()
 
 	export let detail = {};
-	export let opened = false
-	let directory = detail.name;
+	export let opened = false;
 </script>
 
 <style>
@@ -26,5 +25,5 @@
 <button on:click={ () => dispatch(opened ? 'close' : 'open') }>
 	<Icon data={ opened ? caretDown : caretRight } class="caret" />
 	<Icon data={ opened ? folderOpen : folder } class="folder" />
-	{ directory }
+	{ detail.name }
 </button>

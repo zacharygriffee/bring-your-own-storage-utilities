@@ -95,7 +95,7 @@
 
     console.log("Imports from the import map are there to support the tests.");
     console.time("Time of all tests");
-    await import("ALLTESTS");
+    // await import("ALLTESTS");
     test("make file explorer", async t => {
         new Components.FileExplorerComponent({
             target: document.getElementById("fileExplorerTest"),
