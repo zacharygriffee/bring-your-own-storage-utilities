@@ -1,6 +1,6 @@
 <script>
-	import Icon from 'svelte-awesome'
-	import { spinner } from 'svelte-awesome/icons'
+	// import Icon from 'svelte-awesome'
+	// import { spinner } from 'svelte-awesome/icons'
 </script>
 
 <style>
@@ -19,6 +19,6 @@
 </style>
 
 <div>
-	<Icon spin={ true } data={ spinner } />
+<!--	<Icon spin={ true } data={ spinner } />-->
 	Loading...
 </div>

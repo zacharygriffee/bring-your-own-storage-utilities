@@ -9,9 +9,9 @@
     export let source;
     export let cwd;
 
-    export let icons
     export let expanded
     export let selected
+    export let iconSize;
 
     const loaders = {}
     const opened = {}
@@ -79,15 +79,16 @@
                                 { detail }
                                 on:open={ () => cwd = detail.fullPath }
                                 on:close={ () => null }
+                                { iconSize }
                         />
                     {:else}
                         <!-- TODO need to make sure File knows full path -->
                         <File
-                                { icons }
                                 { selected }
                                 { detail }
                                 name={ detail.name }
                                 on:click={ () => console.log("hello file") }
+                                { iconSize }
                         />
                     {/if}
                 </li>

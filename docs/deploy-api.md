@@ -61,7 +61,7 @@ The critical ones are Svelte and SvelteInternal and in 90% of the time SvelteSto
 The others are only necessary if you have it in your code.</p>
 <pre>
 [Specifier]                      = [Global Name]
-svelte                           = Svelte
+svelte                           = SvelteInternal
 svelte/compiler                  = SvelteCompiler
 svelte/store                     = SvelteStore
 svelte/internal                  = SvelteInternal
@@ -355,7 +355,7 @@ The others are only necessary if you have it in your code.
 
 <pre>
 [Specifier]                      = [Global Name]
-svelte                           = Svelte
+svelte                           = SvelteInternal
 svelte/compiler                  = SvelteCompiler
 svelte/store                     = SvelteStore
 svelte/internal                  = SvelteInternal

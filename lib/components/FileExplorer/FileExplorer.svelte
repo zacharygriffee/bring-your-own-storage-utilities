@@ -1,23 +1,27 @@
 <script>
+	import { Styles } from "@sveltestrap/sveltestrap";
 	import Tree from './Tree.svelte'
 	export let source
 	export let cwd = "/";
 	export let icons
 	export let expanded
 	export let selected
+	export let iconSize = "30px";
 
 	if (!source) {
 		throw new Error("props.source must be defined.");
 	}
 </script>
 
+<Styles theme="dark"/>
+
 <main>
 	<Tree
 		{ source }
 		{ cwd }
-		{ icons }
 		{ expanded }
 		{ selected }
+		{ iconSize }
 	/>
 </main>
 

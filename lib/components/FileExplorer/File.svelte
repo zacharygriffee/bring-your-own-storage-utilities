@@ -1,26 +1,22 @@
 <script>
-	import Icon from 'svelte-awesome'
-	import { file } from 'svelte-awesome/icons'
+	import { Icon } from "@sveltestrap/sveltestrap";
 
 	export let detail;
-	export let selected = false
-	export let icons
-
-	$: extension = name && name.split('.').pop()
+	export let selected = false;
+	export let icons;
+	export let iconSize;
 </script>
 
 <style>
 	button:hover {
 		background-color: lightgray;
 	}
-	div {
-		padding-left: 1rem;
-	}
 </style>
 
 <div>
 	<button class:selected on:click>
-		<Icon data={ icons && icons(extension) || file } />
+		<Icon style="font-size: {iconSize}" name={!!detail.typeName ? "filetype-" + detail.typeName : 'file'}/>
+<!--		<Icon data={ icons && icons(extension) || file } />-->
 		{ detail.name }
 	</button>
 </div>

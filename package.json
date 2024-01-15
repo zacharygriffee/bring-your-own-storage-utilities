@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.1012",
+  "version": "0.0.1013",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "browser": "index.bundle.js",
@@ -19,6 +19,7 @@
   "dependencies": {
     "@rollup/browser": "^4.9.4",
     "@rollup/plugin-terser": "^0.4.4",
+    "@sveltestrap/sveltestrap": "^6.2.2",
     "@zacharygriffee/rollup-plugin-external-globals": "^0.0.5",
     "b4a": "^1.6.4",
     "codecs": "^3.1.0",
@@ -60,8 +61,7 @@
     },
     "./query": {
       "default": "./lib/query/index.js",
-      "browser": "./dist/query.min.js"
-    },
+      "browser": "./dist/query.min.js"    },
     "./resolve": {
       "default": "./lib/resolve/index.js",
       "browser": "./dist/resolve.min.js"
@@ -69,10 +69,6 @@
     "./transport": {
       "default": "./lib/transport/index.js",
       "browser": "./dist/transport.min.js"
-    },
-    "./components": {
-      "default": "./lib/components/index.js",
-      "browser": "./dist/components.min.js"
     }
   },
   "devDependencies": {
