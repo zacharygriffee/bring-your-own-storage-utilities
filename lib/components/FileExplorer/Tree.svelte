@@ -20,21 +20,19 @@
     $: files$ = openCwd(cwd);
 
     function breadcrumb(cwd = "") {
-        const result = cwd.split("/").reduce(
+        return cwd.split("/").reduce(
             (acc, val) => {
-                if (!val || !val.length) return acc;
+                if (!val || !val.length) return acc || [];
 
                 acc.push({
                     name: val,
-                    fullPath: acc.join("/") + "/" + val
+                    fullPath: path.join("/", acc.map(o => o.name).join("/"), val)
                 });
+
+                console.log("Path change: ", acc);
                 return acc;
             }, []
         );
-
-        if (result[0] !== "/") result.unshift("/");
-
-        return result;
     }
 
     function openCwd(cwd) {
@@ -66,9 +64,9 @@
 </script>
 <section>
     <h3>
-        <a style:cursor="pointer" on:click={() => cwd = "/"}>Path: </a>
+        <a style:cursor="pointer" on:click={() => cwd = "/"}>Root/</a>
         {#each breadcrumb(cwd) as {name, fullPath}}
-            <a style:cursor="pointer" on:click={() => cwd = fullPath}>{name || ""}/</a>
+            <a style:cursor="pointer" on:click={() => cwd = fullPath || "/"}>{name || ""}/</a>
         {/each}
     </h3>
     <ul>
