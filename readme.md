@@ -24,7 +24,7 @@ right now, but more can be done.
 You can test this repo right now, in your browser. You can view the developer console (F12) when you enter to see the
 very tests you can run in node. It takes a bit of startup time because of the supporting test tools.
 
-[Live test in the browser](https://raw.githack.com/zacharygriffee/bring-your-own-storage-utilities/39719206051ad9f606d4d7732aa5caafeef8c19d/browser-tests.html)
+[Live test in the browser](https://raw.githack.com/zacharygriffee/bring-your-own-storage-utilities/4b0c942946ac8e2a7fef6520f015f7de53d53d23/browser-tests.html)
 
 - Loads an in-memory drive source in the browser
 - Tests every API listed below
@@ -177,7 +177,11 @@ You need to deploy something from your source to the end-user.
 
 Svelte components for handling source storages.
 
-- File explorer coming soon
+### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/components-api.md)
+
+- File explorer (WIP)
+- Upload file from browser into your source
+- Bootstrap.js that works with the way this library handles svelte
 
 ---
 
