@@ -73,7 +73,7 @@ as an interface like in this pseudocode example</p>
 <dd><p>Async version of readdir$. Returns array of the files and folders</p>
 </dd>
 <dt><a href="#toPath">toPath(urlOrPath)</a> ⇒ <code>string</code></dt>
-<dd><p>Converts a file:// or buffer to path.</p>
+<dd><p>Converts a file:// to path if it is one.</p>
 </dd>
 </dl>
 
@@ -383,7 +383,7 @@ Async version of readdir$. Returns array of the files and folders
 <a name="toPath"></a>
 
 ## toPath(urlOrPath) ⇒ <code>string</code>
-Converts a file:// or buffer to path.
+Converts a file:// to path if it is one.
 
 **Kind**: global function  
 **Returns**: <code>string</code> - A path  

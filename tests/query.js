@@ -1,5 +1,14 @@
 import {solo, test} from "brittle";
-import {getEntry, createReadStream$, createReadStream, getType, getType$} from "../dist/query.min.js";
+import {
+    getEntry,
+    createReadStream$,
+    createReadStream,
+    getType,
+    getType$,
+    getTypeName,
+    getTypeName$,
+    pathDetail
+} from "../dist/query.min.js";
 import {fileURLToPath} from "../dist/find.min.js";
 import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
@@ -146,9 +155,12 @@ test("createReadStream$ chunks, start, end, highWaterMark", async t => {
     }
 });
 
-test("get type of file", async t => {
+test("get mime type of file and get type name of file", async t => {
     t.is(await firstValueFrom(getType$(projectFolder, "/package.json")), "application/json");
     t.is(await firstValueFrom(getType$(projectFolder, "/browser-tests.html")), "text/html");
     t.is(await getType(projectFolder, "/browser-tests.html"), "text/html");
     t.is(await getType(projectFolder, "/readme.md"), "text/markdown");
+
+    t.is(await firstValueFrom(getTypeName$(projectFolder, "/package.json")), "json");
+    t.is(await getTypeName(projectFolder, "/browser-tests.html"), "html");
 });

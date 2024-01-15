@@ -1,6 +1,6 @@
 <script>
-	import Icon from 'svelte-awesome'
-	import { exclamationCircle } from 'svelte-awesome/icons'
+	// import Icon from 'svelte-awesome'
+	// import { exclamationCircle } from 'svelte-awesome/icons'
 	export let error = ''
 </script>
 
@@ -19,6 +19,6 @@
 </style>
 
 <div>
-	<Icon data={ exclamationCircle } />
+<!--	<Icon data={ exclamationCircle } />-->
 	there was an error { JSON.stringify(error) }
 </div>

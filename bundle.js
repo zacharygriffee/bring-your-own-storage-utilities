@@ -21,6 +21,7 @@ findDownMultiple$(projectFolder, "bundle*.js")
         rx.map(o => o && path.resolve(__dirname, "." + o)),
         rx.filter(o => o && !o.includes("node_modules") && o !== path.resolve(__dirname, "bundle.js")),
         rx.mergeMap(async o => await import(o)),
+        rx.filter(o => !!o.default),
         rx.map(({default: module, name}) => [module.code, name]),
         rx.reduce((acc, [code, name]) => {
             if (name === "deploy") {

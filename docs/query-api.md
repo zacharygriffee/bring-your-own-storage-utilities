@@ -35,6 +35,19 @@ entry object will have at least:
     value // details of the file, or undefined if it doesn't exist.
 }
 </pre></dd>
+<dt><a href="#getTypeName$">getTypeName$(source, key, config)</a> ⇒ <code>Observable.&lt;any&gt;</code></dt>
+<dd><p>Get the extension name of the file&#39;s mime type. That is, package.json === &#39;json&#39; .
+The extension name is inferred from the first 100 bytes of data from the file. IF the file is less-than 30 bytes,
+it will be inferred by the key name&#39;s extension e.g. package<code>.json</code> . Thus, small files without an extension may not
+be inferred properly to their extension type. It is best to name your keys, at least the small ones, with an extension
+if you want a meaningful result here.</p>
+</dd>
+<dt><a href="#getTypeName">getTypeName()</a></dt>
+<dd><p>Convenience async function for getTypeName$</p>
+</dd>
+<dt><a href="#mimeTypeToName">mimeTypeToName(type)</a> ⇒ <code>null</code> | <code>*</code></dt>
+<dd><p>A simple function to determine what file typename is based on it&#39;s mimetype.</p>
+</dd>
 <dt><a href="#getType$">getType$(source, key, [config])</a> ⇒ <code>Observable.&lt;string&gt;</code></dt>
 <dd><p>Gets the mime type of the file. This function analyzes the first 100 bytes of the file for the magic bytes, if it
 cannot be determined by the byte data, it will then be inferred from the extension of the key. If still it cannot
@@ -151,6 +164,40 @@ entry object will have at least:
 | [config] |  |  |  |
 | [config.cwd] | <code>string</code> | <code>&quot;/&quot;</code> | cwd to resolve the path to |
 | [config.entrySelector] |  |  | Use your own selector to return information about a file, the bare minimum should be what is shown above to best interface with the other functions of this library. The entrySelector function will have three arguments, (source, path, config). This function will be coerced async if it isn't already. The default selector requires the source to have either an entry function or a get function. A get function is literally getting the contents of the file and analyzing it while an entry file gets the details of the file. So, storages with entry function are way more performant in these queries. |
+
+<a name="getTypeName$"></a>
+
+## getTypeName$(source, key, config) ⇒ <code>Observable.&lt;any&gt;</code>
+Get the extension name of the file's mime type. That is, package.json === 'json' .
+The extension name is inferred from the first 100 bytes of data from the file. IF the file is less-than 30 bytes,
+it will be inferred by the key name's extension e.g. package`.json` . Thus, small files without an extension may not
+be inferred properly to their extension type. It is best to name your keys, at least the small ones, with an extension
+if you want a meaningful result here.
+
+**Kind**: global function  
+
+| Param | Description |
+| --- | --- |
+| source | source |
+| key | identifier for the file. See caution above about small files without extension. |
+| config | See Query.getType for config information. |
+
+<a name="getTypeName"></a>
+
+## getTypeName()
+Convenience async function for getTypeName$
+
+**Kind**: global function  
+<a name="mimeTypeToName"></a>
+
+## mimeTypeToName(type) ⇒ <code>null</code> \| <code>\*</code>
+A simple function to determine what file typename is based on it's mimetype.
+
+**Kind**: global function  
+
+| Param | Description |
+| --- | --- |
+| type | a mimetype to get the typename of the file. |
 
 <a name="getType$"></a>
 
