@@ -7,6 +7,8 @@ import {
     getType$,
     getTypeName,
     getTypeName$,
+    list$,
+    readdir$,
     pathDetail
 } from "../dist/query.min.js";
 import {fileURLToPath} from "../dist/find.min.js";
@@ -15,6 +17,7 @@ import LocalDrive from "localdrive";
 import {firstValueFrom} from "rxjs";
 import b4a from "b4a";
 import * as rx from "rxjs";
+import {hasFile} from "./hasFile-test-helper.js";
 
 let projectFolder;
 if (globalThis.testHyperDrive) {
@@ -163,4 +166,20 @@ test("get mime type of file and get type name of file", async t => {
 
     t.is(await firstValueFrom(getTypeName$(projectFolder, "/package.json")), "json");
     t.is(await getTypeName(projectFolder, "/browser-tests.html"), "html");
+});
+
+test("List files", async t => {
+    const packageFiles = await rx.firstValueFrom(list$(projectFolder, {cwd: "/tests/test-area/martini/"}).pipe(rx.toArray()));
+
+    t.ok(hasFile(packageFiles, "/tests/test-area/martini/vermouth/vermouthTypes.txt", true, ({key}) => key), "Of the files, vermouthTypes.txt was part of the result.");
+
+    t.ok(hasFile(packageFiles, "/tests/test-area/martini/standard-martini", true, ({key}) => key), "Of the files, standard-martini was part of the result.");
+});
+
+test("readdir files (reads shallow directory non-recursively both files and directories)", async t => {
+    const packageFiles = await rx.firstValueFrom(readdir$(projectFolder, {cwd: "/tests/test-area/martini/"}).pipe(rx.toArray()));
+
+    t.ok(hasFile(packageFiles, "vodkaMartini.txt", true), "Of the files, vodkaMartini.txt file was part of the result.");
+
+    t.ok(hasFile(packageFiles, "vermouth", true), "Of the files, vermouth directory was part of the result.");
 });

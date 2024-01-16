@@ -104,7 +104,6 @@ The find api functions mainly finding stuff in the source storage or making it e
 - Find files from a parent to the child
 - Find package.json file parent to the current working directory
 - Find node_modules parent to current working directory
-- List recursively or read directory shallow.
 
 ---
 
@@ -120,6 +119,8 @@ that resource
 - Is it a file
 - Is it a folder
 - Get entry details of file
+- List recursively or read directory shallow.
+- Get mime-type of file with magic bytes
 
 ---
 

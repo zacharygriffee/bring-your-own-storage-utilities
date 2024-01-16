@@ -1,12 +1,12 @@
 <script>
     import * as Query from "../../../dist/query.min.js";
-    import * as Find from "../../../dist/find.min.js";
     import UploadTo from "../../../dist/components/UploadTo.min.js"
     import Directory from './Directory.svelte';
     import File from './File.svelte';
-    import * as rx from "rxjs";
+    import {concatMap, map, reduce} from "rxjs/operators";
     import path from "path";
 
+    const rx = {concatMap, map, reduce};
     export let source;
     export let cwd;
 
@@ -38,7 +38,7 @@
     }
 
     function openCwd(cwd) {
-        return Find.readdir$(source, cwd).pipe(
+        return Query.readdir$(source, cwd).pipe(
             rx.concatMap(
                 name => {
                     const fullPath = path.resolve(cwd, name);
