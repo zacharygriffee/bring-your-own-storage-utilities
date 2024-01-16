@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.1016",
+  "version": "0.0.1100",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "browser": "index.bundle.js",
@@ -32,6 +32,7 @@
     "query-string": "^8.1.0",
     "rollup": "^4.9.4",
     "rxjs": "^7.8.1",
+    "rxjs-etc": "^10.6.2",
     "streamx": "^2.15.6",
     "streamx-webstream": "^1.0.11",
     "svelte": "^4.2.8",
@@ -61,7 +62,8 @@
     },
     "./query": {
       "default": "./lib/query/index.js",
-      "browser": "./dist/query.min.js"    },
+      "browser": "./dist/query.min.js"
+    },
     "./resolve": {
       "default": "./lib/resolve/index.js",
       "browser": "./dist/resolve.min.js"

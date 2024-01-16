@@ -85,6 +85,12 @@ be determined a null will be returned.</p>
 <li><input checked="" disabled="" type="checkbox"> incorporate readdir function from this library to support hyperbee file structures as well.</li>
 </ul>
 </dd>
+<dt><a href="#list$">list$()</a> ⇒ <code>*</code></dt>
+<dd><p>Same as readdir$ but config.list = true</p>
+</dd>
+<dt><a href="#list">list()</a></dt>
+<dd><p>Convenience async method for list$</p>
+</dd>
 <dt><a href="#pathDetail$">pathDetail$(sourceDrive, absolutePath)</a> ⇒ <code>*</code></dt>
 <dd><p>Returns entry, isFile and isFolder of a path.</p>
 <p>If it is a file, the mime-type will be determined via getType$</p>
@@ -96,6 +102,18 @@ be determined a null will be returned.</p>
 <dd><p>Async convenience method for pathDetail$
 ** isFile may return false for empty files (0 bytes) on some sources **
 ** isFolder will return false here folders that are empty **</p>
+</dd>
+<dt><a href="#readdir$">readdir$(source, config)</a> ⇒</dt>
+<dd><p>readdir that wraps either hyperdrive and hyperbee instance.
+Aimed to handle hypercore and hyperbee. But, plan on support for more</p>
+<p>readdir will coerce a source to be listable (config.list = true). So even if a source doesn&#39;t have list function,
+it still will work 99% of cases, still tests need to be done to ensure that.</p>
+<p>the readdir of the source can be a <code>cold observable</code> an <code>async iterable</code> an <code>array of keys</code> an <code>async generator</code>,
+anything that <a href="https://rxjs.dev/api/index/function/from">rxjs.from</a> will accept. You could also design the source
+as an interface like in this pseudocode example</p>
+</dd>
+<dt><a href="#readdir">readdir()</a></dt>
+<dd><p>Async version of readdir$. Returns array of the files and folders</p>
 </dd>
 </dl>
 
@@ -317,6 +335,19 @@ Determines if from source this folder exists. It will **not** test positive on s
 | driveSource | The source should have either an async/sync 'exists' function or an 'entry' function |
 | path |  |
 
+<a name="list$"></a>
+
+## list$() ⇒ <code>\*</code>
+Same as readdir$ but config.list = true
+
+**Kind**: global function  
+**See**: readdir$  
+<a name="list"></a>
+
+## list()
+Convenience async method for list$
+
+**Kind**: global function  
 <a name="pathDetail$"></a>
 
 ## pathDetail$(sourceDrive, absolutePath) ⇒ <code>\*</code>
@@ -352,5 +383,57 @@ pathDetail$(drive, "/some/path/to/file.txt").subscribe(
 Async convenience method for pathDetail$
 ** isFile may return false for empty files (0 bytes) on some sources **
 ** isFolder will return false here folders that are empty **
+
+**Kind**: global function  
+<a name="readdir$"></a>
+
+## readdir$(source, config) ⇒
+readdir that wraps either hyperdrive and hyperbee instance.
+Aimed to handle hypercore and hyperbee. But, plan on support for more
+
+readdir will coerce a source to be listable (config.list = true). So even if a source doesn't have list function,
+it still will work 99% of cases, still tests need to be done to ensure that.
+
+the readdir of the source can be a `cold observable` an `async iterable` an `array of keys` an `async generator`,
+anything that [rxjs.from](https://rxjs.dev/api/index/function/from) will accept. You could also design the source
+as an interface like in this pseudocode example
+
+**Kind**: global function  
+**Returns**: observable emits files from the source.  
+
+| Param | Default | Description |
+| --- | --- | --- |
+| source |  | source with functions readdir, get or entry |
+| config |  | These configuration options apply to the readdir$ AND they are passed to the source.readdir second argument |
+| [config.cwd] | <code>/</code> | Current working directory of the source. |
+| [config.list] |  | Whether to get a detailed list of the files. |
+| [config.recursive] |  | Whether to recursively dig into folders only applies if config.list is true |
+| [config.trimPath] | <code>true</code> | To trim the path of any dots and slashes, a db may not start with the leading chars. This is default true because Hyperdrive handles path prefixes |
+
+**Example**  
+```js
+const sourceInterface = (source, defaultProps) => ({
+      exists(filePath) {
+          // Having an exist function will help speed up
+          // some find and query functions
+          return !!source.exists(filePath);
+      }.
+      get(filePath, config = {}) {
+          return source.get(filePath, {...(defaultProps.getProps ?? {}), ... config});
+      },
+    * readdir(path, config = {}) {
+        for (const file of source.pathKeys) {
+            yield file;
+        }
+    }
+});
+
+const sourceInstance = new WhateverSource();
+readdir$(sourceInterface(sourceInstance, { getProps }));
+```
+<a name="readdir"></a>
+
+## readdir()
+Async version of readdir$. Returns array of the files and folders
 
 **Kind**: global function  

@@ -8,9 +8,7 @@ import {
     findNodeModule$,
     findPackageDirectory$,
     findPackageJson$,
-    list$,
     parseModuleSpecifier,
-    readdir$,
     findUp,
     findUp$,
     findUpMultiple$,
@@ -179,21 +177,4 @@ test("Parse module specifier", async t => {
         name: "someModule",
         paths: ["someModule"]
     });
-});
-
-
-test("List files", async t => {
-    const packageFiles = await rx.firstValueFrom(list$(projectFolder, {cwd: "/tests/test-area/martini/"}).pipe(rx.toArray()));
-
-    t.ok(hasFile(packageFiles, "/tests/test-area/martini/vermouth/vermouthTypes.txt", true, ({key}) => key), "Of the files, vermouthTypes.txt was part of the result.");
-
-    t.ok(hasFile(packageFiles, "/tests/test-area/martini/standard-martini", true, ({key}) => key), "Of the files, standard-martini was part of the result.");
-});
-
-test("readdir files (reads shallow directory non-recursively both files and directories)", async t => {
-    const packageFiles = await rx.firstValueFrom(readdir$(projectFolder, {cwd: "/tests/test-area/martini/"}).pipe(rx.toArray()));
-
-    t.ok(hasFile(packageFiles, "vodkaMartini.txt", true), "Of the files, vodkaMartini.txt file was part of the result.");
-
-    t.ok(hasFile(packageFiles, "vermouth", true), "Of the files, vermouth directory was part of the result.");
 });

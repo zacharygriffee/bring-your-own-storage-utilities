@@ -51,26 +51,8 @@ Find directories up package.json resides in.</p>
 <dt><a href="#findPackageJson">findPackageJson()</a></dt>
 <dd><p>Convenience async version of findPackageJson$. Will return an array of all packages found.</p>
 </dd>
-<dt><a href="#list$">list$()</a> ⇒ <code>*</code></dt>
-<dd><p>Same as readdir$ but config.list = true</p>
-</dd>
-<dt><a href="#list">list()</a></dt>
-<dd><p>Convenience async method for list$</p>
-</dd>
 <dt><a href="#parseModuleSpecifier">parseModuleSpecifier(moduleId, config)</a> ⇒</dt>
 <dd><p>Parses a npm module specifier.</p>
-</dd>
-<dt><a href="#readdir$">readdir$(source, config)</a> ⇒</dt>
-<dd><p>readdir that wraps either hyperdrive and hyperbee instance.
-Aimed to handle hypercore and hyperbee. But, plan on support for more</p>
-<p>readdir will coerce a source to be listable (config.list = true). So even if a source doesn&#39;t have list function,
-it still will work 99% of cases, still tests need to be done to ensure that.</p>
-<p>the readdir of the source can be a <code>cold observable</code> an <code>async iterable</code> an <code>array of keys</code> an <code>async generator</code>,
-anything that <a href="https://rxjs.dev/api/index/function/from">rxjs.from</a> will accept. You could also design the source
-as an interface like in this pseudocode example</p>
-</dd>
-<dt><a href="#readdir">readdir()</a></dt>
-<dd><p>Async version of readdir$. Returns array of the files and folders</p>
 </dd>
 <dt><a href="#toPath">toPath(urlOrPath)</a> ⇒ <code>string</code></dt>
 <dd><p>Converts a file:// to path if it is one.</p>
@@ -266,19 +248,6 @@ Find package.json files into the parent directories.
 Convenience async version of findPackageJson$. Will return an array of all packages found.
 
 **Kind**: global function  
-<a name="list$"></a>
-
-## list$() ⇒ <code>\*</code>
-Same as readdir$ but config.list = true
-
-**Kind**: global function  
-**See**: readdir$  
-<a name="list"></a>
-
-## list()
-Convenience async method for list$
-
-**Kind**: global function  
 <a name="parseModuleSpecifier"></a>
 
 ## parseModuleSpecifier(moduleId, config) ⇒
@@ -328,58 +297,6 @@ Parses a npm module specifier.
                  // ]
 } = parseModuleSpecifier("@someScope/someModule@5.5.5/somePath/index", { host : "https://unpkg.com", type: "" });
 ```
-<a name="readdir$"></a>
-
-## readdir$(source, config) ⇒
-readdir that wraps either hyperdrive and hyperbee instance.
-Aimed to handle hypercore and hyperbee. But, plan on support for more
-
-readdir will coerce a source to be listable (config.list = true). So even if a source doesn't have list function,
-it still will work 99% of cases, still tests need to be done to ensure that.
-
-the readdir of the source can be a `cold observable` an `async iterable` an `array of keys` an `async generator`,
-anything that [rxjs.from](https://rxjs.dev/api/index/function/from) will accept. You could also design the source
-as an interface like in this pseudocode example
-
-**Kind**: global function  
-**Returns**: observable emits files from the source.  
-
-| Param | Default | Description |
-| --- | --- | --- |
-| source |  | source with functions readdir, get or entry |
-| config |  | These configuration options apply to the readdir$ AND they are passed to the source.readdir second argument |
-| [config.cwd] | <code>/</code> | Current working directory of the source. |
-| [config.list] |  | Whether to get a detailed list of the files. |
-| [config.recursive] |  | Whether to recursively dig into folders only applies if config.list is true |
-| [config.trimPath] | <code>true</code> | To trim the path of any dots and slashes, a db may not start with the leading chars. This is default true because Hyperdrive handles path prefixes |
-
-**Example**  
-```js
-const sourceInterface = (source, defaultProps) => ({
-      exists(filePath) {
-          // Having an exist function will help speed up
-          // some find and query functions
-          return !!source.exists(filePath);
-      }.
-      get(filePath, config = {}) {
-          return source.get(filePath, {...(defaultProps.getProps ?? {}), ... config});
-      },
-    * readdir(path, config = {}) {
-        for (const file of source.pathKeys) {
-            yield file;
-        }
-    }
-});
-
-const sourceInstance = new WhateverSource();
-readdir$(sourceInterface(sourceInstance, { getProps }));
-```
-<a name="readdir"></a>
-
-## readdir()
-Async version of readdir$. Returns array of the files and folders
-
-**Kind**: global function  
 <a name="toPath"></a>
 
 ## toPath(urlOrPath) ⇒ <code>string</code>
