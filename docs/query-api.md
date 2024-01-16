@@ -371,6 +371,7 @@ If it is a file, the mime-type will be determined via getType$
 ```js
 pathDetail$(drive, "/some/path/to/file.txt").subscribe(
      {
+         fullPath: absolutePath // The absolutePath you passed in.
          isFolder: false,
          isFile: true,
          type: text/plain // if file, mime type, if folder, undefined

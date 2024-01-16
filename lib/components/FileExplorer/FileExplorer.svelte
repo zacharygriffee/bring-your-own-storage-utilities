@@ -6,21 +6,26 @@
     export let cwd = "/";
     export let iconSize = "30px";
     export let updated = 0;
+    export let theme = "dark";
+
+    export let addSelectVector = () => {};
 
     if (!source) {
         throw new Error("props.source must be defined.");
     }
+
 </script>
 
-<Styles theme="dark"/>
+<Styles bind:theme />
 
 {#key updated}
     <main>
         <Tree
-                { source }
-                { cwd }
-                { iconSize }
+                bind:source
+                bind:cwd
+                bind:iconSize
                 bind:updated
+                bind:theme
         />
     </main>
 {/key}

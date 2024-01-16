@@ -1,12 +1,16 @@
 <script>
-    import { Styles, Icon } from "@sveltestrap/sveltestrap";
+    import {Styles, Icon, Tooltip, Button} from "@sveltestrap/sveltestrap";
+    import {nanoid} from "nanoid";
+    import camelCase from "lodash-es/camelCase.js";
     import path from "path";
     import b4a from "b4a";
+
+    let thisId = "u" + camelCase(nanoid());
     export let source;
     export let cwd = "/";
     export let color = "primary";
     export let theme = "dark";
-    export let size = "sm";
+    export let size = "lg";
     export let updated = 0;
     export let keyMutateFunction = (key) => {
         return key;
@@ -28,24 +32,21 @@
         updated++;
     }
 
-    function registerFileUploadElement(ele) { uploaderElement = ele }
+    function registerFileUploadElement(ele) {
+        uploaderElement = ele
+    }
 </script>
 
-<Styles {theme} />
+<Styles {theme}/>
 {#if !!source.put}
-    <label class="btn btn-{color} btn-{size}" for="myFile"><Icon name="upload" /></label>
-    <input use:registerFileUploadElement style="display: none" type="file" id="myFile" name="filename" multiple on:change={uploadTriggered}/>
+    <slot {uploadTriggered} {registerFileUploadElement}>
+        <Button disabled={!source.put} {color} {size} id="fileUploadLabel">
+            <label style:cursor="pointer" for={thisId}>
+                <Icon size="lg" name="upload"/>
+            </label>
+            <input use:registerFileUploadElement style="display: none" type="file" id={thisId} name="filename" multiple
+                   on:change={uploadTriggered}/>
+            <Tooltip target="fileUploadLabel">Upload Files</Tooltip>
+        </Button>
+    </slot>
 {/if}
-
-<style>
-    .button {
-        display: inline-block;
-        background: #000;
-        border-radius: 4px;
-        font-family: "arial-black";
-        font-size: 14px;
-        color: #FFF;
-        padding: 8px 12px;
-        cursor: pointer;
-    }
-</style>

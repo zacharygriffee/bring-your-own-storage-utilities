@@ -1,16 +1,36 @@
 <script>
 	import { Icon } from "@sveltestrap/sveltestrap";
-	import { createEventDispatcher } from 'svelte'
-	const dispatch = createEventDispatcher()
-
 	export let detail = {};
-	export let opened = false;
 	export let iconSize;
+	export let cwd;
+	export let addSelectVector = () => {};
+
+	export function select(choice = !detail.selected) {
+		detail.selected = choice;
+	}
+
+	function onSelect(e) {
+		if (e.shiftKey || e.ctrlKey) {
+			select();
+			if (e.shiftKey) addSelectVector();
+		} else cwd = detail.fullPath;
+	}
+
+	detail.select = select;
 </script>
+{#key detail.selected}
+	<button class="{detail.selected ? 'selected' : ''}" on:click={ e => onSelect(e) }>
+		<Icon style="font-size: {iconSize}" name="folder" />
+		{ detail.name }
+	</button>
+{/key}
 
 <style>
+	.selected {
+		background-color: #0e6cf8;
+	}
 	button:hover {
-		background-color: #dddddd;
+		background-color: #1a1948;
 	}
 	button :global(svg.caret) {
 		width: 0.6rem;
@@ -21,10 +41,3 @@
 		height: 1rem;
 	}
 </style>
-
-<button on:click={ () => dispatch(opened ? 'close' : 'open') }>
-	<Icon style="font-size: {iconSize}" name="folder" />
-<!--	<Icon data={ opened ? caretDown : caretRight } class="caret" />-->
-<!--	<Icon data={ opened ? folderOpen : folder } class="folder" />-->
-	{ detail.name }
-</button>

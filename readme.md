@@ -182,6 +182,7 @@ Svelte components for handling source storages.
 
 - File explorer (WIP)
 - Upload file from browser into your source
+- Download files from your source zipped.
 - Bootstrap.js that works with the way this library handles svelte
 
 ---
