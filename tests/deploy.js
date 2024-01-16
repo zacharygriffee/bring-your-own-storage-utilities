@@ -128,7 +128,6 @@ test("Compile svelte", async (t) => {
                         <\/script>
                         
                         <h1>deepThought says the answer is: {theAnswer}</h1>
-                        <h2>Brought to you by svelte.</h2>
                  `,
                 "entry.js": `
                     // This only really has to happen once per page/SPA, but adds around 40k bytes.
