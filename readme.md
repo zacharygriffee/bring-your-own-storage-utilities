@@ -24,7 +24,7 @@ right now, but more can be done.
 You can test this repo right now, in your browser. You can view the developer console (F12) when you enter to see the
 very tests you can run in node. It takes a bit of startup time because of the supporting test tools.
 
-[Live test in the browser](https://raw.githack.com/zacharygriffee/bring-your-own-storage-utilities/072c7e6aabf308a75f067018865f3861ae3e0513/browser-tests.html)
+[Live test in the browser](https://raw.githack.com/zacharygriffee/bring-your-own-storage-utilities/191c1889e1bb009d24dd55fedb3e73c59c8b1512/browser-tests.html)
 
 - Loads an in-memory drive source in the browser
 - Tests every API listed below
