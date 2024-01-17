@@ -23,11 +23,12 @@
     let uploaderElement;
 
     async function uploadTriggered() {
+        const _source = source;
         for await (let file of uploaderElement.files) {
             const key = keyMutateFunction(path.resolve(cwd, file.name))
             const buf = b4a.from(await file.arrayBuffer());
             console.log("file upload", {fileName: key, buf});
-            await Promise.resolve(putter(key, buf, putConfig))
+            await Promise.resolve(putter(_source, key, buf, putConfig))
         }
         updated++;
     }
