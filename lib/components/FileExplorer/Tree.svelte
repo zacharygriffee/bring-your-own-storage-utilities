@@ -34,7 +34,9 @@
         Container,
         Row,
         Col,
-        ButtonGroup
+        ButtonGroup,
+        Button,
+        Icon
     } = SvelteStrap;
 
     export let source;
@@ -148,7 +150,7 @@
 
 <Container>
     <Row>
-        <Col xs="6">
+        <Col>
             <h3>
                 <Breadcrumb divider="/">
                     {#each breadcrumb(cwd) as {name, fullPath}}
@@ -161,33 +163,56 @@
         </Col>
     </Row>
     <Row>
-        <Col xs="6">
+        <Col>
             <ul use:clickOutside on:click_outside={clearSelection}>
                 {#each $files$ as detail, index}
                     {#if detail.isFile || detail.isFolder}
                         <li class="swipe-holder">
-                            <Swipe showIndicators bind:this={detail.swipeController}>
+                            <Swipe bind:this={detail.swipeController}>
                                 <SwipeItem>
-                                    {#if detail.isFolder}
-                                        <Directory
-                                                addSelectVector={addSelectVector.bind(null, index)}
-                                                bind:detail
-                                                bind:cwd
-                                                size="lg"
-                                                style="pointer-events:fill; height:100%; font-size: x-large"
-                                                color={buttonColors}
-                                        />
-                                    {:else}
-                                        <File
-                                                addSelectVector={addSelectVector.bind(null, index)}
-                                                bind:detail
-                                                size="lg"
-                                                style="pointer-events:fill; height:100%; font-size: x-large"
-                                                color={buttonColors}
-                                        />
-                                    {/if}
+                                    <Container>
+                                        <Row>
+                                            <Col xs="11">
+                                                {#if detail.isFolder}
+                                                    <Directory
+                                                            addSelectVector={addSelectVector.bind(null, index)}
+                                                            bind:detail
+                                                            bind:cwd
+                                                            size="lg"
+                                                            style="pointer-events:fill; height:100%; font-size: x-large"
+                                                            color={buttonColors}
+                                                    />
+                                                {:else}
+                                                    <File
+                                                            addSelectVector={addSelectVector.bind(null, index)}
+                                                            bind:detail
+                                                            size="lg"
+                                                            style="pointer-events:fill; height:100%; font-size: x-large"
+                                                            color={buttonColors}
+                                                    />
+                                                {/if}
+                                            </Col>
+                                            <Col xs="1">
+                                                <Button
+                                                        on:click={() => detail.swipeController.nextItem()}
+                                                        style="pointer-events:fill; height:100%; font-size: x-large"
+                                                >
+                                                    <Icon name="arrow-bar-left" />
+                                                </Button>
+                                            </Col>
+                                        </Row>
+                                    </Container>
                                 </SwipeItem>
                                 <SwipeItem>
+                                    <ButtonGroup size="xl">
+                                        <Button
+                                                on:click={() => detail.swipeController.prevItem()}
+                                                style="pointer-events:fill; height:100%; aspect-ratio: 1/1; font-size: x-large"
+                                                size="lg"
+                                        >
+                                            <Icon name="arrow-bar-right" />
+                                        </Button>
+                                    </ButtonGroup>
                                     <ButtonGroup size="xl">
                                         <Delete
                                                 bind:source
@@ -218,7 +243,7 @@
         </Col>
     </Row>
     <Row>
-        <Col xs="6">
+        <Col>
             <ButtonGroup>
                 <UploadTo bind:cwd
                           bind:source

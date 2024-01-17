@@ -8,9 +8,9 @@
     };
 
     function open(e) {
-        if (detail.swipeController) {
-            detail.swipeController.nextItem()
-        }
+        // if (detail.swipeController) {
+        //     detail.swipeController.nextItem()
+        // }
     }
 
     export function select(choice = !detail.selected) {
