@@ -1,52 +1,72 @@
 <script>
-	import { Icon } from "@sveltestrap/sveltestrap";
-	import {longpress} from "../SveltUIiComposables/index.js";
+    import {onDestroy} from "../../../dist/svelte/svelte-internal.min.js";
+    import {Icon, Button} from "@sveltestrap/sveltestrap";
+    import {longpress} from "../utils/longpress.js";
 
-	export let detail = {};
-	export let iconSize;
-	export let cwd;
-	export let addSelectVector = () => {};
+    export let detail = {};
+    export let iconSize;
+    export let cwd;
+    export let addSelectVector = () => {};
+    export function select(choice = !detail.selected) {
+        detail.selected = choice;
+    }
 
-	export function select(choice = !detail.selected) {
-		detail.selected = choice;
-	}
+    let inner;
+    const cleanup = [];
+    onDestroy(() => {
+        for (let x of cleanup) {
+            x();
+        }
+    });
 
-	let selectIt = false;
-	function onSelect(e) {
-		e.preventDefault();
-		if (selectIt || e.shiftKey || e.ctrlKey) {
-			select();
-			if (e.shiftKey) addSelectVector();
-		} else cwd = detail.fullPath;
-		selectIt = false;
-	}
+    $: if (inner) {
+        {
+            const cleanupLongPress = longpress(inner, 250)
+            const eventFn = (e) => {
+                selectIt = true;
+                e.detail && onSelect(e);
+            };
+            inner.addEventListener(
+                "longpress",
+                eventFn
+            );
 
-	detail.select = select;
+            cleanup.push(() => {
+                inner.removeEventListener("longpress",eventFn)
+                cleanupLongPress();
+            });
+        }
+
+        {
+            inner.addEventListener("click", onSelect);
+            cleanup.push(() => {
+                inner.removeEventListener("click", onSelect);
+            })
+        }
+
+        {
+            const preventDef = (e) => { e.preventDefault(); }
+            inner.addEventListener("contextmenu", preventDef)
+            cleanup.push(() => {
+                inner.removeEventListener("contextmenu", preventDef);
+            })
+        }
+    }
+
+    let selectIt = false;
+
+    function onSelect(e) {
+        if (selectIt || e.shiftKey || e.ctrlKey) {
+            select();
+            if (e.shiftKey) addSelectVector();
+        } else cwd = detail.fullPath;
+        selectIt = false;
+    }
+
+    detail.select = select;
 </script>
-{#key detail.selected}
-	<button use:longpress={300}
-			class="{detail.selected ? 'selected' : ''}"
-			on:click={ e => onSelect(e) }
-			on:longpress={e => selectIt = true}
-	>
-		<Icon style="font-size: {iconSize}" name="folder"/>
-		{ detail.name }
-	</button>
-{/key}
 
-<style>
-	.selected {
-		background-color: #0e6cf8;
-	}
-	button:hover {
-		background-color: #1a1948;
-	}
-	button :global(svg.caret) {
-		width: 0.6rem;
-		padding-right: 0;
-	}
-	button :global(svg.folder) {
-		width: 1.2rem;
-		height: 1rem;
-	}
-</style>
+<Button outline={!detail.selected} bind:inner>
+    <Icon style="font-size: {iconSize}" name="folder"/>
+    { detail.name }
+</Button>
