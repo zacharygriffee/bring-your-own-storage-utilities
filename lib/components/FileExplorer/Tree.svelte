@@ -16,22 +16,26 @@
 </script>
 
 <script>
-    import {
+    import {Swipe, SwipeItem} from "../../../dist/components/SvelteSwipe.min.js";
+    import * as Query from "../../../dist/query.min.js";
+    import UploadTo from "../../../dist/components/UploadTo.min.js"
+    import SaveAll from "../../../dist/components/SaveAll.min.js";
+    import Delete from "../../../dist/components/Delete.min.js";
+    import Directory from './Directory.svelte';
+    import File from './File.svelte';
+    import {concatMap, map, reduce, filter, share, mergeAll} from "rxjs/operators";
+    import path from "path";
+    import {clickOutside} from "../utils/clickOutside.js";
+    import {of} from "rxjs";
+
+    const {
         Breadcrumb,
         BreadcrumbItem,
         Container,
         Row,
         Col,
         ButtonGroup
-    } from "@sveltestrap/sveltestrap";
-    import * as Query from "../../../dist/query.min.js";
-    import UploadTo from "../../../dist/components/UploadTo.min.js"
-    import SaveAll from "../../../dist/components/SaveAll.min.js";
-    import Directory from './Directory.svelte';
-    import File from './File.svelte';
-    import {concatMap, map, reduce, filter, share, mergeAll} from "rxjs/operators";
-    import path from "path";
-    import {clickOutside} from "../utils/clickOutside.js";
+    } = SvelteStrap;
 
     export let source;
     export let cwd;
@@ -117,6 +121,7 @@
                                     fullPath: fullPath,
                                     name,
                                     selected: false,
+                                    key$: of(type),
                                     select() { /* here until component initializes */
                                     }
                                 })
@@ -159,7 +164,7 @@
             <ul use:clickOutside on:click_outside={clearSelection}>
                 {#each $files$ as detail, index}
                     {#if detail.isFile || detail.isFolder}
-                        <li>
+                        <li class="swipe-holder">
                             {#if detail.isFolder}
                                 <Directory
                                         addSelectVector={addSelectVector.bind(null, index)}
@@ -168,11 +173,37 @@
                                         bind:iconSize
                                 />
                             {:else}
-                                <File
-                                        addSelectVector={addSelectVector.bind(null, index)}
-                                        bind:detail
-                                        bind:iconSize
-                                />
+                                <Swipe showIndicators bind:this={detail.swipeController}>
+                                    <SwipeItem>
+                                        <File
+                                                addSelectVector={addSelectVector.bind(null, index)}
+                                                bind:detail
+                                                bind:iconSize
+                                                style="pointer-events:fill;"
+                                        />
+                                    </SwipeItem>
+                                    <SwipeItem>
+                                        <ButtonGroup size="xl">
+                                            <Delete
+                                                    bind:source
+                                                    bind:updated
+                                                    bind:theme
+                                                    keys$={detail.key$}
+                                                    size="lg"
+                                                    style="pointer-events:fill; height:100%; aspect-ratio: 1/1; font-size: x-large"
+                                            />
+                                            <SaveAll bind:source
+                                                     bind:updated
+                                                     bind:theme
+                                                     bind:cwd
+                                                     downloadName={detail.name + ".zip"}
+                                                     keys$={detail.key$}
+                                                     size="lg"
+                                                     style="pointer-events:fill; height:100%; aspect-ratio: 1/1; font-size: x-large"
+                                            />
+                                        </ButtonGroup>
+                                    </SwipeItem>
+                                </Swipe>
                             {/if}
                         </li>
                     {/if}
@@ -181,21 +212,19 @@
         </Col>
     </Row>
     <Row>
-        <Col xs="1">
-                <ButtonGroup size="lg">
-                    <UploadTo bind:cwd
-                              bind:source
-                              bind:updated
-                              bind:theme
-                              color="secondary"/>
-                </ButtonGroup>
-        </Col>
-        <Col xs="1">
-            <ButtonGroup size="lg">
+        <Col xs="3">
+            <ButtonGroup>
+                <UploadTo bind:cwd
+                          bind:source
+                          bind:updated
+                          bind:theme
+                          style="height:100%; aspect-ratio: 1/1; font-size: x-large"
+                          color="secondary"/>
                 <SaveAll bind:source
                          bind:updated
                          bind:theme
                          bind:cwd
+                         style="height:100%; aspect-ratio: 1/1; font-size: x-large"
                          keys$={ selectedFileKeys$ }
                          color="secondary"/>
             </ButtonGroup>
@@ -203,3 +232,8 @@
     </Row>
 </Container>
 
+<style>
+    .swipe-holder {
+        height: 40px;
+    }
+</style>

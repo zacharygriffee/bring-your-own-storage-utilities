@@ -1,5 +1,4 @@
 <script>
-    import {Styles, Icon, Tooltip, Button} from "@sveltestrap/sveltestrap";
     import streamSaver from "streamsaver";
     import {ZipWriter} from "@zip.js/zip.js";
     import {toWeb} from "streamx-webstream";
@@ -8,16 +7,18 @@
     import {concatMap, mergeAll, map, mergeMap, filter} from "rxjs/operators";
     import {operators} from "../../etc.js";
     import {findDownMultiple$} from "../../../dist/find.min.js";
+    import {useHash} from "../SveltUIiComposables/index.js";
+
+    const {Styles, Icon, Tooltip, Button} = SvelteStrap;
 
     const {
         takeSync
     } = operators;
 
+    const thisId = useHash("saveAll");
     export let source;
     export let keys$;
     export let theme = "dark";
-    export let color = "primary";
-    export let size = "lg";
     export let updated = 0;
     export let readStreamConfig = {};
     export let findConfig = {};
@@ -100,9 +101,9 @@
 
 <slot {triggerDownload}>
     {#key updated}
-        <Button {color} {size} id="fileDownloadButton" on:click={triggerDownload}>
-            <Icon size="lg" name="download"/>
+        <Button id={thisId}  {...$$restProps} on:click={triggerDownload}>
+            <Icon {...$$restProps} name="download"/>
         </Button>
-        <Tooltip target="fileDownloadButton">Download Zip</Tooltip>
+        <Tooltip target={thisId}>Download Zip</Tooltip>
     {/key}
 </slot>

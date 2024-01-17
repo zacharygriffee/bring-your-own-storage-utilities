@@ -1,8 +1,7 @@
 <script>
-    import {Icon, Button} from "@sveltestrap/sveltestrap";
     import {longpress} from "../utils/longpress.js";
-    import {onDestroy} from "../../../dist/svelte/svelte-internal.min.js";
-
+    const {onDestroy} = SvelteInternal;
+    const {Icon, Button} = SvelteStrap;
     export let detail = {};
     export let icons;
     export let iconSize;
@@ -11,7 +10,9 @@
     };
 
     function open(e) {
-        console.log("file clicked to be opened", e)
+        if (detail.swipeController) {
+            detail.swipeController.nextItem()
+        }
     }
 
     export function select(choice = !detail.selected) {
@@ -40,7 +41,7 @@
 
     $: if (inner) {
         {
-            const cleanupLongPress = longpress(inner, 250)
+            const cleanupLongPress = longpress(inner, 300)
             const eventFn = (e) => {
                 selectIt = true;
                 e.detail && onSelect(e);
@@ -73,7 +74,7 @@
     }
 </script>
 
-<Button outline={!detail.selected} bind:inner>
-    <Icon style="font-size: {iconSize}" name={!!detail.typeName ? "filetype-" + detail.typeName : 'file'}/>
+<Button outline={!detail.selected} bind:inner {...$$restProps}>
+    <Icon {...$$restProps} name={!!detail.typeName ? "filetype-" + detail.typeName : 'file'}/>
     { detail.name }
 </Button>

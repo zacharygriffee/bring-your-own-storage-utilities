@@ -1,8 +1,7 @@
 <script>
-    import {onDestroy} from "../../../dist/svelte/svelte-internal.min.js";
-    import {Icon, Button} from "@sveltestrap/sveltestrap";
     import {longpress} from "../utils/longpress.js";
-
+    const {onDestroy} = SvelteInternal;
+    const {Icon, Button} = SvelteStrap;
     export let detail = {};
     export let iconSize;
     export let cwd;
@@ -66,7 +65,7 @@
     detail.select = select;
 </script>
 
-<Button outline={!detail.selected} bind:inner>
-    <Icon style="font-size: {iconSize}" name="folder"/>
+<Button outline={!detail.selected} bind:inner  {...$$restProps}>
+    <Icon {...$$restProps} name="folder"/>
     { detail.name }
 </Button>

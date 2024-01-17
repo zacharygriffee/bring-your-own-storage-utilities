@@ -1,6 +1,6 @@
 <script>
-    import {Styles} from "@sveltestrap/sveltestrap";
     import Tree from './Tree.svelte'
+    const {Styles} = SvelteStrap;
 
     export let source
     export let cwd = "/";

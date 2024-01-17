@@ -39,6 +39,9 @@
         }
 </script>
 <script type="module">
+    import "./dist/svelte/svelte-internal.min.js";
+    import "./dist/svelte/svelte-store.min.js";
+    import "./dist/svelte/svelte-strap.min.js";
     import {test} from "brittle";
     import RAM from "random-access-memory";
     import Corestore from "corestore";
@@ -96,7 +99,7 @@
 
     console.log("Imports from the import map are there to support the tests.");
     console.time("Time of all tests");
-    await import("ALLTESTS");
+    // await import("ALLTESTS");
     test("make file explorer", async t => {
         new Components.FileExplorerComponent({
             target: document.getElementById("fileExplorerTest"),

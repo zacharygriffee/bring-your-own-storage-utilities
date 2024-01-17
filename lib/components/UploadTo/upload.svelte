@@ -1,16 +1,13 @@
 <script>
-    import {Styles, Icon, Tooltip, Button} from "@sveltestrap/sveltestrap";
-    import {nanoid} from "nanoid";
-    import camelCase from "lodash-es/camelCase.js";
+    import {useHash} from "../SveltUIiComposables/index.js";
     import path from "path";
     import b4a from "b4a";
-
-    let thisId = "u" + camelCase(nanoid());
+    const {Styles, Icon, Tooltip, Button} = SvelteStrap;
+    const thisId = useHash("upload");
+    const toolTipTargetId = "t" + thisId;
     export let source;
     export let cwd = "/";
-    export let color = "primary";
     export let theme = "dark";
-    export let size = "lg";
     export let updated = 0;
     export let writable = (source) => !!source.put && !!source.writable
     export let putter = (source, key, buf, config) => source.put(key, buf, config);
@@ -43,13 +40,13 @@
 <Styles {theme}/>
 {#if !!writable(source)}
     <slot {uploadTriggered} {registerFileUploadElement}>
-        <Button disabled={!writable(source)} {color} {size} id="fileUploadLabel">
+        <Button disabled={!writable(source)} {...$$restProps} id={toolTipTargetId}>
             <label style:cursor="pointer" for={thisId}>
-                <Icon size="lg" name="upload"/>
+                <Icon {...$$restProps} name="upload"/>
             </label>
             <input use:registerFileUploadElement style="display: none" type="file" id={thisId} name="filename" multiple
                    on:change={uploadTriggered}/>
-            <Tooltip target="fileUploadLabel">Upload Files</Tooltip>
+            <Tooltip target={toolTipTargetId}>Upload Files</Tooltip>
         </Button>
     </slot>
 {/if}
