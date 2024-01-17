@@ -3,7 +3,6 @@
     const {onDestroy} = SvelteInternal;
     const {Icon, Button} = SvelteStrap;
     export let detail = {};
-    export let iconSize;
     export let cwd;
     export let addSelectVector = () => {};
     export function select(choice = !detail.selected) {

@@ -45,6 +45,7 @@
     export let iconSize;
     export let updated = 0;
     export let theme;
+    export let buttonColors = "secondary";
 
     const loaders = {}
 
@@ -147,7 +148,7 @@
 
 <Container>
     <Row>
-        <Col xs="12">
+        <Col xs="6">
             <h3>
                 <Breadcrumb divider="/">
                     {#each breadcrumb(cwd) as {name, fullPath}}
@@ -160,51 +161,56 @@
         </Col>
     </Row>
     <Row>
-        <Col xs="12">
+        <Col xs="6">
             <ul use:clickOutside on:click_outside={clearSelection}>
                 {#each $files$ as detail, index}
                     {#if detail.isFile || detail.isFolder}
                         <li class="swipe-holder">
-                            {#if detail.isFolder}
-                                <Directory
-                                        addSelectVector={addSelectVector.bind(null, index)}
-                                        bind:detail
-                                        bind:cwd
-                                        bind:iconSize
-                                />
-                            {:else}
-                                <Swipe showIndicators bind:this={detail.swipeController}>
-                                    <SwipeItem>
+                            <Swipe showIndicators bind:this={detail.swipeController}>
+                                <SwipeItem>
+                                    {#if detail.isFolder}
+                                        <Directory
+                                                addSelectVector={addSelectVector.bind(null, index)}
+                                                bind:detail
+                                                bind:cwd
+                                                size="lg"
+                                                style="pointer-events:fill; height:100%; font-size: x-large"
+                                                color={buttonColors}
+                                        />
+                                    {:else}
                                         <File
                                                 addSelectVector={addSelectVector.bind(null, index)}
                                                 bind:detail
-                                                bind:iconSize
-                                                style="pointer-events:fill;"
+                                                size="lg"
+                                                style="pointer-events:fill; height:100%; font-size: x-large"
+                                                color={buttonColors}
                                         />
-                                    </SwipeItem>
-                                    <SwipeItem>
-                                        <ButtonGroup size="xl">
-                                            <Delete
-                                                    bind:source
-                                                    bind:updated
-                                                    bind:theme
-                                                    keys$={detail.key$}
-                                                    size="lg"
-                                                    style="pointer-events:fill; height:100%; aspect-ratio: 1/1; font-size: x-large"
-                                            />
-                                            <SaveAll bind:source
-                                                     bind:updated
-                                                     bind:theme
-                                                     bind:cwd
-                                                     downloadName={detail.name + ".zip"}
-                                                     keys$={detail.key$}
-                                                     size="lg"
-                                                     style="pointer-events:fill; height:100%; aspect-ratio: 1/1; font-size: x-large"
-                                            />
-                                        </ButtonGroup>
-                                    </SwipeItem>
-                                </Swipe>
-                            {/if}
+                                    {/if}
+                                </SwipeItem>
+                                <SwipeItem>
+                                    <ButtonGroup size="xl">
+                                        <Delete
+                                                bind:source
+                                                bind:updated
+                                                bind:theme
+                                                keys$={detail.key$}
+                                                size="lg"
+                                                style="pointer-events:fill; height:100%; aspect-ratio: 1/1; font-size: x-large"
+                                                color={buttonColors}
+                                        />
+                                        <SaveAll bind:source
+                                                 bind:updated
+                                                 bind:theme
+                                                 bind:cwd
+                                                 downloadName={detail.name + ".zip"}
+                                                 keys$={detail.key$}
+                                                 size="lg"
+                                                 style="pointer-events:fill; height:100%; aspect-ratio: 1/1; font-size: x-large"
+                                                 color={buttonColors}
+                                        />
+                                    </ButtonGroup>
+                                </SwipeItem>
+                            </Swipe>
                         </li>
                     {/if}
                 {/each}
@@ -212,21 +218,21 @@
         </Col>
     </Row>
     <Row>
-        <Col xs="3">
+        <Col xs="6">
             <ButtonGroup>
                 <UploadTo bind:cwd
                           bind:source
                           bind:updated
                           bind:theme
                           style="height:100%; aspect-ratio: 1/1; font-size: x-large"
-                          color="secondary"/>
+                          color={buttonColors}/>
                 <SaveAll bind:source
                          bind:updated
                          bind:theme
                          bind:cwd
                          style="height:100%; aspect-ratio: 1/1; font-size: x-large"
                          keys$={ selectedFileKeys$ }
-                         color="secondary"/>
+                         color={buttonColors}/>
             </ButtonGroup>
         </Col>
     </Row>
