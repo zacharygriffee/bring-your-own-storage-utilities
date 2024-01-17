@@ -1,6 +1,6 @@
 <script>
 	import { Icon } from "@sveltestrap/sveltestrap";
-	import { longpress } from "../utils/longpress.js";
+	import {longpress} from "../SveltUIiComposables/index.js";
 
 	export let detail = {};
 	export let iconSize;
@@ -13,6 +13,7 @@
 
 	let selectIt = false;
 	function onSelect(e) {
+		e.preventDefault();
 		if (selectIt || e.shiftKey || e.ctrlKey) {
 			select();
 			if (e.shiftKey) addSelectVector();

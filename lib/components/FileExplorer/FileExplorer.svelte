@@ -8,7 +8,8 @@
     export let updated = 0;
     export let theme = "dark";
 
-    export let addSelectVector = () => {};
+    export let addSelectVector = () => {
+    };
 
     if (!source) {
         throw new Error("props.source must be defined.");
@@ -16,19 +17,23 @@
 
 </script>
 
-<Styles bind:theme />
-
-{#key updated}
-    <main>
-        <Tree
-                bind:source
-                bind:cwd
-                bind:iconSize
-                bind:updated
-                bind:theme
-        />
-    </main>
-{/key}
+<Styles bind:theme/>
+<div oncontextmenu={(e) => {
+    e.preventDefault();
+    return false;
+}}>
+    {#key updated}
+        <main>
+            <Tree
+                    bind:source
+                    bind:cwd
+                    bind:iconSize
+                    bind:updated
+                    bind:theme
+            />
+        </main>
+    {/key}
+</div>
 
 <style>
     main :global(ul) {
