@@ -20,6 +20,7 @@
     export let size = "lg";
     export let updated = 0;
     export let readStreamConfig = {};
+    export let findConfig = {};
     export let downloadName = "sourceFiles.zip";
     export let state$;
     export let cwd;
@@ -50,7 +51,7 @@
             takeSync(),
             concatMap((detail) => {
                 if (detail.isFolder) {
-                    return findDownMultiple$(_source, detail.fullPath + "/**")
+                    return findDownMultiple$(_source, detail.fullPath + "/**", findConfig)
                         .pipe(
                             mergeAll(),
                             mergeAll(),

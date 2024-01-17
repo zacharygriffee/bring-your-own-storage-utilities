@@ -70,14 +70,13 @@ Loads all package.json between cwd and stopAt.
 
 | Param | Default | Description |
 | --- | --- | --- |
-| source |  | A hyper source that has a getter. |
+| source |  | A source that has a getter. |
 | config |  | Either a string representing cwd or a config. |
 | config.cwd |  | The nested directory to begin traversing up to find package.json |
 | [config.stopAt] | <code>root</code> | The directory to stop traversing up to. Default is the root of the source. |
-| [config.getter] | <code>source.get</code> | The getter that retrieves the data from the source by the key resolved. [config.query](config.query) is whether the source has the file; [config.getter](config.getter) actually loads the file data. |
+| [config.getter] | <code>source.get</code> | The getter that retrieves the data from the source by the key resolved. |
 | [config.predicate] |  | A predicate to filter package.json files. |
 | [config.trimPath] | <code>true</code> | Will trim any paths of any slashes or dots. Not thoroughly tested. |
-| [config.query] | <code>source.exists || !!source.get</code> | How to query if the package.json exists from the source. |
 
 <a name="loadPackageJson"></a>
 
@@ -92,10 +91,9 @@ Loads the immediate package.json from the cwd directory,
 | config |  | Either a string representing cwd or a config. |
 | config.cwd |  | The nested directory to begin traversing up to find package.json |
 | [config.stopAt] | <code>root</code> | The directory to stop traversing up to. Default is the root of the source. |
-| [config.getter] | <code>source.get</code> | The getter that retrieves the data from the source by the key resolved. [config.query](config.query) is whether the source has the file; [config.getter](config.getter) actually loads the file data. |
+| [config.getter] | <code>source.get</code> | The getter that retrieves the data from the source by the key resolved. |
 | [config.predicate] |  | A predicate to filter package.json files. |
 | [config.trimPath] | <code>true</code> | Will trim any paths of any slashes or dots. Not thoroughly tested. |
-| [config.query] | <code>source.exists || !!source.get</code> | How to query if the package.json exists from the source. |
 
 <a name="loadRootPackageJson"></a>
 
@@ -106,11 +104,11 @@ Loads the root-most package.json (closest to the config.stopAt path)
 
 | Param | Default | Description |
 | --- | --- | --- |
-| source |  | A hyper source that has a getter. |
+| source |  | A source that has a getter. |
 | config |  | Either a string representing cwd or a config. |
 | config.cwd |  | The nested directory to begin traversing up to find package.json |
 | [config.stopAt] | <code>root</code> | The directory to stop traversing up to. Default is the root of the source. |
-| [config.getter] | <code>source.get</code> | The getter that retrieves the data from the source by the key resolved. [config.query](config.query) is whether the source has the file; [config.getter](config.getter) actually loads the file data. |
+| [config.getter] | <code>source.get</code> | The getter that retrieves the data from the source by the key resolved. |
 | [config.predicate] |  | A predicate to filter package.json files. |
 | [config.trimPath] | <code>true</code> | Will trim any paths of any slashes or dots. Not thoroughly tested. |
 | [config.query] | <code>source.exists || !!source.get</code> | How to query if the package.json exists from the source. |
@@ -128,11 +126,10 @@ a package.json parent to the former.
 | source |  | A hyper source that has a getter. |
 | config |  | Either a string representing cwd or a config. |
 | config.cwd |  | The nested directory to begin traversing up to find package.json |
-| [config.getter] | <code>source.get</code> | The getter that retrieves the data from the source by the key resolved. [config.query](config.query) is whether the source has the file; [config.getter](config.getter) actually loads the file data. |
+| [config.getter] | <code>source.get</code> | The getter that retrieves the data from the source by the key resolved. |
 | [config.stopAt] | <code>root</code> | The directory to stop traversing up to. Default is the root of the source. |
 | [config.predicate] |  | A predicate to filter package.json files. |
 | [config.trimPath] | <code>true</code> | Will trim any paths of any slashes or dots. Not thoroughly tested. |
-| [config.query] | <code>source.exists || !!source.get</code> | How to query if the package.json exists from the source. |
 
 <a name="nodeLikeResolver$"></a>
 

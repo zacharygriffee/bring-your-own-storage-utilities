@@ -1,5 +1,6 @@
 <script>
 	import { Icon } from "@sveltestrap/sveltestrap";
+	import {longpress} from "../utils/longpress.js";
 
 	export let detail = {};
 	export let icons;
@@ -15,11 +16,13 @@
 		detail.selected = choice;
 	}
 
+	let selectIt = false;
 	function onSelect(e) {
-		if (e.shiftKey || e.ctrlKey) {
+		if (selectIt || e.shiftKey || e.ctrlKey) {
 			detail.selected = !detail.selected
 			if (e.shiftKey) addSelectVector();
 		} else open(e);
+		selectIt = false;
 	}
 
 	detail.select = select;
@@ -27,7 +30,9 @@
 
 {#key detail.selected}
 	<div>
-		<button class="{detail.selected ? 'selected' : ''} " on:click={e => onSelect(e)}>
+		<button use:longpress={300} class="{detail.selected ? 'selected' : ''} "
+				on:click={ e => onSelect(e) }
+				on:longpress={e => selectIt = true }>
 			<Icon style="font-size: {iconSize}" name={!!detail.typeName ? "filetype-" + detail.typeName : 'file'}/>
 			{ detail.name }
 		</button>

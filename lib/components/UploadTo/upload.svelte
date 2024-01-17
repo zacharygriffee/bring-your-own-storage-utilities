@@ -12,6 +12,9 @@
     export let theme = "dark";
     export let size = "lg";
     export let updated = 0;
+    export let writable = (source) => !!source.put && !!source.writable
+    export let putter = (source, key, buf, config) => source.put(key, buf, config);
+    export let putConfig = {};
     export let keyMutateFunction = (key) => {
         return key;
     };
@@ -27,7 +30,7 @@
             const key = keyMutateFunction(path.resolve(cwd, file.name))
             const buf = b4a.from(await file.arrayBuffer());
             console.log("file upload", {fileName: key, buf});
-            await source.put(key, buf);
+            await Promise.resolve(putter(key, buf, putConfig))
         }
         updated++;
     }
@@ -38,9 +41,9 @@
 </script>
 
 <Styles {theme}/>
-{#if !!source.put}
+{#if !!writable(source)}
     <slot {uploadTriggered} {registerFileUploadElement}>
-        <Button disabled={!source.put} {color} {size} id="fileUploadLabel">
+        <Button disabled={!writable(source)} {color} {size} id="fileUploadLabel">
             <label style:cursor="pointer" for={thisId}>
                 <Icon size="lg" name="upload"/>
             </label>

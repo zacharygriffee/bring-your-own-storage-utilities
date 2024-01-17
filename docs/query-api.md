@@ -104,8 +104,7 @@ be determined a null will be returned.</p>
 ** isFolder will return false here folders that are empty **</p>
 </dd>
 <dt><a href="#readdir$">readdir$(source, config)</a> ⇒</dt>
-<dd><p>readdir that wraps either hyperdrive and hyperbee instance.
-Aimed to handle hypercore and hyperbee. But, plan on support for more</p>
+<dd><p>readdir. By default, lists all files and folders by their name without a path, from the <code>config.cwd</code>.</p>
 <p>readdir will coerce a source to be listable (config.list = true). So even if a source doesn&#39;t have list function,
 it still will work 99% of cases, still tests need to be done to ensure that.</p>
 <p>the readdir of the source can be a <code>cold observable</code> an <code>async iterable</code> an <code>array of keys</code> an <code>async generator</code>,
@@ -389,8 +388,7 @@ Async convenience method for pathDetail$
 <a name="readdir$"></a>
 
 ## readdir$(source, config) ⇒
-readdir that wraps either hyperdrive and hyperbee instance.
-Aimed to handle hypercore and hyperbee. But, plan on support for more
+readdir. By default, lists all files and folders by their name without a path, from the `config.cwd`.
 
 readdir will coerce a source to be listable (config.list = true). So even if a source doesn't have list function,
 it still will work 99% of cases, still tests need to be done to ensure that.
@@ -407,7 +405,7 @@ as an interface like in this pseudocode example
 | source |  | source with functions readdir, get or entry |
 | config |  | These configuration options apply to the readdir$ AND they are passed to the source.readdir second argument |
 | [config.cwd] | <code>/</code> | Current working directory of the source. |
-| [config.list] |  | Whether to get a detailed list of the files. |
+| [config.list] |  | Whether to get a detailed list of the files. A list is currently always recursive. |
 | [config.recursive] |  | Whether to recursively dig into folders only applies if config.list is true |
 | [config.trimPath] | <code>true</code> | To trim the path of any dots and slashes, a db may not start with the leading chars. This is default true because Hyperdrive handles path prefixes |
 
