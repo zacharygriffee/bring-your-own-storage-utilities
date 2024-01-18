@@ -289,10 +289,11 @@ and value is the module specifier to pull from. Sometimes all you need is to rem
         rollupVirtual(
             "bigBloatedExports.js"
             {
-                "theAnswer": "the-answer",   // If you got a cdn plugin 'above this plugin' you can pull from it.
-                "_": `lodash-es`,            // This will add a _ export to the file
+                "default as theAnswer": "the-answer",   // If you got a cdn plugin 'above this plugin' you can pull from it.
+                "* as _": `lodash-es`,            // This will add a _ export to the file
                 "*": "rxjs",                 // The asterisk will pull everything.
                                              // Currently, this is only available for one export per plugin instance.
+                                             // You can hack it by adding whitespace AFTER the astrisk.
                 "yourModule": "./yourModuleFromVirtualPlugin.js"   // Your modules from elsewhere work too......
             }
         )

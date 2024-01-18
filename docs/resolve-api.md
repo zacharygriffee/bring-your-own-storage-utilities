@@ -13,7 +13,6 @@
         * [.exports.getPackageJson()](#Resolve.JsDelivr.exports.getPackageJson)
         * [.exports.importModule$(moduleId, config)](#Resolve.JsDelivr.exports.importModule$) ⇒
         * [.exports.importModule()](#Resolve.JsDelivr.exports.importModule)
-        * [.exports.parseModuleRequest(moduleId, config)](#Resolve.JsDelivr.exports.parseModuleRequest) ⇒ <code>Object</code>
         * [.exports.getVersions$(bareModuleSpecifier)](#Resolve.JsDelivr.exports.getVersions$) ⇒
         * [.exports.get$(id)](#Resolve.JsDelivr.exports.get$) ⇒ <code>Observable.&lt;module&gt;</code>
         * [.exports.get()](#Resolve.JsDelivr.exports.get)
@@ -25,6 +24,7 @@
     * [.exports.createImportMapFromModules()](#Resolve.exports.createImportMapFromModules)
     * [.exports.importCode(code, config)](#Resolve.exports.importCode) ⇒ <code>string</code>
     * [.exports.importCode$()](#Resolve.exports.importCode$)
+    * [.exports.inferCodeUrlOrModuleSpecifier(string)](#Resolve.exports.inferCodeUrlOrModuleSpecifier) ⇒ <code>Object</code>
     * [.exports.jsonParse(json)](#Resolve.exports.jsonParse) ⇒ <code>object</code>
     * [.exports.loadAllScopedPackageJson(source, config)](#Resolve.exports.loadAllScopedPackageJson) ⇒ <code>\*</code>
     * [.exports.loadPackageJson(source, config)](#Resolve.exports.loadPackageJson) ⇒ <code>\*</code>
@@ -46,7 +46,6 @@
     * [.exports.getPackageJson()](#Resolve.JsDelivr.exports.getPackageJson)
     * [.exports.importModule$(moduleId, config)](#Resolve.JsDelivr.exports.importModule$) ⇒
     * [.exports.importModule()](#Resolve.JsDelivr.exports.importModule)
-    * [.exports.parseModuleRequest(moduleId, config)](#Resolve.JsDelivr.exports.parseModuleRequest) ⇒ <code>Object</code>
     * [.exports.getVersions$(bareModuleSpecifier)](#Resolve.JsDelivr.exports.getVersions$) ⇒
     * [.exports.get$(id)](#Resolve.JsDelivr.exports.get$) ⇒ <code>Observable.&lt;module&gt;</code>
     * [.exports.get()](#Resolve.JsDelivr.exports.get)
@@ -113,21 +112,6 @@ Import a module by specifier, url, identifier.
 Convenience async method for importModule$
 
 **Kind**: static method of [<code>JsDelivr</code>](#Resolve.JsDelivr)  
-<a name="Resolve.JsDelivr.exports.parseModuleRequest"></a>
-
-#### JsDelivr.exports.parseModuleRequest(moduleId, config) ⇒ <code>Object</code>
-Parse a module specifier into their parts and possible path locations.
-
-**Kind**: static method of [<code>JsDelivr</code>](#Resolve.JsDelivr)  
-
-| Param | Default | Description |
-| --- | --- | --- |
-| moduleId |  | Specifier can be of formats: name@version/path @namespace/name@version/path and without path or specify the parts in the config. |
-| config |  |  |
-| config.version |  | Version of the module |
-| config.path |  | Path of an aspect of the module. |
-| [config.timeout] | <code>60s</code> | Not implemented yet. |
-
 <a name="Resolve.JsDelivr.exports.getVersions$"></a>
 
 #### JsDelivr.exports.getVersions$(bareModuleSpecifier) ⇒
@@ -284,6 +268,21 @@ Import virtual javascript module from string.
 Convenience rxjs observable for importCode.
 
 **Kind**: static method of [<code>Resolve</code>](#Resolve)  
+<a name="Resolve.exports.inferCodeUrlOrModuleSpecifier"></a>
+
+### Resolve.exports.inferCodeUrlOrModuleSpecifier(string) ⇒ <code>Object</code>
+Get a module whether it is code, url, module specifier, path, svelte etc.
+
+Cannot 'detect svelte code' can only detect whether url/path has an extension of '.svelte'.
+
+Works almost all the time.
+
+**Kind**: static method of [<code>Resolve</code>](#Resolve)  
+
+| Param |
+| --- |
+| string | 
+
 <a name="Resolve.exports.jsonParse"></a>
 
 ### Resolve.exports.jsonParse(json) ⇒ <code>object</code>

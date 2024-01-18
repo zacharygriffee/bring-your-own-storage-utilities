@@ -136,6 +136,9 @@ identifiers and indexers to a resource.
 - Resolve a bare module specifier and other files similar to node's `require` or es6's `import`
 - Collect modules from parent directories that have a `node_modules` folder
 - Load all `package.json` from child directory up to root directory
+- JsDelivr resolve of bare module specifiers
+- Turn string code into module.
+- Get dataUri of code or other resources
 
 ---
 
