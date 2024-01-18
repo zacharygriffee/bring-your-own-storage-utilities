@@ -17,6 +17,7 @@
 
 <script>
     import {Swipe, SwipeItem} from "../../../dist/components/SvelteSwipe.min.js";
+    import {hotkey} from "../SveltUIiComposables/index.js";
     import * as Query from "../../../dist/query.min.js";
     import UploadTo from "../../../dist/components/UploadTo.min.js"
     import SaveAll from "../../../dist/components/SaveAll.min.js";
@@ -90,6 +91,12 @@
         }, 12);
     }
 
+    function selectAll() {
+        files$.getValue().forEach(
+            o => o.select(true)
+        );
+    }
+
     function breadcrumb(cwd = "") {
         const p = cwd.split("/").reduce(
             (acc, val) => {
@@ -109,8 +116,6 @@
     }
 
     function openCwd(cwd) {
-        // console.log("opwnCwd triggered", cwd);
-        // files$ = new SvelteSubject([]);
         Query.readdir$(source, cwd).pipe(
             concatMap(
                 name => {
@@ -164,7 +169,7 @@
     </Row>
     <Row>
         <Col>
-            <ul use:clickOutside on:click_outside={clearSelection}>
+            <ul use:hotkey={[["ctrl+A", selectAll]]} use:clickOutside on:click_outside={clearSelection}>
                 {#each $files$ as detail, index}
                     {#if detail.isFile || detail.isFolder}
                         <li class="swipe-holder">

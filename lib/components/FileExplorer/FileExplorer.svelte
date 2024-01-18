@@ -8,9 +8,6 @@
     export let updated = 0;
     export let theme = "dark";
 
-    export let addSelectVector = () => {
-    };
-
     if (!source) {
         throw new Error("props.source must be defined.");
     }
