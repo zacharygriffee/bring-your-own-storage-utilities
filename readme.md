@@ -128,7 +128,7 @@ that resource
 
 #### `import * as Resolve from "bring-your-own-storage-utilities/resolve"`
 
-Have an id, specifier, import, name, extension, hash table, whatever, this section should be for resolving these
+Have an id, specifier, import, name, hash table, whatever, this section should be for resolving these
 identifiers and indexers to a resource.
 
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/resolve-api.md)
@@ -174,6 +174,10 @@ You need to deploy something from your source to the end-user.
   - including pack(inputName, outputName, rollupConfig) function to make the entire process easier
 - [Svelte](https://svelte.dev/) plugin to compile .svelte files from browser for sources in the browser.
 - [Terser](https://terser.org/) plugin for rollup that works in browser 
+- [jsdelivr](https://www.jsdelivr.com/) plugin that gets module specifier from CDN jsdelivr.
+This plugin will only resolve to module. Even if a module is cjs it will resolve as a module. If the module is
+natively esm module, you shouldn't have any problems with this plugin. MOST cjs just works.... but things can get dicey for some
+complex cjs javascript.
 
 ---
 
@@ -199,6 +203,7 @@ Svelte components for handling source storages.
 - [ ] todo: support db like structures like hyperbee
 - [ ] todo: document on how sources are consumed and interfaces they should have
 - [x] todo: separate very large deploy (currently 4mb) from the rest as a `sdk`
+- [ ] todo: thoroughly test every edge case with JsDelivr plugin/resolver
 
 ## Test it
 
