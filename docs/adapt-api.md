@@ -1,30 +1,26 @@
 
 # ADAPT API
 
-## Functions
+<a name="Adapt"></a>
 
-<dl>
-<dt><a href="#fromRandomAccess">fromRandomAccess(randomAccessFunction, readdir$)</a></dt>
-<dd><p>Wraps a function that makes random access storage instances. You have to supply the readdir mechanism here because
-there is no standard for it.</p>
-</dd>
-<dt><a href="#fromRandomAccessCollection">fromRandomAccessCollection(collection)</a></dt>
-<dd><p>Wraps a collection of random access storage instances to be used with this library.</p>
-<p>Currently supported functions: exists, get, readdir,</p>
-<p>It is <strong>not recommended</strong> to use with collections that have big files. For that, use
-<a href="https://docs.holepunch.to/building-blocks/hypercore">hypercore</a>, or
-<a href="https://docs.holepunch.to/helpers/corestore">corestore</a> or some other handler
-of random-access-storage instances.</p>
-</dd>
-</dl>
+## Adapt : <code>object</code>
+**Kind**: global namespace  
 
-<a name="fromRandomAccess"></a>
+* [Adapt](#Adapt) : <code>object</code>
+    * [.fromRandomAccess](#Adapt.fromRandomAccess) : <code>object</code>
+        * [.exists(file, [config])](#Adapt.fromRandomAccess.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
+        * [.readdir([fromPath], [config])](#Adapt.fromRandomAccess.readdir) ⇒ <code>Readable</code>
+    * [.fromRandomAccessCollection](#Adapt.fromRandomAccessCollection) : <code>object</code>
+        * [.exists(file)](#Adapt.fromRandomAccessCollection.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
+        * [.get(file, [config])](#Adapt.fromRandomAccessCollection.get) ⇒ <code>Promise.&lt;\*&gt;</code>
 
-## fromRandomAccess(randomAccessFunction, readdir$)
+<a name="Adapt.fromRandomAccess"></a>
+
+### Adapt.fromRandomAccess : <code>object</code>
 Wraps a function that makes random access storage instances. You have to supply the readdir mechanism here because
 there is no standard for it.
 
-**Kind**: global function  
+**Kind**: static namespace of [<code>Adapt</code>](#Adapt)  
 **Todo**
 
 - [ ] When this library supports put/write, can keep inner cache of the file hierarchy created to make readdir$
@@ -46,42 +42,28 @@ fromRandomAccess(
 )
 ```
 
-* [fromRandomAccess(randomAccessFunction, readdir$)](#fromRandomAccess)
-    * [.get(file, [config])](#fromRandomAccess.get) ⇒ <code>Promise.&lt;\*&gt;</code>
-    * [.exists(file, [config])](#fromRandomAccess.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.readdir([fromPath], [config])](#fromRandomAccess.readdir) ⇒ <code>Readable</code>
+* [.fromRandomAccess](#Adapt.fromRandomAccess) : <code>object</code>
+    * [.exists(file, [config])](#Adapt.fromRandomAccess.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.readdir([fromPath], [config])](#Adapt.fromRandomAccess.readdir) ⇒ <code>Readable</code>
 
-<a name="fromRandomAccess.get"></a>
+<a name="Adapt.fromRandomAccess.exists"></a>
 
-### fromRandomAccess.get(file, [config]) ⇒ <code>Promise.&lt;\*&gt;</code>
-Get the entire content of the file. **Careful** with big files.
-
-**Kind**: static method of [<code>fromRandomAccess</code>](#fromRandomAccess)  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| file | <code>string</code> |  | File name to get |
-| [config] |  |  | as well as the configuration below, this is passed to the factory function. |
-| [config.encoding] |  | <code>&#x27;binary&#x27;</code> | Either a `string`, compact-encoding, or codec |
-
-<a name="fromRandomAccess.exists"></a>
-
-### fromRandomAccess.exists(file, [config]) ⇒ <code>Promise.&lt;boolean&gt;</code>
+#### fromRandomAccess.exists(file, [config]) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Whether the file exists in collection. An empty file does not exist to this function.
 
-**Kind**: static method of [<code>fromRandomAccess</code>](#fromRandomAccess)  
+**Kind**: static method of [<code>fromRandomAccess</code>](#Adapt.fromRandomAccess)  
 
 | Param | Type | Description |
 | --- | --- | --- |
 | file | <code>string</code> | File name to check |
 | [config] |  | a configuration object that is passed to the factory function |
 
-<a name="fromRandomAccess.readdir"></a>
+<a name="Adapt.fromRandomAccess.readdir"></a>
 
-### fromRandomAccess.readdir([fromPath], [config]) ⇒ <code>Readable</code>
+#### fromRandomAccess.readdir([fromPath], [config]) ⇒ <code>Readable</code>
 Returns a readable stream of files in cwd.
 
-**Kind**: static method of [<code>fromRandomAccess</code>](#fromRandomAccess)  
+**Kind**: static method of [<code>fromRandomAccess</code>](#Adapt.fromRandomAccess)  
 **Returns**: <code>Readable</code> - A streamx readable stream that emits the values.  
 
 | Param | Default | Description |
@@ -91,9 +73,9 @@ Returns a readable stream of files in cwd.
 | [config.cwd] |  | Same as fromPath |
 | [config.recursive] | <code>false</code> | If true, cwd is ignored and all files in the collection are returned. |
 
-<a name="fromRandomAccessCollection"></a>
+<a name="Adapt.fromRandomAccessCollection"></a>
 
-## fromRandomAccessCollection(collection)
+### Adapt.fromRandomAccessCollection : <code>object</code>
 Wraps a collection of random access storage instances to be used with this library.
 
 Currently supported functions: exists, get, readdir,
@@ -103,7 +85,7 @@ It is **not recommended** to use with collections that have big files. For that,
 [corestore](https://docs.holepunch.to/helpers/corestore) or some other handler
 of random-access-storage instances.
 
-**Kind**: global function  
+**Kind**: static namespace of [<code>Adapt</code>](#Adapt)  
 **Todo**
 
 - [ ] Support put, append, and other operations.
@@ -123,47 +105,31 @@ fromRandomAccessStorageCollection({
 });
 ```
 
-* [fromRandomAccessCollection(collection)](#fromRandomAccessCollection)
-    * [.exists(file)](#fromRandomAccessCollection.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.get(file, [config])](#fromRandomAccessCollection.get) ⇒ <code>Promise.&lt;\*&gt;</code>
-    * [.readdir([fromPath], [config])](#fromRandomAccessCollection.readdir) ⇒ <code>Readable</code>
+* [.fromRandomAccessCollection](#Adapt.fromRandomAccessCollection) : <code>object</code>
+    * [.exists(file)](#Adapt.fromRandomAccessCollection.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.get(file, [config])](#Adapt.fromRandomAccessCollection.get) ⇒ <code>Promise.&lt;\*&gt;</code>
 
-<a name="fromRandomAccessCollection.exists"></a>
+<a name="Adapt.fromRandomAccessCollection.exists"></a>
 
-### fromRandomAccessCollection.exists(file) ⇒ <code>Promise.&lt;boolean&gt;</code>
+#### fromRandomAccessCollection.exists(file) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Whether the file exists in collection. An empty file does not exist to this function.
 
-**Kind**: static method of [<code>fromRandomAccessCollection</code>](#fromRandomAccessCollection)  
+**Kind**: static method of [<code>fromRandomAccessCollection</code>](#Adapt.fromRandomAccessCollection)  
 
 | Param | Type |
 | --- | --- |
 | file | <code>string</code> | 
 
-<a name="fromRandomAccessCollection.get"></a>
+<a name="Adapt.fromRandomAccessCollection.get"></a>
 
-### fromRandomAccessCollection.get(file, [config]) ⇒ <code>Promise.&lt;\*&gt;</code>
+#### fromRandomAccessCollection.get(file, [config]) ⇒ <code>Promise.&lt;\*&gt;</code>
 Get the entire content of the file. **Careful** with big files.
 
-**Kind**: static method of [<code>fromRandomAccessCollection</code>](#fromRandomAccessCollection)  
+**Kind**: static method of [<code>fromRandomAccessCollection</code>](#Adapt.fromRandomAccessCollection)  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
 | file | <code>string</code> |  |  |
 | [config] |  |  |  |
 | [config.encoding] |  | <code>&#x27;binary&#x27;</code> | Either a `string`, compact-encoding, or codec |
-
-<a name="fromRandomAccessCollection.readdir"></a>
-
-### fromRandomAccessCollection.readdir([fromPath], [config]) ⇒ <code>Readable</code>
-Returns a readable stream of files in cwd
-
-**Kind**: static method of [<code>fromRandomAccessCollection</code>](#fromRandomAccessCollection)  
-**Returns**: <code>Readable</code> - A streamx readable stream that emits the values.  
-
-| Param | Default | Description |
-| --- | --- | --- |
-| [fromPath] | <code>&quot;/&quot;</code> | A file path, defaults to root. |
-| [config] |  |  |
-| [config.cwd] |  | Same as fromPath |
-| [config.recursive] | <code>false</code> | If true, cwd is ignored and all files in the collection are returned. |
 

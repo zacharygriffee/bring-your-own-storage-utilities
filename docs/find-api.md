@@ -1,96 +1,61 @@
 
 # FIND API
 
-## Functions
+<a name="Find"></a>
 
-<dl>
-<dt><a href="#coercePathAbsolute">coercePathAbsolute(path, [sep])</a> ⇒ <code>string</code></dt>
-<dd><p>Turns a path absolute, removing any prefixes and adding &#39;sep&#39; as a prefix</p>
-</dd>
-<dt><a href="#findDown">findDown()</a></dt>
-<dd><p>Convenience async version of findDown$</p>
-</dd>
-<dt><a href="#findDown$">findDown$()</a></dt>
-<dd><p>Convenience findDownMultiple$ that returns only one by default. Files are also merged into one array.</p>
-</dd>
-<dt><a href="#findDownMultiple$">findDownMultiple$(source, fileList, config)</a> ⇒</dt>
-<dd><p>Traverses down directories of a source storage (child directories).</p>
-<p>Files found will be absolute paths to the source&#39;s root.</p>
-</dd>
-<dt><a href="#findUp">findUp()</a></dt>
-<dd><p>Convenience async version of findUp$</p>
-</dd>
-<dt><a href="#findUp$">findUp$()</a></dt>
-<dd><p>Convenience findUpMultiple$ that returns only one by default. Files are also merged into one array.</p>
-</dd>
-<dt><a href="#findUpMultiple$">findUpMultiple$(source, fileList, [fromDir], config)</a> ⇒</dt>
-<dd><p>Traverses up directories of a source storage (parent directories).</p>
-<p>Files found will be absolute paths to the source&#39;s root.</p>
-</dd>
-<dt><a href="#findNodeModule$">findNodeModule$(source, names, config)</a> ⇒ <code>*</code></dt>
-<dd><p>Finds a module from a node_module folder that may exist between the source root and cwd. The node_module folder must
-have a package.json inside it to qualify as a node_module.</p>
-</dd>
-<dt><a href="#findNodeModule">findNodeModule(source, names, config)</a> ⇒ <code>*</code></dt>
-<dd><p>Finds the node module paths of the inputted bare name specifiers.</p>
-</dd>
-<dt><a href="#findNodeModulesDirectory$">findNodeModulesDirectory$(source, config)</a> ⇒ <code>*</code></dt>
-<dd><p>Find the closest node module directory from a nested cwd directory to the stopAt/root from source.</p>
-</dd>
-<dt><a href="#findNodeModulesDirectory">findNodeModulesDirectory(source, config)</a> ⇒ <code>*</code></dt>
-<dd><p>Find the closest module directory from a nested cwd directory to the stopAt/root from source.</p>
-</dd>
-<dt><a href="#findPackageDirectory$">findPackageDirectory$(source, config)</a> ⇒</dt>
-<dd><p>Simply put, it basically this: dirname(findPackageJson$) || &#39;/&#39;
-Find directories up package.json resides in.</p>
-<p>note: This emits each directory (the correct behavior) unlike the findPackageJson$ which is currently on todo list to change.</p>
-</dd>
-<dt><a href="#findPackageJson$">findPackageJson$(source, config)</a> ⇒</dt>
-<dd><p>Find package.json files into the parent directories.</p>
-</dd>
-<dt><a href="#findPackageJson">findPackageJson()</a></dt>
-<dd><p>Convenience async version of findPackageJson$. Will return an array of all packages found.</p>
-</dd>
-<dt><a href="#parseModuleSpecifier">parseModuleSpecifier(moduleId, config)</a> ⇒</dt>
-<dd><p>Parses a npm module specifier.</p>
-</dd>
-<dt><a href="#toPath">toPath(urlOrPath)</a> ⇒ <code>string</code></dt>
-<dd><p>Converts a file:// to path if it is one.</p>
-</dd>
-</dl>
+## Find : <code>object</code>
+**Kind**: global namespace  
 
-<a name="coercePathAbsolute"></a>
+* [Find](#Find) : <code>object</code>
+    * [.exports.coercePathAbsolute(path, [sep])](#Find.exports.coercePathAbsolute) ⇒ <code>string</code>
+    * [.exports.findDown()](#Find.exports.findDown)
+    * [.exports.findDown$()](#Find.exports.findDown$)
+    * [.exports.findDownMultiple$(source, fileList, config)](#Find.exports.findDownMultiple$) ⇒
+    * [.exports.findUp()](#Find.exports.findUp)
+    * [.exports.findUp$()](#Find.exports.findUp$)
+    * [.exports.findUpMultiple$(source, fileList, [fromDir], config)](#Find.exports.findUpMultiple$) ⇒
+    * [.exports.findNodeModule$(source, names, config)](#Find.exports.findNodeModule$) ⇒ <code>\*</code>
+    * [.exports.findNodeModule(source, names, config)](#Find.exports.findNodeModule) ⇒ <code>\*</code>
+    * [.exports.findNodeModulesDirectory$(source, config)](#Find.exports.findNodeModulesDirectory$) ⇒ <code>\*</code>
+    * [.exports.findNodeModulesDirectory(source, config)](#Find.exports.findNodeModulesDirectory) ⇒ <code>\*</code>
+    * [.exports.findPackageDirectory$(source, config)](#Find.exports.findPackageDirectory$) ⇒
+    * [.exports.findPackageJson$(source, config)](#Find.exports.findPackageJson$) ⇒
+    * [.exports.findPackageJson()](#Find.exports.findPackageJson)
+    * [.exports.parseModuleSpecifier(moduleId, config)](#Find.exports.parseModuleSpecifier) ⇒
+    * [.exports.toPath(urlOrPath)](#Find.exports.toPath) ⇒ <code>string</code>
 
-## coercePathAbsolute(path, [sep]) ⇒ <code>string</code>
+<a name="Find.exports.coercePathAbsolute"></a>
+
+### Find.exports.coercePathAbsolute(path, [sep]) ⇒ <code>string</code>
 Turns a path absolute, removing any prefixes and adding 'sep' as a prefix
 
-**Kind**: global function  
+**Kind**: static method of [<code>Find</code>](#Find)  
 
 | Param | Default | Description |
 | --- | --- | --- |
 | path |  | path to turn absolute |
 | [sep] | <code>&quot;/&quot;</code> | a separator to use for prefixing. |
 
-<a name="findDown"></a>
+<a name="Find.exports.findDown"></a>
 
-## findDown()
+### Find.exports.findDown()
 Convenience async version of findDown$
 
-**Kind**: global function  
-<a name="findDown$"></a>
+**Kind**: static method of [<code>Find</code>](#Find)  
+<a name="Find.exports.findDown$"></a>
 
-## findDown$()
+### Find.exports.findDown$()
 Convenience findDownMultiple$ that returns only one by default. Files are also merged into one array.
 
-**Kind**: global function  
-<a name="findDownMultiple$"></a>
+**Kind**: static method of [<code>Find</code>](#Find)  
+<a name="Find.exports.findDownMultiple$"></a>
 
-## findDownMultiple$(source, fileList, config) ⇒
+### Find.exports.findDownMultiple$(source, fileList, config) ⇒
 Traverses down directories of a source storage (child directories).
 
 Files found will be absolute paths to the source's root.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Find</code>](#Find)  
 **Returns**: [[first directory depth list], [second directory depth list] ...] Each LEVEL represents the directory depth.  
 **Todo**
 
@@ -110,26 +75,26 @@ Files found will be absolute paths to the source's root.
 | [config.cwd] |  | The working directory to begin searching downward. If omitted or null, will find the common dir in the fileList to begin. |
 | [config.isFolderSelector] |  | Predicate of what entries are folders and what are not. Default behavior to treat any entry without an extension (e.g. .txt) a folder. |
 
-<a name="findUp"></a>
+<a name="Find.exports.findUp"></a>
 
-## findUp()
+### Find.exports.findUp()
 Convenience async version of findUp$
 
-**Kind**: global function  
-<a name="findUp$"></a>
+**Kind**: static method of [<code>Find</code>](#Find)  
+<a name="Find.exports.findUp$"></a>
 
-## findUp$()
+### Find.exports.findUp$()
 Convenience findUpMultiple$ that returns only one by default. Files are also merged into one array.
 
-**Kind**: global function  
-<a name="findUpMultiple$"></a>
+**Kind**: static method of [<code>Find</code>](#Find)  
+<a name="Find.exports.findUpMultiple$"></a>
 
-## findUpMultiple$(source, fileList, [fromDir], config) ⇒
+### Find.exports.findUpMultiple$(source, fileList, [fromDir], config) ⇒
 Traverses up directories of a source storage (parent directories).
 
 Files found will be absolute paths to the source's root.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Find</code>](#Find)  
 **Returns**: [[first directory list], [second directory list], [third directory list], ...]  
 
 | Param | Default | Description |
@@ -146,13 +111,13 @@ Files found will be absolute paths to the source's root.
 | [config.cwd] |  | Alias to fromDir. The working directory to begin searching upward (fromDir ---> root directory). If omitted or null, will find the common dir in the fileList to begin. |
 | [config.isFolderSelector] |  | Predicate of what entries are folders and what are not. Default behavior to treat any entry without an extension (e.g. .txt) a folder. |
 
-<a name="findNodeModule$"></a>
+<a name="Find.exports.findNodeModule$"></a>
 
-## findNodeModule$(source, names, config) ⇒ <code>\*</code>
+### Find.exports.findNodeModule$(source, names, config) ⇒ <code>\*</code>
 Finds a module from a node_module folder that may exist between the source root and cwd. The node_module folder must
 have a package.json inside it to qualify as a node_module.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Find</code>](#Find)  
 **See**: findUpMultiple$ for additional configuration.  
 
 | Param | Default | Description |
@@ -163,12 +128,12 @@ have a package.json inside it to qualify as a node_module.
 | [config.collapse] | <code>false</code> | Collapse results into single array still preserving order from the cwd down. |
 | [config.cwd] |  | The working directory |
 
-<a name="findNodeModule"></a>
+<a name="Find.exports.findNodeModule"></a>
 
-## findNodeModule(source, names, config) ⇒ <code>\*</code>
+### Find.exports.findNodeModule(source, names, config) ⇒ <code>\*</code>
 Finds the node module paths of the inputted bare name specifiers.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Find</code>](#Find)  
 
 | Param | Description |
 | --- | --- |
@@ -177,12 +142,12 @@ Finds the node module paths of the inputted bare name specifiers.
 | config |  |
 | [config.cwd] | the working directory |
 
-<a name="findNodeModulesDirectory$"></a>
+<a name="Find.exports.findNodeModulesDirectory$"></a>
 
-## findNodeModulesDirectory$(source, config) ⇒ <code>\*</code>
+### Find.exports.findNodeModulesDirectory$(source, config) ⇒ <code>\*</code>
 Find the closest node module directory from a nested cwd directory to the stopAt/root from source.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Find</code>](#Find)  
 **See**: findUpMultiple$ for additional configuration.  
 
 | Param | Default | Description |
@@ -193,12 +158,12 @@ Find the closest node module directory from a nested cwd directory to the stopAt
 | [config.stopAt] | <code>root</code> | The directory to stop traversing up to. Default is the root of the source. |
 | [config.trimPath] | <code>true</code> | Will trim any paths of any slashes or dots. Not thoroughly tested. |
 
-<a name="findNodeModulesDirectory"></a>
+<a name="Find.exports.findNodeModulesDirectory"></a>
 
-## findNodeModulesDirectory(source, config) ⇒ <code>\*</code>
+### Find.exports.findNodeModulesDirectory(source, config) ⇒ <code>\*</code>
 Find the closest module directory from a nested cwd directory to the stopAt/root from source.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Find</code>](#Find)  
 **See**: findUpMultiple$ for additional configuration.  
 
 | Param | Default | Description |
@@ -209,15 +174,15 @@ Find the closest module directory from a nested cwd directory to the stopAt/root
 | [config.stopAt] | <code>root</code> | The directory to stop traversing up to. Default is the root of the source. |
 | [config.trimPath] | <code>true</code> | Will trim any paths of any slashes or dots. Not thoroughly tested. |
 
-<a name="findPackageDirectory$"></a>
+<a name="Find.exports.findPackageDirectory$"></a>
 
-## findPackageDirectory$(source, config) ⇒
+### Find.exports.findPackageDirectory$(source, config) ⇒
 Simply put, it basically this: dirname(findPackageJson$) || '/'
 Find directories up package.json resides in.
 
 note: This emits each directory (the correct behavior) unlike the findPackageJson$ which is currently on todo list to change.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Find</code>](#Find)  
 **Returns**: emits each directory found  
 
 | Param | Description |
@@ -225,12 +190,12 @@ note: This emits each directory (the correct behavior) unlike the findPackageJso
 | source | A storage source |
 | config | see findUpMultiple$.config |
 
-<a name="findPackageJson$"></a>
+<a name="Find.exports.findPackageJson$"></a>
 
-## findPackageJson$(source, config) ⇒
+### Find.exports.findPackageJson$(source, config) ⇒
 Find package.json files into the parent directories.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Find</code>](#Find)  
 **Returns**: an observable that emits the array of all packages <- should change to emit each file individually  
 **Todo**
 
@@ -242,18 +207,18 @@ Find package.json files into the parent directories.
 | source | A storage source |
 | config | see findUpMultiple$.config |
 
-<a name="findPackageJson"></a>
+<a name="Find.exports.findPackageJson"></a>
 
-## findPackageJson()
+### Find.exports.findPackageJson()
 Convenience async version of findPackageJson$. Will return an array of all packages found.
 
-**Kind**: global function  
-<a name="parseModuleSpecifier"></a>
+**Kind**: static method of [<code>Find</code>](#Find)  
+<a name="Find.exports.parseModuleSpecifier"></a>
 
-## parseModuleSpecifier(moduleId, config) ⇒
+### Find.exports.parseModuleSpecifier(moduleId, config) ⇒
 Parses a npm module specifier.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Find</code>](#Find)  
 **Returns**: Will return an object with various parts of the module specifier including a list of paths you could use, especially in the case where no extension is supplied  
 
 | Param | Description |
@@ -297,12 +262,12 @@ Parses a npm module specifier.
                  // ]
 } = parseModuleSpecifier("@someScope/someModule@5.5.5/somePath/index", { host : "https://unpkg.com", type: "" });
 ```
-<a name="toPath"></a>
+<a name="Find.exports.toPath"></a>
 
-## toPath(urlOrPath) ⇒ <code>string</code>
+### Find.exports.toPath(urlOrPath) ⇒ <code>string</code>
 Converts a file:// to path if it is one.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Find</code>](#Find)  
 **Returns**: <code>string</code> - A path  
 
 | Param | Type |

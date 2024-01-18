@@ -1,40 +1,21 @@
 
 # TRANSPORT API
 
-## Functions
+<a name="Transport"></a>
 
-<dl>
-<dt><a href="#fetchHookOfSource">fetchHookOfSource(source, pathRegExp, [config])</a></dt>
-<dd><p>Create a hook into fetch to consume a source.</p>
-</dd>
-<dt><a href="#addFetchHook">addFetchHook(hook)</a></dt>
-<dd><p>Very similar to connect middleware with some variations. the only argument of this function is a callback with
-arguments (request, response). The request object will have request information you can mutate.</p>
-<p>This is alpha stage function, these mechanics may change.
-As well, hooks are irreversible for the app lifespan for now, but will be adding pause, stop, destroy mechanisms.</p>
-<p>The request object has the standard headers object, among other typical <a href="https://developer.mozilla.org/en-US/docs/Web/API/Request">Request options</a>.</p>
-<p>The response object has a few functions:</p>
-<pre>
-await response.next();             // awaits for the hooks added before this one, if any hooks above this one
-                                   // finalize this promise should not resolve (this will probably change).
+## Transport : <code>object</code>
+**Kind**: global namespace  
 
-await response.end();              // submits the request, ends the chain, submits the fetch,
-                                   // and any further middleware should not be called.
+* [Transport](#Transport) : <code>object</code>
+    * [.exports.fetchHookOfSource(source, pathRegExp, [config])](#Transport.exports.fetchHookOfSource)
+    * [.exports.addFetchHook(hook)](#Transport.exports.addFetchHook)
 
-await response.respond(response); // respond with your own response, fetch is not called,
-                                  // and any further middleware should not be called.
+<a name="Transport.exports.fetchHookOfSource"></a>
 
-response.error(error)             // Cause the chain to fail. Any further middleware should not be called.
-
-</pre></dd>
-</dl>
-
-<a name="fetchHookOfSource"></a>
-
-## fetchHookOfSource(source, pathRegExp, [config])
+### Transport.exports.fetchHookOfSource(source, pathRegExp, [config])
 Create a hook into fetch to consume a source.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Transport</code>](#Transport)  
 
 | Param | Default | Description |
 | --- | --- | --- |
@@ -44,9 +25,9 @@ Create a hook into fetch to consume a source.
 | [config.protocol] | <code>&quot;&quot;</code> | The protocol for this source to be referred to. Default wise, there is no protocol. |
 | [config.mapper] | <code>(match)&#x3D;&gt;match</code> | An async function mapper that will be triggered when a path match has been determined. the match argument will contain a path, an index, and other non-internal parameters (`:path` being the only internal param for now). Whatever modifications you make to the path will be carried to the source. |
 
-<a name="addFetchHook"></a>
+<a name="Transport.exports.addFetchHook"></a>
 
-## addFetchHook(hook)
+### Transport.exports.addFetchHook(hook)
 Very similar to connect middleware with some variations. the only argument of this function is a callback with
 arguments (request, response). The request object will have request information you can mutate.
 
@@ -71,7 +52,7 @@ response.error(error)             // Cause the chain to fail. Any further middle
 
 </pre>
 
-**Kind**: global function  
+**Kind**: static method of [<code>Transport</code>](#Transport)  
 
 | Param | Description |
 | --- | --- |

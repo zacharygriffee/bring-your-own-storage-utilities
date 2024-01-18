@@ -1,4 +1,4 @@
-import {test, solo} from "brittle";
+import {test, solo, skip} from "brittle";
 import * as rx from "rxjs";
 import LocalDrive from "localdrive";
 import path from "../lib/tiny-paths.js";
@@ -7,10 +7,13 @@ import {
     collectModules$,
     loadPackageJson$,
     nodeLikeResolver,
-    nodeLikeResolver$
+    nodeLikeResolver$,
+    createDataUri, importCode, JsDelivr
 } from "../dist/resolve.min.js";
 import * as _ from "lodash-es";
 import b4a from "b4a";
+
+import {firstValueFrom} from "rxjs";
 
 let projectFolder;
 if (globalThis.testHyperDrive) {
@@ -51,4 +54,35 @@ test("Collect modules", async t => {
 
     t.ok(_.isString(lodashEs), "We should have lodash main entry code suitable for bundler");
     t.ok(_.isString(rxjs), "We should have rxjs main entry code suitable for bundler.");
+});
+
+
+test("createDataUri", async (t) => {
+    const {default: theAnswer} = await import(createDataUri(`export default 42`));
+    t.is(theAnswer, 42);
+});
+
+test("Test jsDelivr cdn module import", async t => {
+    const {data: result} = await JsDelivr.get("the-answer");
+    const {default: theAnswer} = await importCode(result);
+    t.is(+theAnswer, 42);
+});
+
+test("Test jsDelivr cdn package.json import", async t => {
+    const {description} = await JsDelivr.getPackageJson("the-answer");
+    t.is(description, "The answer to the question of life, the universe and everything");
+});
+
+skip("Test jsDelivr cdn versions", {timeout: 60000}, async t => {
+    // test at home, your results may very with this. I wouldn't depend on it especially in hot paths.
+    t.comment("During testing I found jsDelivr versions feature to be erratic with connection, so" +
+        "this may fail due to that.")
+    const versions = await JsDelivr.getVersions("the-answer");
+
+    t.is(versions[0].version, "1.0.0", "the-answer never changes versions");
+    t.ok(versions[0].latest, "1.0.0 is the latest version of the answer. deepThought hasn't changed it's mind.");
+
+    const {bandwidth} = await firstValueFrom(versions[0].links$.stats);
+
+    t.ok(Number(bandwidth.total) > 0, "We checked the bandwidth that jsdelivr handles for the-answer.");
 });

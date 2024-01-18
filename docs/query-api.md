@@ -1,138 +1,52 @@
 
 # QUERY API
 
-## Functions
+<a name="Query"></a>
 
-<dl>
-<dt><a href="#createReadStream$">createReadStream$()</a> ⇒</dt>
-<dd><p>Convenience &#39;rxjs.Observable&#39; that wraps around <code>createReadStream</code>.</p>
-</dd>
-<dt><a href="#createReadStream">createReadStream(source, key, [config])</a> ⇒ <code>Readable</code></dt>
-<dd><p>Creates a streamx.Readable stream of source&#39;s readstream of a key. If the source does not have read stream
-will try and use a get function to pull resource.</p>
-<p>Backpressure is not completely ironed out nor tested in many cases, especially when pulling from a source that
-does not have a native createReadStream function e.g. one that only has source.get.</p>
-</dd>
-<dt><a href="#getEntry$">getEntry$(source, path, [config])</a></dt>
-<dd><p>Gets the entry details of the file</p>
-<ul>
-<li>source should have either a <code>get</code> or <code>entry</code> function.</li>
-<li>source should have a <code>readdir</code> function</li>
-</ul>
-<pre>
-getEntry$(someDrive, "\someFolder\someFile.txt")
- .subscribe(
-     entry => {
-         // The entry object
-     }
- );
+## Query : <code>object</code>
+**Kind**: global namespace  
 
-entry object will have at least:
-{
-    isFile, // boolean
-    isFolder, // boolean
-    key, // the name of the file
-    value // details of the file, or undefined if it doesn't exist.
-}
-</pre></dd>
-<dt><a href="#getTypeName$">getTypeName$(source, key, config)</a> ⇒ <code>Observable.&lt;any&gt;</code></dt>
-<dd><p>Get the extension name of the file&#39;s mime type. That is, package.json === &#39;json&#39; .
-The extension name is inferred from the first 100 bytes of data from the file. IF the file is less-than 30 bytes,
-it will be inferred by the key name&#39;s extension e.g. package<code>.json</code> . Thus, small files without an extension may not
-be inferred properly to their extension type. It is best to name your keys, at least the small ones, with an extension
-if you want a meaningful result here.</p>
-</dd>
-<dt><a href="#getTypeName">getTypeName()</a></dt>
-<dd><p>Convenience async function for getTypeName$</p>
-</dd>
-<dt><a href="#mimeTypeToName">mimeTypeToName(type)</a> ⇒ <code>null</code> | <code>*</code></dt>
-<dd><p>A simple function to determine what file typename is based on it&#39;s mimetype.</p>
-</dd>
-<dt><a href="#getType$">getType$(source, key, [config])</a> ⇒ <code>Observable.&lt;string&gt;</code></dt>
-<dd><p>Gets the mime type of the file. This function analyzes the first 100 bytes of the file for the magic bytes, if it
-cannot be determined by the byte data, it will then be inferred from the extension of the key. If still it cannot
-be determined a null will be returned.</p>
-</dd>
-<dt><a href="#getType">getType()</a></dt>
-<dd><p>A convenience async function for getType$</p>
-</dd>
-<dt><a href="#isAbsolute">isAbsolute(x)</a> ⇒ <code>boolean</code></dt>
-<dd><p>Simple method to determine absolute path.</p>
-</dd>
-<dt><a href="#isRelative">isRelative(x)</a> ⇒ <code>boolean</code></dt>
-<dd><p>Simple method to determine relative path.</p>
-</dd>
-<dt><a href="#isRootFolder">isRootFolder([folder])</a> ⇒ <code>boolean</code></dt>
-<dd><p>Determines if folder is root.</p>
-</dd>
-<dt><a href="#isFile$">isFile$(driveSource, path)</a> ⇒ <code>Observable.&lt;boolean&gt;</code> | <code>Observable.&lt;boolean&gt;</code></dt>
-<dd><p>Determines if from source this file exists.</p>
-<p>** this may return false for empty files (0 bytes) on some sources **</p>
-</dd>
-<dt><a href="#isFile">isFile(driveSource, path)</a> ⇒ <code>Promise.&lt;boolean&gt;</code></dt>
-<dd><p>Convenience async function for isFile$</p>
-<p>** this may return false for empty files (0 bytes) on some sources **</p>
-</dd>
-<dt><a href="#isFolder">isFolder(driveSource, path)</a> ⇒ <code>Promise.&lt;boolean&gt;</code></dt>
-<dd><p>Convenience async function for isFolder$. It will <strong>not</strong> test positive on some sources if the folder is empty.</p>
-<p>** Empty folders will return false here **</p>
-</dd>
-<dt><a href="#isFolder$">isFolder$(driveSource, path)</a> ⇒ <code>Observable.&lt;boolean&gt;</code> | <code>Observable.&lt;boolean&gt;</code></dt>
-<dd><p>Determines if from source this folder exists. It will <strong>not</strong> test positive on some sources if the folder is empty.</p>
-<p>** Empty folders will return false here **</p>
-<ul>
-<li><input disabled="" type="checkbox"> create a selector function to override default check</li>
-<li><input checked="" disabled="" type="checkbox"> incorporate readdir function from this library to support hyperbee file structures as well.</li>
-</ul>
-</dd>
-<dt><a href="#list$">list$()</a> ⇒ <code>*</code></dt>
-<dd><p>Same as readdir$ but config.list = true</p>
-</dd>
-<dt><a href="#list">list()</a></dt>
-<dd><p>Convenience async method for list$</p>
-</dd>
-<dt><a href="#pathDetail$">pathDetail$(sourceDrive, absolutePath)</a> ⇒ <code>*</code></dt>
-<dd><p>Returns entry, isFile and isFolder of a path.</p>
-<p>If it is a file, the mime-type will be determined via getType$</p>
-<pre>
-**isFile may return false for empty files (0 bytes) on some sources**
-**isFolder will return false here folders that are empty**
-</pre></dd>
-<dt><a href="#pathDetail">pathDetail()</a></dt>
-<dd><p>Async convenience method for pathDetail$
-** isFile may return false for empty files (0 bytes) on some sources **
-** isFolder will return false here folders that are empty **</p>
-</dd>
-<dt><a href="#readdir$">readdir$(source, config)</a> ⇒</dt>
-<dd><p>readdir. By default, lists all files and folders by their name without a path, from the <code>config.cwd</code>.</p>
-<p>readdir will coerce a source to be listable (config.list = true). So even if a source doesn&#39;t have list function,
-it still will work 99% of cases, still tests need to be done to ensure that.</p>
-<p>the readdir of the source can be a <code>cold observable</code> an <code>async iterable</code> an <code>array of keys</code> an <code>async generator</code>,
-anything that <a href="https://rxjs.dev/api/index/function/from">rxjs.from</a> will accept. You could also design the source
-as an interface like in this pseudocode example</p>
-</dd>
-<dt><a href="#readdir">readdir()</a></dt>
-<dd><p>Async version of readdir$. Returns array of the files and folders</p>
-</dd>
-</dl>
+* [Query](#Query) : <code>object</code>
+    * [.exports.createReadStream$()](#Query.exports.createReadStream$) ⇒
+    * [.exports.createReadStream(source, key, [config])](#Query.exports.createReadStream) ⇒ <code>Readable</code>
+    * [.exports.getEntry$(source, path, [config])](#Query.exports.getEntry$)
+    * [.exports.getEntry()](#Query.exports.getEntry)
+    * [.exports.getTypeName$(source, key, config)](#Query.exports.getTypeName$) ⇒ <code>Observable.&lt;any&gt;</code>
+    * [.exports.getTypeName()](#Query.exports.getTypeName)
+    * [.exports.mimeTypeToName(type)](#Query.exports.mimeTypeToName) ⇒ <code>null</code> \| <code>\*</code>
+    * [.exports.getType$(source, key, [config])](#Query.exports.getType$) ⇒ <code>Observable.&lt;string&gt;</code>
+    * [.exports.getType()](#Query.exports.getType)
+    * [.exports.isAbsolute(x)](#Query.exports.isAbsolute) ⇒ <code>boolean</code>
+    * [.exports.isRelative(x)](#Query.exports.isRelative) ⇒ <code>boolean</code>
+    * [.exports.isRootFolder([folder])](#Query.exports.isRootFolder) ⇒ <code>boolean</code>
+    * [.exports.isFile$(driveSource, path)](#Query.exports.isFile$) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;boolean&gt;</code>
+    * [.exports.isFile(driveSource, path)](#Query.exports.isFile) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.exports.isFolder(driveSource, path)](#Query.exports.isFolder) ⇒ <code>Promise.&lt;boolean&gt;</code>
+    * [.exports.isFolder$(driveSource, path)](#Query.exports.isFolder$) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;boolean&gt;</code>
+    * [.exports.list$()](#Query.exports.list$) ⇒ <code>\*</code>
+    * [.exports.list()](#Query.exports.list)
+    * [.exports.pathDetail$(sourceDrive, absolutePath)](#Query.exports.pathDetail$) ⇒ <code>\*</code>
+    * [.exports.pathDetail()](#Query.exports.pathDetail)
+    * [.exports.readdir$(source, config)](#Query.exports.readdir$) ⇒
+    * [.exports.readdir()](#Query.exports.readdir)
 
-<a name="createReadStream$"></a>
+<a name="Query.exports.createReadStream$"></a>
 
-## createReadStream$() ⇒
+### Query.exports.createReadStream$() ⇒
 Convenience 'rxjs.Observable' that wraps around `createReadStream`.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 **Returns**: Observable<Buffer>  
-<a name="createReadStream"></a>
+<a name="Query.exports.createReadStream"></a>
 
-## createReadStream(source, key, [config]) ⇒ <code>Readable</code>
+### Query.exports.createReadStream(source, key, [config]) ⇒ <code>Readable</code>
 Creates a streamx.Readable stream of source's readstream of a key. If the source does not have read stream
 will try and use a get function to pull resource.
 
 Backpressure is not completely ironed out nor tested in many cases, especially when pulling from a source that
 does not have a native createReadStream function e.g. one that only has source.get.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 **Returns**: <code>Readable</code> - Readable stream.  
 
 | Param | Default | Description |
@@ -147,9 +61,9 @@ does not have a native createReadStream function e.g. one that only has source.g
 | [config.highWaterMark] |  | createReadStream will automatically chunkify to the highWaterMark any stream passed through. This will help to control the flow. |
 | [config.wait] | <code>false</code> | a common setting on network storage sources, unless you really want to wait, I have set the default automatically false to only queue locally cached resources. |
 
-<a name="getEntry$"></a>
+<a name="Query.exports.getEntry$"></a>
 
-## getEntry$(source, path, [config])
+### Query.exports.getEntry$(source, path, [config])
 Gets the entry details of the file
 
 - source should have either a `get` or `entry` function.
@@ -172,7 +86,7 @@ entry object will have at least:
 }
 </pre>
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 
 | Param | Type | Default | Description |
 | --- | --- | --- | --- |
@@ -182,16 +96,22 @@ entry object will have at least:
 | [config.cwd] | <code>string</code> | <code>&quot;/&quot;</code> | cwd to resolve the path to |
 | [config.entrySelector] |  |  | Use your own selector to return information about a file, the bare minimum should be what is shown above to best interface with the other functions of this library. The entrySelector function will have three arguments, (source, path, config). This function will be coerced async if it isn't already. The default selector requires the source to have either an entry function or a get function. A get function is literally getting the contents of the file and analyzing it while an entry file gets the details of the file. So, storages with entry function are way more performant in these queries. |
 
-<a name="getTypeName$"></a>
+<a name="Query.exports.getEntry"></a>
 
-## getTypeName$(source, key, config) ⇒ <code>Observable.&lt;any&gt;</code>
+### Query.exports.getEntry()
+Convenience async method for getEntry$
+
+**Kind**: static method of [<code>Query</code>](#Query)  
+<a name="Query.exports.getTypeName$"></a>
+
+### Query.exports.getTypeName$(source, key, config) ⇒ <code>Observable.&lt;any&gt;</code>
 Get the extension name of the file's mime type. That is, package.json === 'json' .
 The extension name is inferred from the first 100 bytes of data from the file. IF the file is less-than 30 bytes,
 it will be inferred by the key name's extension e.g. package`.json` . Thus, small files without an extension may not
 be inferred properly to their extension type. It is best to name your keys, at least the small ones, with an extension
 if you want a meaningful result here.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 
 | Param | Description |
 | --- | --- |
@@ -199,31 +119,31 @@ if you want a meaningful result here.
 | key | identifier for the file. See caution above about small files without extension. |
 | config | See Query.getType for config information. |
 
-<a name="getTypeName"></a>
+<a name="Query.exports.getTypeName"></a>
 
-## getTypeName()
+### Query.exports.getTypeName()
 Convenience async function for getTypeName$
 
-**Kind**: global function  
-<a name="mimeTypeToName"></a>
+**Kind**: static method of [<code>Query</code>](#Query)  
+<a name="Query.exports.mimeTypeToName"></a>
 
-## mimeTypeToName(type) ⇒ <code>null</code> \| <code>\*</code>
+### Query.exports.mimeTypeToName(type) ⇒ <code>null</code> \| <code>\*</code>
 A simple function to determine what file typename is based on it's mimetype.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 
 | Param | Description |
 | --- | --- |
 | type | a mimetype to get the typename of the file. |
 
-<a name="getType$"></a>
+<a name="Query.exports.getType$"></a>
 
-## getType$(source, key, [config]) ⇒ <code>Observable.&lt;string&gt;</code>
+### Query.exports.getType$(source, key, [config]) ⇒ <code>Observable.&lt;string&gt;</code>
 Gets the mime type of the file. This function analyzes the first 100 bytes of the file for the magic bytes, if it
 cannot be determined by the byte data, it will then be inferred from the extension of the key. If still it cannot
 be determined a null will be returned.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 
 | Param | Default | Description |
 | --- | --- | --- |
@@ -232,53 +152,53 @@ be determined a null will be returned.
 | [config] |  | Any additional configuration to pass to the createReadStream of the source. The start and length are non-optional. |
 | [config.wait] | <code>false</code> | Some sources.createReadStream have this argument where they wait for the resource to be available. You can override this behavior and wait, some sources also may have a timeout argument to limit the wait. You should view the documentation for the source you pass. If you do decide to wait, some things may hang until the resource is available. |
 
-<a name="getType"></a>
+<a name="Query.exports.getType"></a>
 
-## getType()
+### Query.exports.getType()
 A convenience async function for getType$
 
-**Kind**: global function  
-<a name="isAbsolute"></a>
+**Kind**: static method of [<code>Query</code>](#Query)  
+<a name="Query.exports.isAbsolute"></a>
 
-## isAbsolute(x) ⇒ <code>boolean</code>
+### Query.exports.isAbsolute(x) ⇒ <code>boolean</code>
 Simple method to determine absolute path.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 
 | Param |
 | --- |
 | x | 
 
-<a name="isRelative"></a>
+<a name="Query.exports.isRelative"></a>
 
-## isRelative(x) ⇒ <code>boolean</code>
+### Query.exports.isRelative(x) ⇒ <code>boolean</code>
 Simple method to determine relative path.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 
 | Param |
 | --- |
 | x | 
 
-<a name="isRootFolder"></a>
+<a name="Query.exports.isRootFolder"></a>
 
-## isRootFolder([folder]) ⇒ <code>boolean</code>
+### Query.exports.isRootFolder([folder]) ⇒ <code>boolean</code>
 Determines if folder is root.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 
 | Param | Default |
 | --- | --- |
 | [folder] | <code>&quot;/&quot;</code> | 
 
-<a name="isFile$"></a>
+<a name="Query.exports.isFile$"></a>
 
-## isFile$(driveSource, path) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;boolean&gt;</code>
+### Query.exports.isFile$(driveSource, path) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;boolean&gt;</code>
 Determines if from source this file exists.
 
 ** this may return false for empty files (0 bytes) on some sources **
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 **Todo**
 
 - [ ] create a selector function to override default check
@@ -289,37 +209,37 @@ Determines if from source this file exists.
 | driveSource | The source should have either an async/sync 'exists' function or an 'entry' function |
 | path |  |
 
-<a name="isFile"></a>
+<a name="Query.exports.isFile"></a>
 
-## isFile(driveSource, path) ⇒ <code>Promise.&lt;boolean&gt;</code>
+### Query.exports.isFile(driveSource, path) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Convenience async function for isFile$
 
 ** this may return false for empty files (0 bytes) on some sources **
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 
 | Param | Description |
 | --- | --- |
 | driveSource | The source should have either an async/sync 'exists' function or an 'entry' function |
 | path |  |
 
-<a name="isFolder"></a>
+<a name="Query.exports.isFolder"></a>
 
-## isFolder(driveSource, path) ⇒ <code>Promise.&lt;boolean&gt;</code>
+### Query.exports.isFolder(driveSource, path) ⇒ <code>Promise.&lt;boolean&gt;</code>
 Convenience async function for isFolder$. It will **not** test positive on some sources if the folder is empty.
 
 ** Empty folders will return false here **
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 
 | Param | Description |
 | --- | --- |
 | driveSource | The source should have either an async/sync 'exists' function or an 'entry' function |
 | path |  |
 
-<a name="isFolder$"></a>
+<a name="Query.exports.isFolder$"></a>
 
-## isFolder$(driveSource, path) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;boolean&gt;</code>
+### Query.exports.isFolder$(driveSource, path) ⇒ <code>Observable.&lt;boolean&gt;</code> \| <code>Observable.&lt;boolean&gt;</code>
 Determines if from source this folder exists. It will **not** test positive on some sources if the folder is empty.
 
 ** Empty folders will return false here **
@@ -327,29 +247,29 @@ Determines if from source this folder exists. It will **not** test positive on s
 - [ ] create a selector function to override default check
 - [x] incorporate readdir function from this library to support hyperbee file structures as well.
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 
 | Param | Description |
 | --- | --- |
 | driveSource | The source should have either an async/sync 'exists' function or an 'entry' function |
 | path |  |
 
-<a name="list$"></a>
+<a name="Query.exports.list$"></a>
 
-## list$() ⇒ <code>\*</code>
+### Query.exports.list$() ⇒ <code>\*</code>
 Same as readdir$ but config.list = true
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 **See**: readdir$  
-<a name="list"></a>
+<a name="Query.exports.list"></a>
 
-## list()
+### Query.exports.list()
 Convenience async method for list$
 
-**Kind**: global function  
-<a name="pathDetail$"></a>
+**Kind**: static method of [<code>Query</code>](#Query)  
+<a name="Query.exports.pathDetail$"></a>
 
-## pathDetail$(sourceDrive, absolutePath) ⇒ <code>\*</code>
+### Query.exports.pathDetail$(sourceDrive, absolutePath) ⇒ <code>\*</code>
 Returns entry, isFile and isFolder of a path.
 
 If it is a file, the mime-type will be determined via getType$
@@ -359,7 +279,7 @@ If it is a file, the mime-type will be determined via getType$
 **isFolder will return false here folders that are empty**
 </pre>
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 
 | Param | Description |
 | --- | --- |
@@ -377,17 +297,17 @@ pathDetail$(drive, "/some/path/to/file.txt").subscribe(
      }
 );
 ```
-<a name="pathDetail"></a>
+<a name="Query.exports.pathDetail"></a>
 
-## pathDetail()
+### Query.exports.pathDetail()
 Async convenience method for pathDetail$
 ** isFile may return false for empty files (0 bytes) on some sources **
 ** isFolder will return false here folders that are empty **
 
-**Kind**: global function  
-<a name="readdir$"></a>
+**Kind**: static method of [<code>Query</code>](#Query)  
+<a name="Query.exports.readdir$"></a>
 
-## readdir$(source, config) ⇒
+### Query.exports.readdir$(source, config) ⇒
 readdir. By default, lists all files and folders by their name without a path, from the `config.cwd`.
 
 readdir will coerce a source to be listable (config.list = true). So even if a source doesn't have list function,
@@ -397,7 +317,7 @@ the readdir of the source can be a `cold observable` an `async iterable` an `arr
 anything that [rxjs.from](https://rxjs.dev/api/index/function/from) will accept. You could also design the source
 as an interface like in this pseudocode example
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
 **Returns**: observable emits files from the source.  
 
 | Param | Default | Description |
@@ -430,9 +350,9 @@ const sourceInterface = (source, defaultProps) => ({
 const sourceInstance = new WhateverSource();
 readdir$(sourceInterface(sourceInstance, { getProps }));
 ```
-<a name="readdir"></a>
+<a name="Query.exports.readdir"></a>
 
-## readdir()
+### Query.exports.readdir()
 Async version of readdir$. Returns array of the files and folders
 
-**Kind**: global function  
+**Kind**: static method of [<code>Query</code>](#Query)  
