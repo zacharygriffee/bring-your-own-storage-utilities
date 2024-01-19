@@ -3,7 +3,7 @@ import {fileURLToPath} from "../dist/find.min.js";
 import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
 import b4a from "b4a";
-import {rollupDynamicImports} from "../lib/deploy/rollup-dynamic-imports.js";
+// import {rollupDynamicImports} from "../lib/deploy/rollup-dynamic-imports.js";
 import {exists} from "../lib/resolve/jsdelivr.js";
 // WASM kicking my butt on being 'iso support'
 // Will have to handle another time.
