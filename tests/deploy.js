@@ -3,6 +3,8 @@ import {fileURLToPath} from "../dist/find.min.js";
 import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
 import b4a from "b4a";
+import {rollupDynamicImports} from "../lib/deploy/rollup-dynamic-imports.js";
+import {exists} from "../lib/resolve/jsdelivr.js";
 // WASM kicking my butt on being 'iso support'
 // Will have to handle another time.
 let deployPkg;
@@ -196,3 +198,28 @@ if (typeof fetch !== "undefined") {
         t.ok(path.posix, "We got a path module.");
     });
 }
+
+solo("code splitting", async t => {
+
+    const result = await pack(
+        "codeSplit",
+        {
+            plugins: [
+                rollupVirtualPlugin({
+                    // "someDynamicImport": "export default 42",
+                    "codeSplit": "const theAnswer = await import('someDynamicImport'); export {theAnswer};"
+                }),
+                rollupFromJsdelivr(),
+                rollupDynamicImports(() => {
+                    return import("random-access-memory");
+                })
+            ],
+            output: {
+                inlineDynamicImports: false
+            },
+            autoImport: true
+        }
+    );
+
+    debugger;
+});
