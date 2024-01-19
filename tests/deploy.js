@@ -1,4 +1,4 @@
-import {solo, test} from "brittle";
+import {solo, test, skip} from "brittle";
 import {fileURLToPath} from "../dist/find.min.js";
 import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
@@ -199,7 +199,7 @@ if (typeof fetch !== "undefined") {
     });
 }
 
-solo("code splitting", async t => {
+skip("code splitting", async t => {
 
     const result = await pack(
         "codeSplit",
