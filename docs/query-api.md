@@ -16,6 +16,8 @@
     * [.exports.mimeTypeToName(type)](#Query.exports.mimeTypeToName) ⇒ <code>null</code> \| <code>\*</code>
     * [.exports.getType$(source, key, [config])](#Query.exports.getType$) ⇒ <code>Observable.&lt;string&gt;</code>
     * [.exports.getType()](#Query.exports.getType)
+    * [.exports.get$(source, key, [config])](#Query.exports.get$) ⇒ <code>Observable.&lt;buffer&gt;</code>
+    * [.exports.get()](#Query.exports.get)
     * [.exports.isAbsolute(x)](#Query.exports.isAbsolute) ⇒ <code>boolean</code>
     * [.exports.isRelative(x)](#Query.exports.isRelative) ⇒ <code>boolean</code>
     * [.exports.isRootFolder([folder])](#Query.exports.isRootFolder) ⇒ <code>boolean</code>
@@ -27,6 +29,8 @@
     * [.exports.list()](#Query.exports.list)
     * [.exports.pathDetail$(sourceDrive, absolutePath)](#Query.exports.pathDetail$) ⇒ <code>\*</code>
     * [.exports.pathDetail()](#Query.exports.pathDetail)
+    * [.exports.put$(source, key, bufferValue, [config])](#Query.exports.put$) ⇒ <code>Observable.&lt;ObservedValueOf.&lt;Promise.&lt;unknown&gt;&gt;&gt;</code>
+    * [.exports.put()](#Query.exports.put)
     * [.exports.readdir$(source, config)](#Query.exports.readdir$) ⇒
     * [.exports.readdir()](#Query.exports.readdir)
 
@@ -156,6 +160,36 @@ be determined a null will be returned.
 
 ### Query.exports.getType()
 A convenience async function for getType$
+
+**Kind**: static method of [<code>Query</code>](#Query)  
+<a name="Query.exports.get$"></a>
+
+### Query.exports.get$(source, key, [config]) ⇒ <code>Observable.&lt;buffer&gt;</code>
+A wrapper to get a key from a source.
+
+Unless using for something else, this should always return a binary buffer or uint8array.
+
+**Kind**: static method of [<code>Query</code>](#Query)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| source |  |  |  |
+| key |  |  |  |
+| [config] | <code>object</code> \| <code>string</code> |  | Configuration passed to the source, except the following. If a string is passed here, it will be inferred as the encoding. |
+| [config.getter] | <code>function</code> |  | How to get from the source. This can be async. The default is source.get(key, config). |
+| [config.encoding] | <code>Object</code> \| <code>string</code> | <code>utf8</code> | An encoder object or description. Most of this API expects the result to be in binary, including Query.createReadStream. So if your source returns a string or json object, coerce the result into binary with this configuration. IF the source already returns a buffer, this will do nothing. If you need to mutate the response further than this, use `config.getter`. |
+
+**Example**  
+```js
+// A get where the key is the result for example purposes.
+// The key is a javascript object
+// the encoding is 'json' to turn the result from get to a buffer.
+get$({ get(k) { return k; } }, {test: "case"}, { encoding: "json" }).subscribe(buffer => {});
+```
+<a name="Query.exports.get"></a>
+
+### Query.exports.get()
+Convenience async version of get$
 
 **Kind**: static method of [<code>Query</code>](#Query)  
 <a name="Query.exports.isAbsolute"></a>
@@ -303,6 +337,28 @@ pathDetail$(drive, "/some/path/to/file.txt").subscribe(
 Async convenience method for pathDetail$
 ** isFile may return false for empty files (0 bytes) on some sources **
 ** isFolder will return false here folders that are empty **
+
+**Kind**: static method of [<code>Query</code>](#Query)  
+<a name="Query.exports.put$"></a>
+
+### Query.exports.put$(source, key, bufferValue, [config]) ⇒ <code>Observable.&lt;ObservedValueOf.&lt;Promise.&lt;unknown&gt;&gt;&gt;</code>
+Put data into a source.
+
+**Kind**: static method of [<code>Query</code>](#Query)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| source |  |  |  |
+| key |  |  |  |
+| bufferValue |  |  | The data to put. It should be coerced to a buffer. |
+| [config] |  |  | With the exception of the following, the config for the put operation. |
+| [config.encoding] | <code>Object</code> \| <code>string</code> | <code>utf8</code> | If `bufferValue  is not a buffer, this encoding will be applied. |
+| [config.putter] |  |  | Change the put operation. Helpful if you are putting to a source that does not handle buffer operations or has a different argument signature or has a different function name. |
+
+<a name="Query.exports.put"></a>
+
+### Query.exports.put()
+Convenience async method for put$
 
 **Kind**: static method of [<code>Query</code>](#Query)  
 <a name="Query.exports.readdir$"></a>
