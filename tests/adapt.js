@@ -1,22 +1,23 @@
 import {test, solo} from "brittle";
 import RAM from "random-access-memory";
-import codec from "codecs";
 import b4a from "b4a";
-import {fromRandomAccess, fromRandomAccessCollection, ISource} from "../dist/adapt.min.js";
+import {fromRandomAccess, ISource, fromRandomAccessCollection} from "../dist/adapt.min.js";
 import {findDown, findPackageJson} from "../dist/find.min.js";
 import {isAbsolute, list, readdir} from "../dist/query.min.js";
 
 
-// import {} from "../lib/adapt/index.js";
+// import {ISource, fromRandomAccessCollection, fromRandomAccess} from "../lib/adapt/index.js";
 // import {findDown, findPackageJson} from "../lib/find/index.js";
 // import {list, readdir} from "../lib/query/index.js";
 
 import {loadPackageJson} from "../dist/resolve.min.js";
+
+// import {loadPackageJson} from "../lib/resolve/index.js";
 import {from} from "rxjs";
 import {hasFile} from "./hasFile-test-helper.js";
 
 
-solo("isource basic", async t => {
+test("isource basic", async t => {
     const srcObj = {};
     const src = ISource({
         id: "isource basic",
@@ -80,9 +81,8 @@ test("fromRandomAccessStorageCollection", async t => {
 `))
     };
     const files = fromRandomAccessCollection(fileObject);
-    const howtoMakeWatermelonMargarita = await files.get("margarita/watermelon.txt", { encoding: codec("hex") });
-    t.is(howtoMakeWatermelonMargarita, b4a.toString(b4a.from("tequila, triple sec, sour, watermelon puree"), "hex"),
-        "get and encoding works! pow");
+    const howtoMakeWatermelonMargarita = await files.get("margarita/watermelon.txt");
+    t.alike(howtoMakeWatermelonMargarita, b4a.from("tequila, triple sec, sour, watermelon puree"));
 
     const doWeHaveSnacks = await files.exists("snacks.txt");
     const doWeHaveSlashSnacks = await files.exists("/snacks.txt");
@@ -119,9 +119,8 @@ test("Using a randomAccess creation function", async (t) => {
 
     const files = fromRandomAccess(ramFolder, from(Object.keys(fileObject)));
 
-    const howToMakeGinMartini = await files.get("/martini/ginMartini", { encoding: codec("hex") });
-    t.is(howToMakeGinMartini, b4a.toString(b4a.from("gin,vermouth"), "hex"),
-        "get and encoding works! pow");
+    const howToMakeGinMartini = await files.get("/martini/ginMartini");
+    t.alike(howToMakeGinMartini, b4a.from("gin,vermouth"));
 
     const doWeHaveSnacks = await files.exists("snacks.txt");
     const doWeHaveSlashSnacks = await files.exists("/snacks.txt");
