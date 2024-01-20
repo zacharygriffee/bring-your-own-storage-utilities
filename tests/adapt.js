@@ -1,19 +1,71 @@
-import {test} from "brittle";
+import {test, solo} from "brittle";
 import RAM from "random-access-memory";
 import codec from "codecs";
 import b4a from "b4a";
-import {fromRandomAccess, fromRandomAccessCollection} from "../dist/adapt.min.js";
+import {fromRandomAccess, fromRandomAccessCollection, ISource} from "../dist/adapt.min.js";
 import {findDown, findPackageJson} from "../dist/find.min.js";
-import {list, readdir} from "../dist/query.min.js";
+import {isAbsolute, list, readdir} from "../dist/query.min.js";
 
 
-// import {fromRandomAccess, fromRandomAccessCollection} from "../lib/adapt/index.js";
+// import {} from "../lib/adapt/index.js";
 // import {findDown, findPackageJson} from "../lib/find/index.js";
 // import {list, readdir} from "../lib/query/index.js";
 
 import {loadPackageJson} from "../dist/resolve.min.js";
 import {from} from "rxjs";
 import {hasFile} from "./hasFile-test-helper.js";
+
+
+solo("isource basic", async t => {
+    const srcObj = {};
+    const src = ISource({
+        id: "isource basic",
+        get(k) {
+            if (isAbsolute(k)) k = k.slice(1);
+            return srcObj[k]
+        },
+        exists(k) {
+            if (isAbsolute(k)) k = k.slice(1);
+            return !!srcObj[k]
+        },
+        put(k, v) {
+            srcObj[k] = v;
+        },
+        get length() {
+            return Object.keys(srcObj).length
+        },
+        * readdir(path) {
+            for (const key of Object.keys(srcObj)) {
+                yield key;
+            }
+        },
+        del(k) {
+            if (srcObj[k]) delete srcObj[k];
+            return Promise.resolve();
+        },
+        ready() {
+            return new Promise(r => setTimeout(r, 100))
+        }
+    });
+
+    const start = Date.now();
+    await src.ready();
+
+    const readyTime = Date.now() - start;
+    t.ok(readyTime > 75 && readyTime < 125, "about 100 ms to get ready");
+    await src.put("x", "hello x");
+    t.ok(b4a.equals(await src.get("x"), b4a.from("hello x")));
+    for await (const x of src.createReadStream("x")) {
+        t.ok(b4a.equals(x, b4a.from("hello x")))
+    }
+    const [xEntry] = await src.list("/");
+    t.ok(xEntry.value.blob.byteLength === b4a.from("hello x").length);
+    t.is(src.length, 1);
+    t.is((await src.readdir())[0], "x");
+    await src.del("x");
+    t.is(src.length, 0);
+    t.ok(src.writable);
+});
 
 test("fromRandomAccessStorageCollection", async t => {
     const fileObject = {

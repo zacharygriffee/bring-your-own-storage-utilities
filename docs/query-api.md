@@ -7,6 +7,8 @@
 **Kind**: global namespace  
 
 * [Query](#Query) : <code>object</code>
+    * [.exports.append$(source, bufferValue, [config])](#Query.exports.append$) ⇒ <code>Observable.&lt;ObservedValueOf.&lt;Promise.&lt;unknown&gt;&gt;&gt;</code>
+    * [.exports.append()](#Query.exports.append)
     * [.exports.createReadStream$()](#Query.exports.createReadStream$) ⇒
     * [.exports.createReadStream(source, key, [config])](#Query.exports.createReadStream) ⇒ <code>Readable</code>
     * [.exports.getEntry$(source, path, [config])](#Query.exports.getEntry$)
@@ -33,7 +35,49 @@
     * [.exports.put()](#Query.exports.put)
     * [.exports.readdir$(source, config)](#Query.exports.readdir$) ⇒
     * [.exports.readdir()](#Query.exports.readdir)
+    * [.exports.ready$(source, [config])](#Query.exports.ready$) ⇒ <code>Observable.&lt;ObservedValueOf.&lt;Promise.&lt;unknown&gt;&gt;&gt;</code>
+    * [.exports.ready()](#Query.exports.ready)
 
+<a name="Query.exports.append$"></a>
+
+### Query.exports.append$(source, bufferValue, [config]) ⇒ <code>Observable.&lt;ObservedValueOf.&lt;Promise.&lt;unknown&gt;&gt;&gt;</code>
+Append data into a source.
+
+**Kind**: static method of [<code>Query</code>](#Query)  
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| source |  |  |  |
+| bufferValue |  |  | The data to append. IF you don't want to pass a buffer to source, set `config.encoding=null` |
+| [config] |  |  | With the exception of the following, the config for the append operation. |
+| [config.encoding] | <code>Object</code> \| <code>string</code> \| <code>null</code> | <code>utf8</code> | If `bufferValue`  is not a buffer, this encoding will be applied. |
+| [config.appender] |  |  | Change the append operation. Helpful if you are appending to a source that does not handle buffer operations or has a different argument signature or has a different function name. Set this to 'null' to ignore encodings. Most of the BYOSU does not care about the encoding append into the source, it cares about how it gets it with the `Query.get$`. Pass null to ignore encodings. |
+
+**Example**  
+```js
+// append into an array
+const arr = [];
+await append(
+    {
+        append(buf) { arr.push(buf) }
+    },
+    "hello",
+    {test: "case"},
+    {encoding: "json"} // To turn the object into a buffer
+                       // the put operation can use.
+                       // Set this to null, to pass value as is.
+);
+const [obj] = arr;
+obj // {test: "case"}
+```
+<a name="Query.exports.append"></a>
+
+### Query.exports.append()
+Convenience async method for append$
+
+Some `source.append` does not return anything after it's operation, in this case, this will return null.
+
+**Kind**: static method of [<code>Query</code>](#Query)  
 <a name="Query.exports.createReadStream$"></a>
 
 ### Query.exports.createReadStream$() ⇒
@@ -350,15 +394,32 @@ Put data into a source.
 | --- | --- | --- | --- |
 | source |  |  |  |
 | key |  |  |  |
-| bufferValue |  |  | The data to put. It should be coerced to a buffer. |
+| bufferValue |  |  | The data to put. IF you don't want to pass a buffer to source, set `config.encoding=null` |
 | [config] |  |  | With the exception of the following, the config for the put operation. |
-| [config.encoding] | <code>Object</code> \| <code>string</code> | <code>utf8</code> | If `bufferValue  is not a buffer, this encoding will be applied. |
-| [config.putter] |  |  | Change the put operation. Helpful if you are putting to a source that does not handle buffer operations or has a different argument signature or has a different function name. |
+| [config.encoding] | <code>Object</code> \| <code>string</code> \| <code>null</code> | <code>utf8</code> | If `bufferValue`  is not a buffer, this encoding will be applied. |
+| [config.putter] |  |  | Change the put operation. Helpful if you are putting to a source that does not handle buffer operations or has a different argument signature or has a different function name. Set this to 'null' to ignore encodings. Most of the BYOSU does not care about the encoding put into the source, it cares about how it gets it with the `Query.get$`. Pass null to ignore encodings. |
 
+**Example**  
+```js
+// put into an object
+const obj = {};
+await put(
+    {
+        put(k, buf) { obj[k] = buf }
+    },
+    "hello",
+    {test: "case"},
+    {encoding: "json"} // To turn the object into a buffer
+                       // the put operation can use.
+                       // Set this to null, to pass value as is.
+);
+```
 <a name="Query.exports.put"></a>
 
 ### Query.exports.put()
 Convenience async method for put$
+
+Some `source.put` does not return anything after it's operation, in this case, this will return null.
 
 **Kind**: static method of [<code>Query</code>](#Query)  
 <a name="Query.exports.readdir$"></a>
@@ -410,5 +471,36 @@ readdir$(sourceInterface(sourceInstance, { getProps }));
 
 ### Query.exports.readdir()
 Stream version of readdir$. Returns array of the files and folders
+
+**Kind**: static method of [<code>Query</code>](#Query)  
+<a name="Query.exports.ready$"></a>
+
+### Query.exports.ready$(source, [config]) ⇒ <code>Observable.&lt;ObservedValueOf.&lt;Promise.&lt;unknown&gt;&gt;&gt;</code>
+To check if a resource is ready. This function first checks to see if resource has a 'ready' function
+and resolve that way, if not, Promise.resolve will be used.
+
+**Kind**: static method of [<code>Query</code>](#Query)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| source |  |  |
+| [config] | <code>function</code> \| <code>object</code> | The only config is readier, so you could pass a function here as config.readier |
+| [config.readier] | <code>function</code> | A hook to define how the source becomes ready. Return a null promise. |
+
+**Example**  
+```js
+// We'll be ready in just a second. :)
+await ready({
+    ready() {
+        return new Promise(resolve => {
+            setTimeout(resolve, 1000)
+        })
+    }
+});
+```
+<a name="Query.exports.ready"></a>
+
+### Query.exports.ready()
+Convenience async function for ready$
 
 **Kind**: static method of [<code>Query</code>](#Query)  
