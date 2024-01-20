@@ -161,14 +161,15 @@ result information of the bundle will be added there.
 - [ ] support code splitting
 
 
-| Param | Default | Description |
-| --- | --- | --- |
-| source |  | A source that has at least a `get` function |
-| config |  |  |
-| [config.asInput] | <code>true</code> | Whether this source serves as an input of scripts. |
-| [config.asOutput] | <code>!!source.put</code> | Whether this source serves as an output of the bundle. Currently, only supports sources with a put function. Will automatically detect whether the source has put function. This will detect the output name from the rollup.output configuration. |
-| [config.excludes] |  | Exclude ids / specifiers from being imported from this source. |
-| [config.jsCode] |  | Mapper to handle post processing of code before being sent to the output source. |
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| source |  |  | A source that has at least a `get` function |
+| config |  |  |  |
+| [config.asInput] |  | <code>true</code> | Whether this source serves as an input of scripts. |
+| [config.asOutput] |  | <code>!!source.put</code> | Whether this source serves as an output of the bundle. Currently, only supports sources with a put function. Will automatically detect whether the source has put function. This will detect the output name from the rollup.output configuration. |
+| [config.excludes] |  |  | Exclude ids / specifiers from being imported from this source. |
+| [config.jsCode] |  |  | Mapper to handle post processing of code before being sent to the output source. |
+| [config.outputNameHandler] | <code>function</code> |  | Handle with the arguments (chunkId, chunk) the output names of each chunk of the result. |
 
 <a name="Deploy.exports.rollupReplaceThesePlugin"></a>
 

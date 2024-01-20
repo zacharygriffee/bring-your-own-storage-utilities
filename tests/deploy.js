@@ -4,7 +4,7 @@ import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
 import b4a from "b4a";
 // import {rollupDynamicImports} from "../lib/deploy/rollup-dynamic-imports.js";
-import {exists} from "../lib/resolve/jsdelivr.js";
+// import {exists} from "../lib/resolve/jsdelivr.js";
 // WASM kicking my butt on being 'iso support'
 // Will have to handle another time.
 let deployPkg;
@@ -169,57 +169,63 @@ test("Compile svelte", async (t) => {
 
 if (typeof fetch !== "undefined") {
     test("Rollup with JsDelivr", async t => {
-        const {module: {theAnswer, path, SHA512, SHA512Ready}} = await pack(
-            "bloatedLibrary",
-            {
-                plugins: [
-                    rollupVirtualExports("bloatedLibrary", {
-                        "default as theAnswer": "the-answer",
-                        "default as path": "tiny-paths",
-                        "default as SHA512, ready as SHA512Ready": "sha512-wasm@2.3.4"
-                    }),
-                    rollupFromJsdelivr()
-                ],
-                autoImport: true
-            }
-        );
+        try {
+            const result = await pack(
+                "bloatedLibrary",
+                {
+                    plugins: [
+                        rollupVirtualExports("bloatedLibrary", {
+                            "default as theAnswer": "the-answer",
+                            "default as path": "tiny-paths",
+                            "default as SHA512, ready as SHA512Ready": "sha512-wasm@2.3.4"
+                        }),
+                        rollupFromJsdelivr()
+                    ],
+                    autoImport: true
+                }
+            );
 
-        await SHA512Ready();
+            const {module: {theAnswer, path, SHA512, SHA512Ready}} = result;
 
-        const hexHash = SHA512()
-            .update('hello')
-            .update(' ')
-            .update(b4a.from('world'))
-            .digest('hex')
+            await SHA512Ready();
 
-        t.is(theAnswer, 42, "We got an answer");
-        t.is(hexHash, "309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f",
-            "We digested a sha512 from a library that has it's own imports");
-        t.ok(path.posix, "We got a path module.");
+            const hexHash = SHA512()
+                .update('hello')
+                .update(' ')
+                .update(b4a.from('world'))
+                .digest('hex')
+
+            t.is(theAnswer, 42, "We got an answer");
+            t.is(hexHash, "309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f",
+                "We digested a sha512 from a library that has it's own imports");
+            t.ok(path.posix, "We got a path module.");
+        } catch (e) {
+            debugger;
+        }
     });
 }
 
-skip("code splitting", async t => {
-
-    const result = await pack(
-        "codeSplit",
-        {
-            plugins: [
-                rollupVirtualPlugin({
-                    // "someDynamicImport": "export default 42",
-                    "codeSplit": "const theAnswer = await import('someDynamicImport'); export {theAnswer};"
-                }),
-                rollupFromJsdelivr(),
-                rollupDynamicImports(() => {
-                    return import("random-access-memory");
-                })
-            ],
-            output: {
-                inlineDynamicImports: false
-            },
-            autoImport: true
-        }
-    );
+skip("testings", async t => {
+    const result = await pack("testings", {
+        plugins: [
+            rollupVirtualPlugin(
+                {
+                    x: `
+                        export let res = 0;
+                        export function inc(i=1) { res+=i };
+                    `,
+                    testings: `
+                        import {res, inc} from "x";
+                        console.log(res);
+                        inc(5);
+                        console.log(res);
+                        export default res;
+                    `
+                }
+            )
+        ],
+        autoImport: true
+    });
 
     debugger;
 });

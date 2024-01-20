@@ -11,7 +11,9 @@
         * [.exports.getModuleCode$(moduleId, config)](#Resolve.JsDelivr.exports.getModuleCode$) ⇒
         * [.exports.getPackageJson$(moduleId, config)](#Resolve.JsDelivr.exports.getPackageJson$)
         * [.exports.getPackageJson()](#Resolve.JsDelivr.exports.getPackageJson)
-        * [.exports.importModule$(moduleId, config)](#Resolve.JsDelivr.exports.importModule$) ⇒
+        * [.exports.exists$(moduleId, config)](#Resolve.JsDelivr.exports.exists$)
+        * [.exports.exists()](#Resolve.JsDelivr.exports.exists)
+        * [.exports.importModule$(moduleId, config)](#Resolve.JsDelivr.exports.importModule$)
         * [.exports.importModule()](#Resolve.JsDelivr.exports.importModule)
         * [.exports.getVersions$(bareModuleSpecifier)](#Resolve.JsDelivr.exports.getVersions$) ⇒
         * [.exports.get$(id)](#Resolve.JsDelivr.exports.get$) ⇒ <code>Observable.&lt;module&gt;</code>
@@ -44,7 +46,9 @@
     * [.exports.getModuleCode$(moduleId, config)](#Resolve.JsDelivr.exports.getModuleCode$) ⇒
     * [.exports.getPackageJson$(moduleId, config)](#Resolve.JsDelivr.exports.getPackageJson$)
     * [.exports.getPackageJson()](#Resolve.JsDelivr.exports.getPackageJson)
-    * [.exports.importModule$(moduleId, config)](#Resolve.JsDelivr.exports.importModule$) ⇒
+    * [.exports.exists$(moduleId, config)](#Resolve.JsDelivr.exports.exists$)
+    * [.exports.exists()](#Resolve.JsDelivr.exports.exists)
+    * [.exports.importModule$(moduleId, config)](#Resolve.JsDelivr.exports.importModule$)
     * [.exports.importModule()](#Resolve.JsDelivr.exports.importModule)
     * [.exports.getVersions$(bareModuleSpecifier)](#Resolve.JsDelivr.exports.getVersions$) ⇒
     * [.exports.get$(id)](#Resolve.JsDelivr.exports.get$) ⇒ <code>Observable.&lt;module&gt;</code>
@@ -88,13 +92,30 @@ TODO: get the parent most package.json from path.
 Convenience async function of getPackageJson$
 
 **Kind**: static method of [<code>JsDelivr</code>](#Resolve.JsDelivr)  
+<a name="Resolve.JsDelivr.exports.exists$"></a>
+
+#### JsDelivr.exports.exists$(moduleId, config)
+Checks if the module exists on jsdelivr without downloading code.
+
+**Kind**: static method of [<code>JsDelivr</code>](#Resolve.JsDelivr)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| moduleId | <code>string</code> | module specifier |
+| config |  |  |
+
+<a name="Resolve.JsDelivr.exports.exists"></a>
+
+#### JsDelivr.exports.exists()
+Convenience async method of checkModuleExists$
+
+**Kind**: static method of [<code>JsDelivr</code>](#Resolve.JsDelivr)  
 <a name="Resolve.JsDelivr.exports.importModule$"></a>
 
-#### JsDelivr.exports.importModule$(moduleId, config) ⇒
+#### JsDelivr.exports.importModule$(moduleId, config)
 Import a module by specifier, url, identifier.
 
 **Kind**: static method of [<code>JsDelivr</code>](#Resolve.JsDelivr)  
-**Returns**: Promise<module>  
 
 | Param | Default | Description |
 | --- | --- | --- |

@@ -13,6 +13,7 @@
     * [.fromRandomAccessCollection](#Adapt.fromRandomAccessCollection) : <code>object</code>
         * [.exists(file)](#Adapt.fromRandomAccessCollection.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
         * [.get(file, [config])](#Adapt.fromRandomAccessCollection.get) ⇒ <code>Promise.&lt;\*&gt;</code>
+    * [.exports.ISource(source, [meta])](#Adapt.exports.ISource) ⇒ <code>any</code>
 
 <a name="Adapt.fromRandomAccess"></a>
 
@@ -132,4 +133,18 @@ Get the entire content of the file. **Careful** with big files.
 | file | <code>string</code> |  |  |
 | [config] |  |  |  |
 | [config.encoding] |  | <code>&#x27;binary&#x27;</code> | Either a `string`, compact-encoding, or codec |
+
+<a name="Adapt.exports.ISource"></a>
+
+### Adapt.exports.ISource(source, [meta]) ⇒ <code>any</code>
+Utilize this source interface to make it easier and safer for this library to handle your
+source. Any area where library function accepts a 'source', pass a wrapped source for best
+results.
+
+**Kind**: static method of [<code>Adapt</code>](#Adapt)  
+
+| Param | Description |
+| --- | --- |
+| source |  |
+| [meta] | Just meta data to send along with the container that wraps the source. |
 

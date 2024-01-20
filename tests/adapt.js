@@ -5,6 +5,12 @@ import b4a from "b4a";
 import {fromRandomAccess, fromRandomAccessCollection} from "../dist/adapt.min.js";
 import {findDown, findPackageJson} from "../dist/find.min.js";
 import {list, readdir} from "../dist/query.min.js";
+
+
+// import {fromRandomAccess, fromRandomAccessCollection} from "../lib/adapt/index.js";
+// import {findDown, findPackageJson} from "../lib/find/index.js";
+// import {list, readdir} from "../lib/query/index.js";
+
 import {loadPackageJson} from "../dist/resolve.min.js";
 import {from} from "rxjs";
 import {hasFile} from "./hasFile-test-helper.js";

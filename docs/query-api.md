@@ -353,6 +353,6 @@ readdir$(sourceInterface(sourceInstance, { getProps }));
 <a name="Query.exports.readdir"></a>
 
 ### Query.exports.readdir()
-Async version of readdir$. Returns array of the files and folders
+Stream version of readdir$. Returns array of the files and folders
 
 **Kind**: static method of [<code>Query</code>](#Query)  
