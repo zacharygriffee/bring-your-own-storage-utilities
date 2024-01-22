@@ -47,30 +47,33 @@ npm install bring-your-own-storage-utilities --save
 
 ```ecmascript 6 
     // Example using a standard javascript object as a source.
+    // See tests/adapt.js for this very thing at work.
     import {Adapt} from "bring-your-own-storage-utilities";
     const obj = {};
     const yourSource = Adapt.iSource({
-      async get(key) {
-          return obj[key];
-      }.
-      async exists(key) {
-          return !!obj[key];
-      },
-      async put(key, buffer, config) {
-          obj[key] = buffer;
-      },
-      async del(key) {
-          if (obj[key]) {
-            delete obj[key];
-          }
-      },
-      * readdir(path) {
-        for (const key of Object.keys(obj)) {
-          if (keys.startsWith(key)) {
-            yield path;
-          }
+        async get(key) {
+            return obj[key];
+        },
+        async exists(key) {
+            return !!obj[trimStart(key, "/")];
+        },
+        async put(key, buffer, config) {
+            obj[key] = buffer;
+        },
+        async del(key) {
+            if (obj[key]) {
+                delete obj[key];
+            }
+        },
+        * readdir(path) {
+            path = trimEnd(coercePathAbsolute(path), "/") + "/";
+            for (let key of Object.keys(obj)) {
+                key = coercePathAbsolute(key);
+                if (key.startsWith(path)) {
+                    yield key.slice(path.length).split("/").shift();
+                }
+            }
         }
-      } 
     });
 ```
 

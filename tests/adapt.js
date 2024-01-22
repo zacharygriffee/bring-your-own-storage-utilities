@@ -2,7 +2,7 @@ import {test, solo} from "brittle";
 import RAM from "random-access-memory";
 import b4a from "b4a";
 import {iSource, RandomAccessCollection} from "../dist/adapt.min.js";
-import {findDown, findPackageJson} from "../dist/find.min.js";
+import {coercePathAbsolute, findDown, findPackageJson} from "../dist/find.min.js";
 import {isAbsolute, list, readdir} from "../dist/query.min.js";
 import {pack} from "../dist/deploy.min.js";
 
@@ -12,6 +12,7 @@ import {pack} from "../dist/deploy.min.js";
 // import {list, readdir} from "../lib/query/index.js";
 
 import {loadPackageJson} from "../dist/resolve.min.js";
+import {trimEnd, trimStart} from "../lib/util/index.js";
 
 // import {loadPackageJson} from "../lib/resolve/index.js";
 // import {from} from "rxjs";
@@ -70,10 +71,54 @@ test("isource basic", async t => {
     t.ok(src.writable);
 });
 
+solo("readme example if isource", async t => {
+    // Example using a standard javascript object as a source.
+    const obj = {};
+    const yourSource = iSource({
+        async get(key) {
+            // Our object is stored without an initial slash
+            // make sure to trim it.
+            return obj[trimStart(key, "/")];
+        },
+        async exists(key) {
+            // Our object is stored without an initial slash
+            // make sure to trim it.
+            return !!obj[trimStart(key, "/")];
+        },
+        async put(key, buffer, config) {
+            obj[key] = buffer;
+        },
+        async del(key) {
+            if (obj[key]) {
+                delete obj[key];
+            }
+        },
+        * readdir(path) {
+            // Rudimentary path iterator.
+            path = trimEnd(coercePathAbsolute(path), "/") + "/";
+            for (let key of Object.keys(obj)) {
+                key = coercePathAbsolute(key);
+                if (key.startsWith(path)) {
+                    yield key.slice(path.length).split("/").shift();
+                }
+            }
+        }
+    });
+
+    await yourSource.put("hello", "world");
+    await yourSource.put("folder/answer", "42");
+    t.alike(await yourSource.readdir("/"), ["hello", "folder"]);
+    t.alike(await yourSource.readdir("/folder"), ["answer"]);
+    t.is(b4a.toString(await yourSource.get("hello")), "world");
+    const [one, two] = await yourSource.list("/");
+    t.ok(((one.isFile && one.key === "/hello") || (one.isFolder && one.key === "/folder")));
+    t.ok(((two.isFile && two.key === "/hello") || (two.isFolder && two.key === "/folder")));
+    t.is(b4a.toString(await yourSource.get("folder/answer")), "42");
+});
 
 test("fromRandomAccessStorageCollection", async t => {
     const fileObject = {
-        ["snacks.txt"]:  new RAM(b4a.from("pretzels, chips, olives, fries")),
+        ["snacks.txt"]: new RAM(b4a.from("pretzels, chips, olives, fries")),
         ["margarita/standard.txt"]: new RAM(b4a.from("tequila, triple sec, sour")),
         ["margarita/watermelon.txt"]: new RAM(b4a.from("tequila, triple sec, sour, watermelon puree")),
         ["margarita/golden.txt"]: new RAM(b4a.from("tequila, triple sec, sour, orange juice")),
