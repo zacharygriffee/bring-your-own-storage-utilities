@@ -73,7 +73,7 @@ Files found will be absolute paths to the source's root.
 | [config.filter] | <code></code> | Optional filter to apply to the file search. |
 | [config.readdir$] |  | An rxjs observable that returns a list of files and folders from the source. Default behavior is to use source.readdir(path). |
 | [config.cwd] |  | The working directory to begin searching downward. If omitted or null, will find the common dir in the fileList to begin. |
-| [config.isFolderSelector] |  | Predicate of what entries are folders and what are not. Default behavior to treat any entry without an extension (e.g. .txt) a folder. |
+| [config.isFolderSelector] |  | Predicate of what entries are folders and what are not. Default behavior to treat any entry without an extension (e.g. .txt) a folder and a folder must also have at least one file somewhere as a dependent of it. e.g. empty folders with no files should **not** show up. |
 
 <a name="Find.exports.findUp"></a>
 
@@ -109,7 +109,6 @@ Files found will be absolute paths to the source's root.
 | [config.filter] | <code></code> | Optional filter to apply to the file search. |
 | [config.readdir$] |  | An rxjs observable that returns a list of files and folders from the source. Default behavior is to use source.readdir(path) |
 | [config.cwd] |  | Alias to fromDir. The working directory to begin searching upward (fromDir ---> root directory). If omitted or null, will find the common dir in the fileList to begin. |
-| [config.isFolderSelector] |  | Predicate of what entries are folders and what are not. Default behavior to treat any entry without an extension (e.g. .txt) a folder. |
 
 <a name="Find.exports.findNodeModule$"></a>
 

@@ -7,144 +7,153 @@
 **Kind**: global namespace  
 
 * [Adapt](#Adapt) : <code>object</code>
-    * [.fromRandomAccess](#Adapt.fromRandomAccess) : <code>object</code>
-        * [.exists(file, [config])](#Adapt.fromRandomAccess.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
-        * [.readdir([fromPath], [config])](#Adapt.fromRandomAccess.readdir) ⇒ <code>Readable</code>
-    * [.fromRandomAccessCollection](#Adapt.fromRandomAccessCollection) : <code>object</code>
-        * [.exists(file)](#Adapt.fromRandomAccessCollection.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
-        * [.get(file, [config])](#Adapt.fromRandomAccessCollection.get) ⇒ <code>Promise.&lt;\*&gt;</code>
-    * [.exports.ISource(source, [meta])](#Adapt.exports.ISource) ⇒ <code>any</code>
+    * [.iSource](#Adapt.iSource) ⇒ <code>any</code>
+    * [.RandomAccessCollection](#Adapt.RandomAccessCollection)
+    * [.exports.setPack(_pack)](#Adapt.exports.setPack) ⇒
+    * [.importPack([url])](#Adapt.importPack) ⇒ <code>Promise.&lt;void&gt;</code>
 
-<a name="Adapt.fromRandomAccess"></a>
+<a name="Adapt.iSource"></a>
 
-### Adapt.fromRandomAccess : <code>object</code>
-Wraps a function that makes random access storage instances. You have to supply the readdir mechanism here because
-there is no standard for it.
-
-**Kind**: static namespace of [<code>Adapt</code>](#Adapt)  
-**Todo**
-
-- [ ] When this library supports put/write, can keep inner cache of the file hierarchy created to make readdir$
-      function optional.
-
-
-| Param | Type | Description |
-| --- | --- | --- |
-| randomAccessFunction | <code>AsyncFunction</code> \| <code>function</code> | A function that creates random access file instances. |
-| readdir$ | <code>Observable.&lt;string&gt;</code> | A **cold** Observable source stream that emits filenames that exist in the filesystem scope you want. |
-
-**Example**  
-```js
-fromRandomAccess(
- (file, config) => {
-     return fileStore[file] = makeARandomAccessStorageCompatibleFile(file, config);
- },
- rxjs.from(fileStore)
-)
-```
-
-* [.fromRandomAccess](#Adapt.fromRandomAccess) : <code>object</code>
-    * [.exists(file, [config])](#Adapt.fromRandomAccess.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.readdir([fromPath], [config])](#Adapt.fromRandomAccess.readdir) ⇒ <code>Readable</code>
-
-<a name="Adapt.fromRandomAccess.exists"></a>
-
-#### fromRandomAccess.exists(file, [config]) ⇒ <code>Promise.&lt;boolean&gt;</code>
-Whether the file exists in collection. An empty file does not exist to this function.
-
-**Kind**: static method of [<code>fromRandomAccess</code>](#Adapt.fromRandomAccess)  
-
-| Param | Type | Description |
-| --- | --- | --- |
-| file | <code>string</code> | File name to check |
-| [config] |  | a configuration object that is passed to the factory function |
-
-<a name="Adapt.fromRandomAccess.readdir"></a>
-
-#### fromRandomAccess.readdir([fromPath], [config]) ⇒ <code>Readable</code>
-Returns a readable stream of files in cwd.
-
-**Kind**: static method of [<code>fromRandomAccess</code>](#Adapt.fromRandomAccess)  
-**Returns**: <code>Readable</code> - A streamx readable stream that emits the values.  
-
-| Param | Default | Description |
-| --- | --- | --- |
-| [fromPath] | <code>&quot;/&quot;</code> | A file path, defaults to root. |
-| [config] |  |  |
-| [config.cwd] |  | Same as fromPath |
-| [config.recursive] | <code>false</code> | If true, cwd is ignored and all files in the collection are returned. |
-
-<a name="Adapt.fromRandomAccessCollection"></a>
-
-### Adapt.fromRandomAccessCollection : <code>object</code>
-Wraps a collection of random access storage instances to be used with this library.
-
-Currently supported functions: exists, get, readdir,
-
-It is **not recommended** to use with collections that have big files. For that, use
-[hypercore](https://docs.holepunch.to/building-blocks/hypercore), or
-[corestore](https://docs.holepunch.to/helpers/corestore) or some other handler
-of random-access-storage instances.
-
-**Kind**: static namespace of [<code>Adapt</code>](#Adapt)  
-**Todo**
-
-- [ ] Support put, append, and other operations.
-
-
-| Param | Description |
-| --- | --- |
-| collection | A key/value of fileNames/randomAccessStorage instances, mix it up if you want. |
-
-**Example**  
-```js
-// Example
-import RAM from "random-access-memory";
-fromRandomAccessStorageCollection({
-    ["/file"]: new RAM(),
-    ["/folder/file2"]: new RAM()
-});
-```
-
-* [.fromRandomAccessCollection](#Adapt.fromRandomAccessCollection) : <code>object</code>
-    * [.exists(file)](#Adapt.fromRandomAccessCollection.exists) ⇒ <code>Promise.&lt;boolean&gt;</code>
-    * [.get(file, [config])](#Adapt.fromRandomAccessCollection.get) ⇒ <code>Promise.&lt;\*&gt;</code>
-
-<a name="Adapt.fromRandomAccessCollection.exists"></a>
-
-#### fromRandomAccessCollection.exists(file) ⇒ <code>Promise.&lt;boolean&gt;</code>
-Whether the file exists in collection. An empty file does not exist to this function.
-
-**Kind**: static method of [<code>fromRandomAccessCollection</code>](#Adapt.fromRandomAccessCollection)  
-
-| Param | Type |
-| --- | --- |
-| file | <code>string</code> | 
-
-<a name="Adapt.fromRandomAccessCollection.get"></a>
-
-#### fromRandomAccessCollection.get(file, [config]) ⇒ <code>Promise.&lt;\*&gt;</code>
-Get the entire content of the file. **Careful** with big files.
-
-**Kind**: static method of [<code>fromRandomAccessCollection</code>](#Adapt.fromRandomAccessCollection)  
-
-| Param | Type | Default | Description |
-| --- | --- | --- | --- |
-| file | <code>string</code> |  |  |
-| [config] |  |  |  |
-| [config.encoding] |  | <code>&#x27;binary&#x27;</code> | Either a `string`, compact-encoding, or codec |
-
-<a name="Adapt.exports.ISource"></a>
-
-### Adapt.exports.ISource(source, [meta]) ⇒ <code>any</code>
+### Adapt.iSource ⇒ <code>any</code>
 Utilize this source interface to make it easier and safer for this library to handle your
 source. Any area where library function accepts a 'source', pass a wrapped source for best
 results.
 
-**Kind**: static method of [<code>Adapt</code>](#Adapt)  
+source can have any of these methods and properties:
+<pre>
+source = {
+    // Methods
+    get,                 // Get a buffer from the storage by key.
+    get$,                // An observable version of get
+    put,                 // Put a buffer at key into the source
+    put$,                // An observable of put
+    append,              // Append a buffer to a source
+    append$,             // An observable of append
+    entry,               // To retrieve details of entry at key of source
+    del,                 // Del key at source.
+    exists,              // Whether the key of source exists
+    ready,               // Whether the source is ready to operate.
+    readdir,             // Get an array of entries of the cwd of source
+    list,                // Get an array of 'entry' details of the cwd of source
+    createReadStream,    // Get a stream of data from a key of source.
+
+    // Properties
+    length               // For supporting sources, get the length. Not fully implemented.
+    factory              // A string module that defines how to
+                         // install this storage source.
+};
+</pre>
+
+**Kind**: static interface of [<code>Adapt</code>](#Adapt)  
+**See**: Adapt.fromRandomAccessCollection for details on how to implement  
 
 | Param | Description |
 | --- | --- |
 | source |  |
 | [meta] | Just meta data to send along with the container that wraps the source. |
+
+**Example**  
+```js
+// Example of factory
+import {pack} from "bring-your-own-storage-utilities/deploy";
+setPack(pack);
+
+const src = ISource({
+    factory: `
+        const obj = {};
+        export function get(x) {
+            return obj[x];
+        }
+        export function put(x, buf) {
+            obj[x] = buf;
+        }
+        export function del(x) {
+            if (obj[x]) {
+                delete obj[x];
+            }
+        }
+    `
+});
+const installedSrc = await src.install();
+await installedSrc.put("hello", "you");
+await installedSrc.get("hello"); // buffer version of 'you'
+```
+**Example**  
+```js
+// You don't need factory to make, if you don't need portable source.
+
+const obj = {};
+const src = ISource({
+   get(x) {
+       return obj[x];
+   },
+   async put(x, buf) {
+       obj[x] = buf;
+       await new Promise(resolve => setTimeout(resolve, 1000);
+   },
+   del(x) {
+       if (obj[x]) {
+           delete obj[x];
+       }
+   }
+});
+```
+<a name="Adapt.RandomAccessCollection"></a>
+
+### Adapt.RandomAccessCollection
+A ISource interface for a collection of random-access-storages
+
+**Kind**: static property of [<code>Adapt</code>](#Adapt)  
+**Example**  
+```js
+// Install storage and get the Adapt.ISource interface.
+const RAC = await RandomAccessCollection.install();
+
+RAC.setDefault((fileName, buff, config) => new RAM(buff));
+
+RAC.setCollection({
+ preexistingFile: new RAM(),
+ ["folder/preexistingFileInFolder.txt"]: new RAI()
+});
+await RAC.exists("folder/preexistingFileInFolder.txt"); // true
+```
+<a name="Adapt.exports.setPack"></a>
+
+### Adapt.exports.setPack(_pack) ⇒
+Only necessary if you did not import the entire BYOSU namespace e.g. import * as BYOSU from "bring-your-own-storage-utilities";.
+
+IF constructing a iSource from a factory string, you must import a pack.
+Either use setPack if you already have Deploy.pack loaded.
+Or, use importPack to import your own or from BYOSU repo.
+
+**This is only ran once.
+
+Repeated calls will be ignored**
+
+**Kind**: static method of [<code>Adapt</code>](#Adapt)  
+**Returns**: void  
+
+| Param | Description |
+| --- | --- |
+| _pack | a preloaded Deploy.pack you have |
+
+<a name="Adapt.importPack"></a>
+
+### Adapt.importPack([url]) ⇒ <code>Promise.&lt;void&gt;</code>
+Only necessary if you did not import the entire BYOSU namespace e.g. import * as BYOSU from "bring-your-own-storage-utilities";.
+
+IF constructing a iSource from a factory string, you must import a pack. Either use setPack if you already have
+Deploy.pack loaded. Or, use importPack to import your own or from BYOSU repo.
+
+**This is only ran once.
+
+Repeated calls will be ignored**
+
+import errors should be caught by you
+
+**Kind**: static method of [<code>Adapt</code>](#Adapt)  
+
+| Param | Default | Description |
+| --- | --- | --- |
+| [url] | <code>https://cdn.jsdelivr.net/npm/bring-your-own-storage-utilities@0.0.1202/dist/deploy.min.js/+esm</code> | default is https://cdn.jsdelivr.net/npm/bring-your-own-storage-utilities@0.0.1202/dist/deploy.min.js/+esm |
 

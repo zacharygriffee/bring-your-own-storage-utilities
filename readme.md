@@ -39,73 +39,49 @@ npm install bring-your-own-storage-utilities --save
 
 ---
 
-# It starts with a source
+## It starts with a source that you bring
 
-BYOSU functions currently have the ability to adapt to most source storages. For example, the find-down by default will
-access source.readdir, but you can supply your own observable if you need specific way to list the files in the
-directory. Check the function on what ways you can adapt your source storage for it.
+> You can use the Adapt.iSource interface or if your source resembles the interface
+> at all, it will probably work. Using the interface will ensure that the source is adapted
+> to the utilities of the BYOSU Apis.
 
-Here is example of interfacing a source Map object to most of the current API:
-
-```ecmascript 6
-const mapStorage = new Map();
-const config = { capitalize: true };
-const sourceInterface = (source, defaultProps) => ({
-    async exists(filePath) {
-      // Having an exist function will help speed up 
-      // some find and query functions
-      return source.has(filePath);
-    },
-    async get(filePath, config = {}) {
-        const {
-            capitalize
-        } = {...defaultProps, ...config};
-        
-        if (capitalize) filePath = capitalizeFunction(filePath);
-        
-        return source.get(filePath);
-    },
-    // readdir can be a cold observable, array, iterable, async iterable, readable stream,
-    // async generator, regular generator, pretty much anything rxjs.from will accept.
-    // But the first argument will be a path that will be queried and a config object.
-    // and it should return just the filename (no paths) in directory `path`  
-    * readdir(path, config = {}) {
-        for (const file of source.keys()) {
-            // You would do the path handling here.
-            yield file;
+```ecmascript 6 
+    // Example using a standard javascript object as a source.
+    import {Adapt} from "bring-your-own-storage-utilities";
+    const obj = {};
+    const yourSource = Adapt.iSource({
+      async get(key) {
+          return obj[key];
+      }.
+      async exists(key) {
+          return !!obj[key];
+      },
+      async put(key, buffer, config) {
+          obj[key] = buffer;
+      },
+      async del(key) {
+          if (obj[key]) {
+            delete obj[key];
+          }
+      },
+      * readdir(path) {
+        for (const key of Object.keys(obj)) {
+          if (keys.startsWith(key)) {
+            yield path;
+          }
         }
-    }
-});
-
-readdir$(
-    sourceInterface(mapStorage, { capitalize: true })
-).subscribe(
-    file => {
-        // files enumerated
-    }
-);
+      } 
+    });
 ```
+
+> Your source after the above example will magically acquire much of the query API methods 
+> and can be used in any of the other api
 
 # API
 
 #### `import * as BYOSU from "bring-your-own-storage-utilities"`
 
-#### `import {Adapt, Find, Query, Resolve, Transport} from "bring-your-own-storage-utilities"`
-
-## `Find`
-
-#### `import * as Find from "bring-your-own-storage-utilities/find"`
-
-The find api functions mainly finding stuff in the source storage or making it easier to find stuff.
-
-### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/find-api.md)
-
-- Find files from a child directory up to the parents
-- Find files from a parent to the child
-- Find package.json file parent to the current working directory
-- Find node_modules parent to current working directory
-
----
+#### `import {Adapt, Find, Query, Resolve, Transport, Deploy} from "bring-your-own-storage-utilities"`
 
 ## `Query`
 
@@ -121,6 +97,21 @@ that resource
 - Get entry details of file
 - List recursively or read directory shallow.
 - Get mime-type of file with magic bytes
+
+---
+
+## `Find`
+
+#### `import * as Find from "bring-your-own-storage-utilities/find"`
+
+The find api functions mainly finding stuff in the source storage or making it easier to find stuff.
+
+### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/find-api.md)
+
+- Find files from a child directory up to the parents
+- Find files from a parent to the child
+- Find package.json file parent to the current working directory
+- Find node_modules parent to current working directory
 
 ---
 
@@ -159,25 +150,26 @@ You need data from your source to go from point A to point B. Transport will hel
 
 - Fetch hook to fetch from your source or to create your own hooks.
 
----
-## API included separately
-
 ## `Deploy`
-
-#### `import * as Deploy from "bring-your-own-storage-utilities/deploy"`
 
 You need to deploy something from your source to the end-user.
 
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/deploy-api.md)
 
 - [Rollup](https://rollupjs.org/) plugin to bundle files from your source
-  - including pack(inputName, outputName, rollupConfig) function to make the entire process easier
-- [Svelte](https://svelte.dev/) plugin to compile .svelte files from browser for sources in the browser.
-- [Terser](https://terser.org/) plugin for rollup that works in browser 
+  - Utilizing dependency injection techniques. You can supply a `rollup module`, or this library will download 
+it when `Deploy.pack` is used. See Deploy.setRollup in the api.
+- [Svelte](https://svelte.dev/) plugin to compile .svelte files from browser for sources in the browser. 
+  - Utilizing dependency injection techniques. You can supply the compile function from svelte library or this library will
+download one. See `Deploy.setSvelteCompiler` in the api.
+- ~~ [Terser](https://terser.org/) plugin for rollup that works in browser ~~ Disabled for now.
 - [jsdelivr](https://www.jsdelivr.com/) plugin that gets module specifier from CDN jsdelivr.
-This plugin will only resolve to module. Even if a module is cjs it will resolve as a module. If the module is
-natively esm module, you shouldn't have any problems with this plugin. MOST cjs just works.... but things can get dicey for some
-complex cjs javascript.
+  This plugin will only resolve to module. Even if a module is cjs it will resolve as a module. If the module is
+  natively esm module, you shouldn't have any problems with this plugin. MOST cjs just works.... but things can get dicey for some
+  complex cjs javascript.
+
+---
+## API included separately
 
 ---
 

@@ -3,6 +3,7 @@ import {fileURLToPath} from "../dist/find.min.js";
 import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
 import b4a from "b4a";
+import {rollupTerserBrowserPlugin} from "../dist/deploy/rollup-terser-browser-plugin.js";
 // import {rollupDynamicImports} from "../lib/deploy/rollup-dynamic-imports.js";
 // import {exists} from "../lib/resolve/jsdelivr.js";
 // WASM kicking my butt on being 'iso support'
@@ -20,10 +21,14 @@ const {
     rollupExternalGlobalsPlugin,
     pack,
     rollupSveltePluginNoServer,
-    rollupTerserBrowserPlugin,
     rollupFromJsdelivr,
-    rollupVirtualExports
+    rollupVirtualExports,
+    setSvelteCompiler,
+    setRollup
 } = deployPkg;
+
+await setSvelteCompiler(await import("../dist/svelte/svelte-compiler.min.js"));
+await setRollup();
 
 let projectFolder;
 if (globalThis.testHyperDrive) {

@@ -7,6 +7,8 @@
 **Kind**: global namespace  
 
 * [Deploy](#Deploy) : <code>object</code>
+    * [.exports.ROLLUP](#Deploy.exports.ROLLUP)
+    * [.exports.setRollup(rollup)](#Deploy.exports.setRollup) ⇒ <code>Promise.&lt;void&gt;</code>
     * [.exports.rollup$(entry, config)](#Deploy.exports.rollup$)
     * [.exports.generate$(outputName, bundle$, outputConfig)](#Deploy.exports.generate$)
     * [.exports.pack$(entryName, [outputName], [config])](#Deploy.exports.pack$)
@@ -19,9 +21,40 @@
     * [.exports.rollupTerserBrowserPlugin([comments])](#Deploy.exports.rollupTerserBrowserPlugin)
     * [.exports.rollupVirtualPlugin(codeBook, config)](#Deploy.exports.rollupVirtualPlugin)
     * [.exports.rollupVirtualExports(entryName, exportBook, config)](#Deploy.exports.rollupVirtualExports) ⇒ <code>Object</code>
+    * [.exports.setSvelteCompiler([svelteCompilerModule])](#Deploy.exports.setSvelteCompiler) ⇒ <code>Promise.&lt;void&gt;</code>
     * [.exports.svelteCompile()](#Deploy.exports.svelteCompile)
     * [.exports.svelteCompile$(code, config)](#Deploy.exports.svelteCompile$)
     * [.exports.terser(code, [comments])](#Deploy.exports.terser) ⇒ <code>Promise.&lt;MinifyOutput&gt;</code>
+
+<a name="Deploy.exports.ROLLUP"></a>
+
+### Deploy.exports.ROLLUP
+Once rollup is acquired through setRollup function, this will be the module.
+
+**Kind**: static property of [<code>Deploy</code>](#Deploy)  
+<a name="Deploy.exports.setRollup"></a>
+
+### Deploy.exports.setRollup(rollup) ⇒ <code>Promise.&lt;void&gt;</code>
+Set rollup module. Rollup has many different versions that may suit your needs better.
+
+**You may only set rollup module once**
+
+**Repeated calls will be ignored**
+
+<pre>
+     Use case:                        NPM Specifier
+     For the browser:                 @rollup/browser@3.29.4
+     For the browser utilizing wasm:  @rollup/browser@latest
+     For node:                        rollup
+</pre>
+
+If you do not call this before using pack,` @rollup/browser@3.29.4` will be downloaded and used.
+
+**Kind**: static method of [<code>Deploy</code>](#Deploy)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| rollup | <code>module</code> \| <code>string</code> | If string or nill, will be specifier to get rollup or `@rollup/browser@3.29.4` |
 
 <a name="Deploy.exports.rollup$"></a>
 
@@ -224,7 +257,8 @@ under the names of the above list.
 
 | Param | Description |
 | --- | --- |
-| config | This is the same configuration as [svelteCompile$](svelteCompile$) |
+| config | This is the same configuration as [svelteCompile$](svelteCompile$) including the following |
+| [config.svelteCompiler] | See Deploy.setSvelteCompiler. This is a convenience function to set the compiler from here. However, if you've already set the compiler or have already run svelteCompiler function, this will do nothing. |
 
 <a name="Deploy.exports.rollupTerserBrowserPlugin"></a>
 
@@ -301,6 +335,24 @@ and value is the module specifier to pull from. Sometimes all you need is to rem
     ]
 }
 ```
+<a name="Deploy.exports.setSvelteCompiler"></a>
+
+### Deploy.exports.setSvelteCompiler([svelteCompilerModule]) ⇒ <code>Promise.&lt;void&gt;</code>
+Set the rollup compiler. Call this before any svelte actions including Deploy.rollupSveltePluginNoServer. If you do not
+call this, the `dist/svelte-compiler.min.js` of BYOSU will be downloaded and used.
+
+**You may only set compiler once**
+
+**Repeated calls will be ignored**
+
+You may also use the svelte/compiler module from the svelte repo see Deploy.svelteCompile for more information.
+
+**Kind**: static method of [<code>Deploy</code>](#Deploy)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| [svelteCompilerModule] | <code>module</code> \| <code>string</code> \| <code>function</code> | If module is passed, no download will occur, and will use module.compile to compile svelte files. If a function is passed, will assume it is a svelte/compiler compile function. If a string is passed (browser only) will download the module and use it. If nothing is passed Will download `dist/svelte-compiler.min.js` from BYOSU repo. |
+
 <a name="Deploy.exports.svelteCompile"></a>
 
 ### Deploy.exports.svelteCompile()

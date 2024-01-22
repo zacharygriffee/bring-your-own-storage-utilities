@@ -24,7 +24,7 @@
     * [.exports.createDataUri$()](#Resolve.exports.createDataUri$)
     * [.exports.createImportMapFromModules$(source, list, config)](#Resolve.exports.createImportMapFromModules$) ⇒ <code>\*</code>
     * [.exports.createImportMapFromModules()](#Resolve.exports.createImportMapFromModules)
-    * [.exports.importCode(code, config)](#Resolve.exports.importCode) ⇒ <code>string</code>
+    * [.exports.importCode(code, config)](#Resolve.exports.importCode) ⇒ <code>Promise.&lt;\*&gt;</code>
     * [.exports.importCode$()](#Resolve.exports.importCode$)
     * [.exports.inferCodeUrlOrModuleSpecifier(string)](#Resolve.exports.inferCodeUrlOrModuleSpecifier) ⇒ <code>Object</code>
     * [.exports.jsonParse(json)](#Resolve.exports.jsonParse) ⇒ <code>object</code>
@@ -270,7 +270,7 @@ Convenience async method for createImportMapFromModules$
 **Kind**: static method of [<code>Resolve</code>](#Resolve)  
 <a name="Resolve.exports.importCode"></a>
 
-### Resolve.exports.importCode(code, config) ⇒ <code>string</code>
+### Resolve.exports.importCode(code, config) ⇒ <code>Promise.&lt;\*&gt;</code>
 Import virtual javascript module from string.
 
 **Kind**: static method of [<code>Resolve</code>](#Resolve)  

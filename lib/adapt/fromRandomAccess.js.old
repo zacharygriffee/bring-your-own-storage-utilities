@@ -2,7 +2,6 @@ import {Readable} from "streamx";
 import {coercePathAbsolute} from "../find/coercePathAbsolute.js";
 import {ISource} from "./ISource.js";
 import {endWith} from "rxjs";
-import b4a from "b4a";
 import codec from "codecs";
 
 /**

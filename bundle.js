@@ -24,9 +24,9 @@ findDownMultiple$(projectFolder, "bundle*.js")
         rx.filter(o => !!o.default),
         rx.map(({default: module, name}) => [module.code, name]),
         rx.reduce((acc, [code, name]) => {
-            if (name === "deploy") {
-                return acc;
-            }
+            // if (name === "deploy") {
+            //     return acc;
+            // }
             acc[name] = code;
             return acc;
             }, {}),

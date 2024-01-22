@@ -1,25 +1,27 @@
 import {test, solo} from "brittle";
 import RAM from "random-access-memory";
 import b4a from "b4a";
-import {fromRandomAccess, ISource, fromRandomAccessCollection} from "../dist/adapt.min.js";
+import {iSource, RandomAccessCollection} from "../dist/adapt.min.js";
 import {findDown, findPackageJson} from "../dist/find.min.js";
 import {isAbsolute, list, readdir} from "../dist/query.min.js";
+import {pack} from "../dist/deploy.min.js";
 
 
-// import {ISource, fromRandomAccessCollection, fromRandomAccess} from "../lib/adapt/index.js";
+// import {ISource, RandomAccessCollection} from "../lib/adapt/index.js";
 // import {findDown, findPackageJson} from "../lib/find/index.js";
 // import {list, readdir} from "../lib/query/index.js";
 
 import {loadPackageJson} from "../dist/resolve.min.js";
 
 // import {loadPackageJson} from "../lib/resolve/index.js";
-import {from} from "rxjs";
-import {hasFile} from "./hasFile-test-helper.js";
+// import {from} from "rxjs";
+// import {hasFile} from "./hasFile-test-helper.js";
+// import {RandomAccessCollection, setPack} from "../lib/adapt/fromRandomAccessCollection.js";
 
 
 test("isource basic", async t => {
     const srcObj = {};
-    const src = ISource({
+    const src = iSource({
         id: "isource basic",
         get(k) {
             if (isAbsolute(k)) k = k.slice(1);
@@ -68,6 +70,7 @@ test("isource basic", async t => {
     t.ok(src.writable);
 });
 
+
 test("fromRandomAccessStorageCollection", async t => {
     const fileObject = {
         ["snacks.txt"]:  new RAM(b4a.from("pretzels, chips, olives, fries")),
@@ -80,7 +83,19 @@ test("fromRandomAccessStorageCollection", async t => {
 }
 `))
     };
-    const files = fromRandomAccessCollection(fileObject);
+    const storeOfStorageInstalls = {};
+    const source = iSource({
+        put(k, buf) {
+            storeOfStorageInstalls[k] = buf;
+        },
+        get(k) {
+            return storeOfStorageInstalls[k];
+        }
+    })
+    const files = await RandomAccessCollection.install("RandomStorage", source);
+    t.ok(storeOfStorageInstalls.RandomStorage)
+
+    files.setCollection(fileObject);
     const howtoMakeWatermelonMargarita = await files.get("margarita/watermelon.txt");
     t.alike(howtoMakeWatermelonMargarita, b4a.from("tequila, triple sec, sour, watermelon puree"));
 
@@ -102,54 +117,65 @@ test("fromRandomAccessStorageCollection", async t => {
     const loadJson = await loadPackageJson(files, {cwd: "/margarita/"});
     t.is(loadJson.name, "in-memory-package-json-for-margarita", "We can read the json file.");
 });
+//
+// test("Using a randomAccess creation function", async (t) => {
+//     const fileObject = {};
+//     const make = (file, buf) => fileObject[file] = new RAM(buf)
+//     const ramFolder = (file) => fileObject[file];
+//
+//     make("/martini/vodkaMartini", b4a.from("vodka,vermouth"));
+//     make("/martini/ginMartini", b4a.from("gin,vermouth"));
+//     make("/snacks", b4a.from("pretzels, chips, olives, fries"));
+//     make("/martini/package.json", b4a.from(`
+// {
+//   "name": "in-memory-package-json-for-martini"
+// }
+// `));
+//
+//     const files = fromRandomAccess(ramFolder, from(Object.keys(fileObject)));
+//
+//     const howToMakeGinMartini = await files.get("/martini/ginMartini");
+//     t.alike(howToMakeGinMartini, b4a.from("gin,vermouth"));
+//
+//     const doWeHaveSnacks = await files.exists("snacks.txt");
+//     const doWeHaveSlashSnacks = await files.exists("/snacks.txt");
+//
+//     t.ok(doWeHaveSlashSnacks === doWeHaveSnacks, "Don't need leading slash to be absolute path, but its always recommended.");
+//
+//     const doWeHaveMargaritas = await files.exists("margarita.txt");
+//     t.absent(doWeHaveMargaritas, "We don't have margarita here.");
+//
+//     const [vodkaMartini, nothingElse] = await findDown(files, ["vodka*"]);
+//     t.is(vodkaMartini, "/martini/vodkaMartini", "This library will coerce file names with root slash.");
+//     t.absent(nothingElse);
+//     const dir = await readdir(files, {recursive: true});
+//     t.is(dir.length, Object.values(fileObject).length, "We just list all files recursively");
+//     const [martiniHasAJsonFile] = await findPackageJson(files, {cwd: "/martini/"});
+//     t.is(martiniHasAJsonFile, "/martini/package.json", "We found that martini has a package.json");
+//     const loadJson = await loadPackageJson(files, {cwd: "/martini/"});
+//     t.is(loadJson.name, "in-memory-package-json-for-martini", "We can read the json file.");
+//
+//     const foundFiles = await readdir(files, {cwd: "/martini/",recursive: false});
+//     t.ok(hasFile(foundFiles, "ginMartini") && foundFiles.length === 3, "Test cwd scopes things correctly returning the file name without slashes.");
+//
+//     const listOfFiles = await list(files);
+//
+//     t.is(listOfFiles.length, 4, "List works even though we don't have an explicit function yet for the adapter");
+//     const {key, value: {blob}} = listOfFiles.find(({key}) => key === "/martini/ginMartini");
+//
+//     t.is(key, "/martini/ginMartini");
+//     t.is(blob.byteLength, b4a.byteLength("gin,vermouth"), "Get size of the blob apart of the list.");
+//
+//     t.absent(hasFile(foundFiles, "someNonExistentFile.txt"));
+// });
 
-test("Using a randomAccess creation function", async (t) => {
-    const fileObject = {};
-    const make = (file, buf) => fileObject[file] = new RAM(buf)
-    const ramFolder = (file) => fileObject[file];
-
-    make("/martini/vodkaMartini", b4a.from("vodka,vermouth"));
-    make("/martini/ginMartini", b4a.from("gin,vermouth"));
-    make("/snacks", b4a.from("pretzels, chips, olives, fries"));
-    make("/martini/package.json", b4a.from(`
-{
-  "name": "in-memory-package-json-for-martini"
-}
-`));
-
-    const files = fromRandomAccess(ramFolder, from(Object.keys(fileObject)));
-
-    const howToMakeGinMartini = await files.get("/martini/ginMartini");
-    t.alike(howToMakeGinMartini, b4a.from("gin,vermouth"));
-
-    const doWeHaveSnacks = await files.exists("snacks.txt");
-    const doWeHaveSlashSnacks = await files.exists("/snacks.txt");
-
-    t.ok(doWeHaveSlashSnacks === doWeHaveSnacks, "Don't need leading slash to be absolute path, but its always recommended.");
-
-    const doWeHaveMargaritas = await files.exists("margarita.txt");
-    t.absent(doWeHaveMargaritas, "We don't have margarita here.");
-
-    const [vodkaMartini, nothingElse] = await findDown(files, ["vodka*"]);
-    t.is(vodkaMartini, "/martini/vodkaMartini", "This library will coerce file names with root slash.");
-    t.absent(nothingElse);
-    const dir = await readdir(files, {recursive: true});
-    t.is(dir.length, Object.values(fileObject).length, "We just list all files recursively");
-    const [martiniHasAJsonFile] = await findPackageJson(files, {cwd: "/martini/"});
-    t.is(martiniHasAJsonFile, "/martini/package.json", "We found that martini has a package.json");
-    const loadJson = await loadPackageJson(files, {cwd: "/martini/"});
-    t.is(loadJson.name, "in-memory-package-json-for-martini", "We can read the json file.");
-
-    const foundFiles = await readdir(files, {cwd: "/martini/",recursive: false});
-    t.ok(hasFile(foundFiles, "ginMartini") && foundFiles.length === 3, "Test cwd scopes things correctly returning the file name without slashes.");
-
-    const listOfFiles = await list(files);
-
-    t.is(listOfFiles.length, 4, "List works even though we don't have an explicit function yet for the adapter");
-    const {key, value: {blob}} = listOfFiles.find(({key}) => key === "/martini/ginMartini");
-
-    t.is(key, "/martini/ginMartini");
-    t.is(blob.byteLength, b4a.byteLength("gin,vermouth"), "Get size of the blob apart of the list.");
-
-    t.absent(hasFile(foundFiles, "someNonExistentFile.txt"));
-});
+// setPack(pack);
+// const coll1 = await RandomAccessCollection.install();
+// await coll1.setDefault((name, buf) => new RAM(buf));
+//
+// solo("rac", async t => {
+//     await coll1.put("fun", "world");
+//     const fun = b4a.toString(await coll1.get("fun"));
+//     t.is(fun, "world");
+// });
+//

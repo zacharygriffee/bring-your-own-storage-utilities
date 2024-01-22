@@ -1,3 +1,8 @@
+import {setPack} from "./lib/adapt/index.js";
+import {pack} from "./lib/deploy/index.js";
+
+await setPack(pack);
+
 export * as Find from "./lib/find/index.js";
 export * as Query from "./lib/query/index.js";
 export * as Resolve from "./lib/resolve/index.js"
