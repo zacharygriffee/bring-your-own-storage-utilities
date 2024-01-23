@@ -1,7 +1,8 @@
 import {test, solo} from "brittle";
 import RAM from "random-access-memory";
+import RAS from "random-access-storage";
 import b4a from "b4a";
-import {iSource, RandomAccessCollection, setPack} from "../dist/adapt.min.js";
+import {iSource, RandomAccessCollection, setPack, enableRandomAccess} from "../dist/adapt.min.js";
 import {coercePathAbsolute, findDown, findPackageJson} from "../dist/find.min.js";
 import {isAbsolute, list, readdir} from "../dist/query.min.js";
 import {pack} from "../dist/deploy.min.js";
@@ -74,6 +75,7 @@ test("isource basic", async t => {
 });
 
 test("isource randomaccess", async t => {
+    enableRandomAccess(RAS);
     {
         // readable and writable
         await src.put("readableAndWritable", "123456789123456789123456789123456789123456789")
@@ -171,7 +173,7 @@ test("isource randomaccess", async t => {
     }
 });
 
-test("readme example if isource", async t => {
+test("readme example of isource", async t => {
     // Example using a standard javascript object as a source.
     const obj = {};
     const yourSource = iSource({
