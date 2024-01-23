@@ -8,7 +8,7 @@ import {isAbsolute, list, readdir} from "../dist/query.min.js";
 import {pack} from "../dist/deploy.min.js";
 
 
-// import {iSource, RandomAccessCollection} from "../lib/adapt/index.js";
+// import {iSource, enableRandomAccess/*, RandomAccessCollection*/} from "../lib/adapt/index.js";
 // import {findDown, findPackageJson} from "../lib/find/index.js";
 // import {list, readdir} from "../lib/query/index.js";
 
