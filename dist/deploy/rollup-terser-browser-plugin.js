@@ -22943,7 +22943,7 @@ var sourceMap_umdExports = sourceMap_umd.exports;
 
 
 // a small wrapper around source-map and @jridgewell/source-map
-async function SourceMap(options) {
+function* SourceMap(options) {
     options = defaults(options, {
         file : null,
         root : null,
@@ -22966,7 +22966,7 @@ async function SourceMap(options) {
         // We support both @jridgewell/source-map (which has a sync
         // SourceMapConsumer) and source-map (which has an async
         // SourceMapConsumer).
-        orig_map = await new sourceMap_umdExports.SourceMapConsumer(options.orig);
+        orig_map = yield new sourceMap_umdExports.SourceMapConsumer(options.orig);
         if (orig_map.sourcesContent) {
             orig_map.sources.forEach(function(source, i) {
                 var content = orig_map.sourcesContent[i];
@@ -31531,7 +31531,7 @@ function log_input(files, options, fs, debug_folder) {
     fs.writeFileSync(log_path, "Options: \n" + options_str + "\n\nInput files:\n\n" + files_str(files) + "\n");
 }
 
-async function minify(files, options, _fs_module) {
+function* minify_sync_or_async(files, options, _fs_module) {
     if (
         _fs_module
         && typeof process === "object"
@@ -31736,7 +31736,7 @@ async function minify(files, options, _fs_module) {
             if (options.sourceMap.includeSources && files instanceof AST_Toplevel) {
                 throw new Error("original source content unavailable");
             }
-            format_options.source_map = await SourceMap({
+            format_options.source_map = yield* SourceMap({
                 file: options.sourceMap.filename,
                 orig: options.sourceMap.content,
                 root: options.sourceMap.root,
@@ -31796,6 +31796,19 @@ async function minify(files, options, _fs_module) {
         };
     }
     return result;
+}
+
+async function minify(files, options, _fs_module) {
+    const gen = minify_sync_or_async(files, options, _fs_module);
+
+    let yielded;
+    let val;
+    do {
+        val = gen.next(await yielded);
+        yielded = val.value;
+    } while (!val.done);
+
+    return val.value;
 }
 
 // This file was generated. Do not modify manually!
