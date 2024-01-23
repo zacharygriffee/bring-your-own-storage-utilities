@@ -35,6 +35,7 @@
     "protomux": "^3.5.1",
     "protomux-rpc": "^1.5.1",
     "query-string": "^8.1.0",
+    "random-access-storage": "^3.0.1",
     "rollup": "^4.9.4",
     "rxjs": "^7.8.1",
     "rxjs-etc": "^10.6.2",

@@ -7,7 +7,7 @@ import {isAbsolute, list, readdir} from "../dist/query.min.js";
 import {pack} from "../dist/deploy.min.js";
 
 
-// import {ISource, RandomAccessCollection} from "../lib/adapt/index.js";
+// import {iSource, RandomAccessCollection} from "../lib/adapt/index.js";
 // import {findDown, findPackageJson} from "../lib/find/index.js";
 // import {list, readdir} from "../lib/query/index.js";
 
@@ -21,38 +21,39 @@ import {trimEnd, trimStart} from "../lib/util/index.js";
 // import {hasFile} from "./hasFile-test-helper.js";
 // import {RandomAccessCollection, setPack} from "../lib/adapt/fromRandomAccessCollection.js";
 setPack(pack);
-test("isource basic", async t => {
-    const srcObj = {};
-    const src = iSource({
-        id: "isource basic",
-        get(k) {
-            if (isAbsolute(k)) k = k.slice(1);
-            return srcObj[k]
-        },
-        exists(k) {
-            if (isAbsolute(k)) k = k.slice(1);
-            return !!srcObj[k]
-        },
-        put(k, v) {
-            srcObj[k] = v;
-        },
-        get length() {
-            return Object.keys(srcObj).length
-        },
-        * readdir(path) {
-            for (const key of Object.keys(srcObj)) {
-                yield key;
-            }
-        },
-        del(k) {
-            if (srcObj[k]) delete srcObj[k];
-            return Promise.resolve();
-        },
-        ready() {
-            return new Promise(r => setTimeout(r, 100))
-        }
-    });
 
+const srcObj = {};
+const src = iSource({
+    id: "isource basic",
+    get(k) {
+        if (isAbsolute(k)) k = k.slice(1);
+        return srcObj[k]
+    },
+    exists(k) {
+        if (isAbsolute(k)) k = k.slice(1);
+        return !!srcObj[k]
+    },
+    put(k, v) {
+        srcObj[k] = v;
+    },
+    get length() {
+        return Object.keys(srcObj).length
+    },
+    * readdir(path) {
+        for (const key of Object.keys(srcObj)) {
+            yield key;
+        }
+    },
+    del(k) {
+        if (srcObj[k]) delete srcObj[k];
+        return Promise.resolve();
+    },
+    ready() {
+        return new Promise(r => setTimeout(r, 100))
+    }
+});
+
+test("isource basic", async t => {
     const start = Date.now();
     await src.ready();
 
@@ -70,6 +71,104 @@ test("isource basic", async t => {
     await src.del("x");
     t.is(src.length, 0);
     t.ok(src.writable);
+});
+
+test("isource randomaccess", async t => {
+    {
+        // readable and writable
+        await src.put("readableAndWritable", "123456789123456789123456789123456789123456789")
+        const ras = src.randomAccess("readableAndWritable");
+        const result1 = await promisify(ras, "read", 1, 4);
+        t.is(b4a.toString(result1), "2345");
+        await promisify(ras, "write", 2, b4a.from("ab"));
+        const result3 = await promisify(ras, "read", 1, 4);
+        t.is(b4a.toString(result3), "2ab5")
+        await promisify(ras, "truncate", 5);
+        await t.exception(() => promisify(ras, "read", 1, 6));
+        await promisify(ras, "truncate", 10);
+        const result4 = await promisify(ras, "read", 1, 6);
+        t.is(b4a.toString(result4), "2ab5\0\0");
+        await promisify(ras, "write", 5, b4a.from("\0z"));
+        const result5 = await promisify(ras, "read", 1, 7);
+        t.is(b4a.toString(result5), "2ab5\0z\0");
+        await promisify(ras, "del", 1, 3);
+        const result6 = await promisify(ras, "read", 0, 10);
+        t.is(b4a.toString(result6), "1\0\0\0" + "5\0z\0\0\0");
+        // delete the file from the iSource perspective.
+        await src.del("readableAndWritable");
+        // Should not be able to access deleted file.
+        await t.exception(() => promisify(ras, "read", 1, 4));
+        // Should not be able to write either.
+        await t.exception(() => promisify(ras, "write", 1, b4a.from("1234")))
+    }
+
+    {
+        // Not writable option.
+        await src.put("fileNotWritable", "123456789123456789123456789123456789123456789")
+        const ras = src.randomAccess("fileNotWritable", {writable: false});
+        await promisify(ras, "read", 1, 4);
+        await t.exception(() => promisify(ras, "write", 2, b4a.from("ab")));
+        await t.exception(() => promisify(ras, "truncate", 1000));
+        await t.exception(() => promisify(ras, "del", 0, 5));
+        const {size} = await promisify(ras, "stat");
+        t.is(size, 45);
+        await src.del("fileNotWritable");
+    }
+
+    {
+        // Not readable option.
+        await src.put("fileNotReadable", "123456789123456789123456789123456789123456789")
+        const ras = src.randomAccess("fileNotReadable", {readable: false});
+        await t.exception(() => promisify(ras, "read", 1, 4));
+        await promisify(ras, "write", 2, b4a.from("ab"));
+        t.is(b4a.toString(await src.get("fileNotReadable")), "12ab56789123456789123456789123456789123456789");
+        await promisify(ras, "truncate", 100);
+        t.is(b4a.toString((await src.get("fileNotReadable"))).length, 100);
+        const {size} = await promisify(ras, "stat");
+        t.is(size, 100);
+        await src.del("fileNotReadable");
+    }
+
+    {
+        // Some configurations and initial truncation support.
+        const ras = src.randomAccess("nonExistingFile", {offset: 5, size: 10});
+        const result = await promisify(ras, "read", 0, 15);
+        await promisify(ras, "close");
+        await src.del("nonExistingFile");
+        await src.put("existingFile", b4a.from("123456789123456789123456789123456789123456789"));
+        const ras2 = src.randomAccess("existingFile", {
+            buffer: b4a.from("abcde"),
+            offset: 1
+        });
+
+        const value = b4a.toString(await promisify(ras2, "read", 0, 45));
+        t.is(value, "1abcde789123456789123456789123456789123456789");
+        await promisify(ras2, "close");
+
+        const ras3 = src.randomAccess("existingFile", {
+            buffer: b4a.alloc(60, "Z"),
+            offset: 1,
+            truncate: true
+        });
+
+        t.is(b4a.toString(await promisify(ras3, "read", 0, 61)), "1ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
+        ras3.close();
+
+        const ras4 = src.randomAccess("existingFile", {
+            offset: 1,
+            size: 10,
+            truncate: true
+        });
+
+        t.is(b4a.toString(await promisify(ras4, "read", 0, 11)), "1ZZZZZZZZZZ");
+        await t.exception(() => promisify(ras4, "read", 0, 12));
+    }
+
+    function promisify(o, m, ...args) {
+        const p = new Promise((resolve, reject) => args.push((e, o) => e ? reject(e) : resolve(o)));
+        o[m](...args);
+        return p;
+    }
 });
 
 test("readme example if isource", async t => {
