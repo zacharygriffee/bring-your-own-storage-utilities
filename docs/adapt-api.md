@@ -9,8 +9,6 @@
 * [Adapt](#Adapt) : <code>object</code>
     * [.iSource](#Adapt.iSource) ⇒ <code>any</code>
     * [.RandomAccessCollection](#Adapt.RandomAccessCollection)
-    * [.exports.setPack(_pack)](#Adapt.exports.setPack) ⇒
-    * [.importPack([url])](#Adapt.importPack) ⇒ <code>Promise.&lt;void&gt;</code>
 
 <a name="Adapt.iSource"></a>
 
@@ -30,15 +28,21 @@ source = {
     append,              // Append a buffer to a source
     append$,             // An observable of append
     entry,               // To retrieve details of entry at key of source
+                         // Your source should have an entry or get function to work
     del,                 // Del key at source.
     exists,              // Whether the key of source exists
+                         // Your source should have an exists, entry, or get function for exists to work.
     ready,               // Whether the source is ready to operate.
     readdir,             // Get an array of entries of the cwd of source
     list,                // Get an array of 'entry' details of the cwd of source
+                         // Your source should have a readdir function/generator/observable
     createReadStream,    // Get a stream of data from a key of source.
-    factory              // A function that returns a `string module` that defines how to
-                         // install this storage source.
+                         // Your source should have either a get or a native createReadStream(fileName, config)
 
+    factory              // A function that returns a `string module` that defines how to
+                         // install this storage source to make the source portable.
+    randomAccess         // Create a random access storage interface of the iSource. You must enable randomAccess
+                         // with Adapt.enableRandomAccess function before use.
     // Properties
     length               // For supporting sources, get the length. Not fully implemented.
     source               // the raw source iSource wraps.
@@ -118,43 +122,3 @@ RAC.setCollection({
 });
 await RAC.exists("folder/preexistingFileInFolder.txt"); // true
 ```
-<a name="Adapt.exports.setPack"></a>
-
-### Adapt.exports.setPack(_pack) ⇒
-Only necessary if you did not import the entire BYOSU namespace e.g. import * as BYOSU from "bring-your-own-storage-utilities";.
-
-IF constructing a iSource from a factory string, you must import a pack.
-Either use setPack if you already have Deploy.pack loaded.
-Or, use importPack to import your own or from BYOSU repo.
-
-**This is only ran once.
-
-Repeated calls will be ignored**
-
-**Kind**: static method of [<code>Adapt</code>](#Adapt)  
-**Returns**: void  
-
-| Param | Description |
-| --- | --- |
-| _pack | a preloaded Deploy.pack you have |
-
-<a name="Adapt.importPack"></a>
-
-### Adapt.importPack([url]) ⇒ <code>Promise.&lt;void&gt;</code>
-Only necessary if you did not import the entire BYOSU namespace e.g. import * as BYOSU from "bring-your-own-storage-utilities";.
-
-IF constructing a iSource from a factory string, you must import a pack. Either use setPack if you already have
-Deploy.pack loaded. Or, use importPack to import your own or from BYOSU repo.
-
-**This is only ran once.
-
-Repeated calls will be ignored**
-
-import errors should be caught by you
-
-**Kind**: static method of [<code>Adapt</code>](#Adapt)  
-
-| Param | Default | Description |
-| --- | --- | --- |
-| [url] | <code>https://cdn.jsdelivr.net/npm/bring-your-own-storage-utilities@0.0.1202/dist/deploy.min.js/+esm</code> | default is https://cdn.jsdelivr.net/npm/bring-your-own-storage-utilities@0.0.1202/dist/deploy.min.js/+esm |
-

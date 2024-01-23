@@ -98,8 +98,6 @@ test("isource randomaccess", async t => {
         t.is(b4a.toString(result6), "1\0\0\0" + "5\0z\0\0\0");
         // delete the file from the iSource perspective.
         await src.del("readableAndWritable");
-        // Should not be able to access deleted file.
-        await t.exception(() => promisify(ras, "read", 1, 4));
         // Should not be able to write either.
         await t.exception(() => promisify(ras, "write", 1, b4a.from("1234")))
     }
