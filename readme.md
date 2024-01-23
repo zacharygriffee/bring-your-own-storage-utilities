@@ -24,7 +24,7 @@ right now, but more can be done.
 You can test this repo right now, in your browser. You can view the developer console (F12) when you enter to see the
 very tests you can run in node. It takes a bit of startup time because of the supporting test tools.
 
-[Live test in the browser](https://raw.githack.com/zacharygriffee/bring-your-own-storage-utilities/8fb2b6ebbfed5b16a51db6bca928fd5e5889e5ba/browser-tests.html)
+[Live test in the browser](https://raw.githack.com/zacharygriffee/bring-your-own-storage-utilities/cf0f58dd3544d0f11ee20054d80910157bdb9839/browser-tests.html)
 
 - Loads an in-memory drive source in the browser
 - Tests every API listed below
@@ -152,6 +152,7 @@ You need data from your source to go from point A to point B. Transport will hel
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/transport-api.md)
 
 - Fetch hook to fetch from your source or to create your own hooks.
+- Share your source over rpc socket
 
 ## `Deploy`
 
@@ -165,7 +166,7 @@ it when `Deploy.pack` is used. See Deploy.setRollup in the api.
 - [Svelte](https://svelte.dev/) plugin to compile .svelte files from browser for sources in the browser. 
   - Utilizing dependency injection techniques. You can supply the compile function from svelte library or this library will
 download one. See `Deploy.setSvelteCompiler` in the api.
-- ~~ [Terser](https://terser.org/) plugin for rollup that works in browser ~~ Disabled for now.
+-  ~~~ [Terser](https://terser.org/) plugin for rollup that works in browser ~~~ Disabled for now.
 - [jsdelivr](https://www.jsdelivr.com/) plugin that gets module specifier from CDN jsdelivr.
   This plugin will only resolve to module. Even if a module is cjs it will resolve as a module. If the module is
   natively esm module, you shouldn't have any problems with this plugin. MOST cjs just works.... but things can get dicey for some
