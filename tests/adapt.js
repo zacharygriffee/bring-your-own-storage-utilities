@@ -1,7 +1,7 @@
 import {test, solo} from "brittle";
 import RAM from "random-access-memory";
 import b4a from "b4a";
-import {iSource, RandomAccessCollection} from "../dist/adapt.min.js";
+import {iSource, RandomAccessCollection, setPack} from "../dist/adapt.min.js";
 import {coercePathAbsolute, findDown, findPackageJson} from "../dist/find.min.js";
 import {isAbsolute, list, readdir} from "../dist/query.min.js";
 import {pack} from "../dist/deploy.min.js";
@@ -14,12 +14,13 @@ import {pack} from "../dist/deploy.min.js";
 import {loadPackageJson} from "../dist/resolve.min.js";
 import {trimEnd, trimStart} from "../lib/util/index.js";
 
+// import Corestore from "corestore";
+
 // import {loadPackageJson} from "../lib/resolve/index.js";
 // import {from} from "rxjs";
 // import {hasFile} from "./hasFile-test-helper.js";
 // import {RandomAccessCollection, setPack} from "../lib/adapt/fromRandomAccessCollection.js";
-
-
+setPack(pack);
 test("isource basic", async t => {
     const srcObj = {};
     const src = iSource({
@@ -71,7 +72,7 @@ test("isource basic", async t => {
     t.ok(src.writable);
 });
 
-solo("readme example if isource", async t => {
+test("readme example if isource", async t => {
     // Example using a standard javascript object as a source.
     const obj = {};
     const yourSource = iSource({
@@ -162,6 +163,9 @@ test("fromRandomAccessStorageCollection", async t => {
     const loadJson = await loadPackageJson(files, {cwd: "/margarita/"});
     t.is(loadJson.name, "in-memory-package-json-for-margarita", "We can read the json file.");
 });
+
+
+
 //
 // test("Using a randomAccess creation function", async (t) => {
 //     const fileObject = {};

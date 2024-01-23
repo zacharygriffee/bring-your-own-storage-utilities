@@ -7,8 +7,92 @@
 **Kind**: global namespace  
 
 * [Transport](#Transport) : <code>object</code>
+    * [.iNetworkSource](#Transport.iNetworkSource) : <code>object</code>
+        * [.exports.serve(iSource, config)](#Transport.iNetworkSource.exports.serve) ⇒ <code>Object</code>
+        * [.exports.connect$(socket, config)](#Transport.iNetworkSource.exports.connect$) ⇒ <code>Observable.&lt;ISource&gt;</code>
+        * [.exports.connect(socket, config)](#Transport.iNetworkSource.exports.connect)
     * [.exports.fetchHookOfSource(source, pathRegExp, [config])](#Transport.exports.fetchHookOfSource)
     * [.exports.addFetchHook(hook)](#Transport.exports.addFetchHook)
+
+<a name="Transport.iNetworkSource"></a>
+
+### Transport.iNetworkSource : <code>object</code>
+**Kind**: static namespace of [<code>Transport</code>](#Transport)  
+
+* [.iNetworkSource](#Transport.iNetworkSource) : <code>object</code>
+    * [.exports.serve(iSource, config)](#Transport.iNetworkSource.exports.serve) ⇒ <code>Object</code>
+    * [.exports.connect$(socket, config)](#Transport.iNetworkSource.exports.connect$) ⇒ <code>Observable.&lt;ISource&gt;</code>
+    * [.exports.connect(socket, config)](#Transport.iNetworkSource.exports.connect)
+
+<a name="Transport.iNetworkSource.exports.serve"></a>
+
+#### iNetworkSource.exports.serve(iSource, config) ⇒ <code>Object</code>
+Serve a source over rpc. Is an observer to anything that produces sockets, so it can be used in a rxjs observable.
+
+**Kind**: static method of [<code>iNetworkSource</code>](#Transport.iNetworkSource)  
+**See**: https://github.com/holepunchto/protomux-rpc  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| iSource |  |  |
+| config |  | Other than the following, config is passed to protomux-rpc |
+| [config.firewall] | <code>function</code> | Receives arguments (socket, {action: "get", handshake, ...otherInfo}). To block the peer from connecting, return truthy. If you want to allow their access, return a falsy. action is one of the functions or properties of iSource interface. Not all are supported yet, but will soon. |
+
+**Example**  
+```js
+// Prevent put and del to a hacker
+const server = serve(source, {
+     firewall(socket, {action}) { socket.isHacker && (action === "put" || action === "del") },
+     id: b4a.from("the-menu")
+};
+// Or just serve your source like a lunatic
+const server = serve(source);
+
+server.next(socket);                        // next adds a socket that will use the serve source.
+server.complete();                          // complete ends the service gracefully
+server.error(new Error("You're a hacker")); // error ends the service abruptly
+
+// you may also iterate the current sockets
+for (const socket of server) {
+    // do ya thang.
+}
+```
+<a name="Transport.iNetworkSource.exports.connect$"></a>
+
+#### iNetworkSource.exports.connect$(socket, config) ⇒ <code>Observable.&lt;ISource&gt;</code>
+Connect to a source serve service.
+
+**Kind**: static method of [<code>iNetworkSource</code>](#Transport.iNetworkSource)  
+
+| Param | Description |
+| --- | --- |
+| socket | socket or mux |
+| config |  |
+
+**Example**  
+```js
+connect$(socket, {id: b4a.from("the-menu")})
+     .pipe(
+         concatMap(o => o.get("/beefFolder/hamburger.txt")),
+         map(b4a.toString)
+     )
+     .subscribe(getHamburger);
+
+ function getHamburger(hamburgerTxt) {
+     console.log(hamburgerTxt);
+ }
+```
+<a name="Transport.iNetworkSource.exports.connect"></a>
+
+#### iNetworkSource.exports.connect(socket, config)
+Convenience async method for connect$
+
+**Kind**: static method of [<code>iNetworkSource</code>](#Transport.iNetworkSource)  
+
+| Param |
+| --- |
+| socket | 
+| config | 
 
 <a name="Transport.exports.fetchHookOfSource"></a>
 

@@ -36,11 +36,12 @@ source = {
     readdir,             // Get an array of entries of the cwd of source
     list,                // Get an array of 'entry' details of the cwd of source
     createReadStream,    // Get a stream of data from a key of source.
+    factory              // A function that returns a `string module` that defines how to
+                         // install this storage source.
 
     // Properties
     length               // For supporting sources, get the length. Not fully implemented.
-    factory              // A string module that defines how to
-                         // install this storage source.
+    source               // the raw source iSource wraps.
 };
 </pre>
 
@@ -50,7 +51,7 @@ source = {
 | Param | Description |
 | --- | --- |
 | source |  |
-| [meta] | Just meta data to send along with the container that wraps the source. |
+| state | any state to be carried by the source |
 
 **Example**  
 ```js
