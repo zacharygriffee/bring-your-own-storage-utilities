@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.1301",
+  "version": "0.0.1302",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "browser": "index.bundle.js",
@@ -87,8 +87,5 @@
     "jsdoc-to-markdown": "^8.0.0",
     "localdrive": "^1.11.1",
     "random-access-memory": "^6.2.0"
-  },
-  "overrides": {
-    "lodash.pick@>=3.7.0 <4.17.19": "https://github.com/lodash/lodash/archive/f299b52f39486275a9e6483b60a410e06520c538.tar.gz"
   }
 }
