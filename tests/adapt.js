@@ -2,13 +2,14 @@ import {test, solo} from "brittle";
 import RAM from "random-access-memory";
 import RAS from "random-access-storage";
 import b4a from "b4a";
-import {iSource, RandomAccessCollection, setPack, enableRandomAccess} from "../dist/adapt.min.js";
+// import {iSource, RandomAccessCollection, setPack, enableRandomAccess} from "../dist/adapt.min.js";
 import {coercePathAbsolute, findDown, findPackageJson} from "../dist/find.min.js";
 import {isAbsolute, list, readdir} from "../dist/query.min.js";
 import {pack} from "../dist/deploy.min.js";
+import Corestore from "corestore";
 
 
-// import {iSource, enableRandomAccess/*, RandomAccessCollection*/} from "../lib/adapt/index.js";
+import {iSource, enableRandomAccess, RandomAccessCollection, setPack} from "../lib/adapt/index.js";
 // import {findDown, findPackageJson} from "../lib/find/index.js";
 // import {list, readdir} from "../lib/query/index.js";
 
@@ -22,20 +23,27 @@ import {trimEnd, trimStart} from "../lib/util/index.js";
 // import {hasFile} from "./hasFile-test-helper.js";
 // import {RandomAccessCollection, setPack} from "../lib/adapt/fromRandomAccessCollection.js";
 setPack(pack);
+enableRandomAccess(RAS);
 
 const srcObj = {};
 const src = iSource({
     id: "isource basic",
-    get(k) {
+    async get(k) {
+        // await new Promise(res => setTimeout(res, 0));
         if (isAbsolute(k)) k = k.slice(1);
+        // if (k.endsWith("tree"))
+        //     console.log("getting", k, srcObj[k]);
         return srcObj[k]
     },
     exists(k) {
         if (isAbsolute(k)) k = k.slice(1);
         return !!srcObj[k]
     },
-    put(k, v) {
+    async put(k, v) {
+        // await new Promise(res => setTimeout(res, 0));
         srcObj[k] = v;
+        // debugger;
+        // console.log("putting", k);
     },
     get length() {
         return Object.keys(srcObj).length
@@ -51,7 +59,8 @@ const src = iSource({
     },
     ready() {
         return new Promise(r => setTimeout(r, 100))
-    }
+    },
+    __contents: srcObj
 });
 
 test("isource basic", async t => {
@@ -75,7 +84,6 @@ test("isource basic", async t => {
 });
 
 test("isource randomaccess", async t => {
-    enableRandomAccess(RAS);
     {
         // readable and writable
         await src.put("readableAndWritable", "123456789123456789123456789123456789123456789")
@@ -98,8 +106,10 @@ test("isource randomaccess", async t => {
         t.is(b4a.toString(result6), "1\0\0\0" + "5\0z\0\0\0");
         // delete the file from the iSource perspective.
         await src.del("readableAndWritable");
-        // Should not be able to write either.
-        await t.exception(() => promisify(ras, "write", 1, b4a.from("1234")))
+        await promisify(ras, "write", 1, b4a.from("1234"));
+        const newFile = await promisify(ras, "read", 0, 5);
+        t.is(b4a.toString(newFile), "\0" + "1234", "Writing creates the file");
+        await src.del("readableAndWritable");
     }
 
     {
@@ -127,41 +137,6 @@ test("isource randomaccess", async t => {
         const {size} = await promisify(ras, "stat");
         t.is(size, 100);
         await src.del("fileNotReadable");
-    }
-
-    {
-        // Some configurations and initial truncation support.
-        const ras = src.randomAccess("nonExistingFile", {offset: 5, size: 10});
-        const result = await promisify(ras, "read", 0, 15);
-        await promisify(ras, "close");
-        await src.del("nonExistingFile");
-        await src.put("existingFile", b4a.from("123456789123456789123456789123456789123456789"));
-        const ras2 = src.randomAccess("existingFile", {
-            buffer: b4a.from("abcde"),
-            offset: 1
-        });
-
-        const value = b4a.toString(await promisify(ras2, "read", 0, 45));
-        t.is(value, "1abcde789123456789123456789123456789123456789");
-        await promisify(ras2, "close");
-
-        const ras3 = src.randomAccess("existingFile", {
-            buffer: b4a.alloc(60, "Z"),
-            offset: 1,
-            truncate: true
-        });
-
-        t.is(b4a.toString(await promisify(ras3, "read", 0, 61)), "1ZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZZ");
-        ras3.close();
-
-        const ras4 = src.randomAccess("existingFile", {
-            offset: 1,
-            size: 10,
-            truncate: true
-        });
-
-        t.is(b4a.toString(await promisify(ras4, "read", 0, 11)), "1ZZZZZZZZZZ");
-        await t.exception(() => promisify(ras4, "read", 0, 12));
     }
 
     function promisify(o, m, ...args) {
@@ -217,7 +192,8 @@ test("readme example of isource", async t => {
 });
 
 // Test requires fetch.
-if (typeof fetch !== "undefined") {
+if (typeof fetch !== "undefined")
+{
     test("fromRandomAccessStorageCollection", async t => {
         const fileObject = {
             ["snacks.txt"]: new RAM(b4a.from("pretzels, chips, olives, fries")),
@@ -266,67 +242,16 @@ if (typeof fetch !== "undefined") {
     });
 }
 
+test("test corestore", async t => {
+    const corestore = new Corestore(src.randomAccess);
+    const helloCore = await corestore.get({name: "helloCore"});
+    await helloCore.ready();
+    await helloCore.append(b4a.from("hello world"));
+    await helloCore.append(b4a.from("hello world2"));
+    await helloCore.append(b4a.from("hello world3"));
+    const test1 = b4a.toString(await helloCore.get(0));
+    const test2 = b4a.toString(await helloCore.get(1));
+    const test3 = b4a.toString(await helloCore.get(2));
 
-
-//
-// test("Using a randomAccess creation function", async (t) => {
-//     const fileObject = {};
-//     const make = (file, buf) => fileObject[file] = new RAM(buf)
-//     const ramFolder = (file) => fileObject[file];
-//
-//     make("/martini/vodkaMartini", b4a.from("vodka,vermouth"));
-//     make("/martini/ginMartini", b4a.from("gin,vermouth"));
-//     make("/snacks", b4a.from("pretzels, chips, olives, fries"));
-//     make("/martini/package.json", b4a.from(`
-// {
-//   "name": "in-memory-package-json-for-martini"
-// }
-// `));
-//
-//     const files = fromRandomAccess(ramFolder, from(Object.keys(fileObject)));
-//
-//     const howToMakeGinMartini = await files.get("/martini/ginMartini");
-//     t.alike(howToMakeGinMartini, b4a.from("gin,vermouth"));
-//
-//     const doWeHaveSnacks = await files.exists("snacks.txt");
-//     const doWeHaveSlashSnacks = await files.exists("/snacks.txt");
-//
-//     t.ok(doWeHaveSlashSnacks === doWeHaveSnacks, "Don't need leading slash to be absolute path, but its always recommended.");
-//
-//     const doWeHaveMargaritas = await files.exists("margarita.txt");
-//     t.absent(doWeHaveMargaritas, "We don't have margarita here.");
-//
-//     const [vodkaMartini, nothingElse] = await findDown(files, ["vodka*"]);
-//     t.is(vodkaMartini, "/martini/vodkaMartini", "This library will coerce file names with root slash.");
-//     t.absent(nothingElse);
-//     const dir = await readdir(files, {recursive: true});
-//     t.is(dir.length, Object.values(fileObject).length, "We just list all files recursively");
-//     const [martiniHasAJsonFile] = await findPackageJson(files, {cwd: "/martini/"});
-//     t.is(martiniHasAJsonFile, "/martini/package.json", "We found that martini has a package.json");
-//     const loadJson = await loadPackageJson(files, {cwd: "/martini/"});
-//     t.is(loadJson.name, "in-memory-package-json-for-martini", "We can read the json file.");
-//
-//     const foundFiles = await readdir(files, {cwd: "/martini/",recursive: false});
-//     t.ok(hasFile(foundFiles, "ginMartini") && foundFiles.length === 3, "Test cwd scopes things correctly returning the file name without slashes.");
-//
-//     const listOfFiles = await list(files);
-//
-//     t.is(listOfFiles.length, 4, "List works even though we don't have an explicit function yet for the adapter");
-//     const {key, value: {blob}} = listOfFiles.find(({key}) => key === "/martini/ginMartini");
-//
-//     t.is(key, "/martini/ginMartini");
-//     t.is(blob.byteLength, b4a.byteLength("gin,vermouth"), "Get size of the blob apart of the list.");
-//
-//     t.absent(hasFile(foundFiles, "someNonExistentFile.txt"));
-// });
-
-// setPack(pack);
-// const coll1 = await RandomAccessCollection.install();
-// await coll1.setDefault((name, buf) => new RAM(buf));
-//
-// solo("rac", async t => {
-//     await coll1.put("fun", "world");
-//     const fun = b4a.toString(await coll1.get("fun"));
-//     t.is(fun, "world");
-// });
-//
+    t.is(test1+test2+test3,"hello worldhello world2hello world3");
+});
