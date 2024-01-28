@@ -64,34 +64,37 @@ test("createDataUri", async (t) => {
     t.is(theAnswer, 42);
 });
 
-if (typeof fetch !== "undefined") {
-    test("Test jsDelivr cdn module import", async t => {
-        const {data: result} = await JsDelivr.get("the-answer");
-        const {default: theAnswer} = await importCode(result);
-        t.is(+theAnswer, 42);
-    });
+test("Test jsDelivr cdn module import", {
+    skip: typeof fetch === "undefined"
+}, async t => {
+    const {data: result} = await JsDelivr.get("the-answer");
+    const {default: theAnswer} = await importCode(result);
+    t.is(+theAnswer, 42);
+});
 
-    test("Test jsDelivr cdn package.json import", async t => {
-        const {description} = await JsDelivr.getPackageJson("the-answer");
-        t.is(description, "The answer to the question of life, the universe and everything");
-    });
+test("Test jsDelivr cdn package.json import", {
+    skip: typeof fetch === "undefined"
+}, async t => {
+    const {description} = await JsDelivr.getPackageJson("the-answer");
+    t.is(description, "The answer to the question of life, the universe and everything");
+});
 
-    skip("Test jsDelivr cdn versions", {timeout: 60000}, async t => {
-        // test at home, your results may very with this. I wouldn't depend on it especially in hot paths.
-        t.comment("During testing I found jsDelivr versions feature to be erratic with connection, so" +
-            "this may fail due to that.")
-        const versions = await JsDelivr.getVersions("the-answer");
+skip("Test jsDelivr cdn versions", {
+    timeout: 60000,
+    skip: typeof fetch === "undefined"
+}, async t => {
+    // test at home, your results may very with this. I wouldn't depend on it especially in hot paths.
+    t.comment("During testing I found jsDelivr versions feature to be erratic with connection, so" +
+        "this may fail due to that.")
+    const versions = await JsDelivr.getVersions("the-answer");
 
-        t.is(versions[0].version, "1.0.0", "the-answer never changes versions");
-        t.ok(versions[0].latest, "1.0.0 is the latest version of the answer. deepThought hasn't changed it's mind.");
+    t.is(versions[0].version, "1.0.0", "the-answer never changes versions");
+    t.ok(versions[0].latest, "1.0.0 is the latest version of the answer. deepThought hasn't changed it's mind.");
 
-        const {bandwidth} = await firstValueFrom(versions[0].links$.stats);
+    const {bandwidth} = await firstValueFrom(versions[0].links$.stats);
 
-        t.ok(Number(bandwidth.total) > 0, "We checked the bandwidth that jsdelivr handles for the-answer.");
-    });
-} else {
-    console.warn("Fetch not supported in your environment. Tests are disabled for transport.");
-}
+    t.ok(Number(bandwidth.total) > 0, "We checked the bandwidth that jsdelivr handles for the-answer.");
+});
 
 test("inferCodeUrlOrModuleSpecifier", async t => {
     t.ok(inferCodeUrlOrModuleSpecifier("the-answer").module);

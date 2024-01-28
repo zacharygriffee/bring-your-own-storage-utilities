@@ -172,43 +172,44 @@ test("Compile svelte", async (t) => {
     }
 });
 
-if (typeof fetch !== "undefined") {
-    test("Rollup with JsDelivr", async t => {
-        try {
-            const result = await pack(
-                "bloatedLibrary",
-                {
-                    plugins: [
-                        rollupVirtualExports("bloatedLibrary", {
-                            "default as theAnswer": "the-answer",
-                            "default as path": "tiny-paths",
-                            "default as SHA512, ready as SHA512Ready": "sha512-wasm@2.3.4"
-                        }),
-                        rollupFromJsdelivr()
-                    ],
-                    autoImport: true
-                }
-            );
+test("Rollup with JsDelivr", {
+    skip: typeof fetch === "undefined"
+}, async t => {
+    try {
+        const result = await pack(
+            "bloatedLibrary",
+            {
+                plugins: [
+                    rollupVirtualExports("bloatedLibrary", {
+                        "default as theAnswer": "the-answer",
+                        "default as path": "tiny-paths",
+                        "default as SHA512, ready as SHA512Ready": "sha512-wasm@2.3.4"
+                    }),
+                    rollupFromJsdelivr()
+                ],
+                autoImport: true
+            }
+        );
 
-            const {module: {theAnswer, path, SHA512, SHA512Ready}} = result;
+        const {module: {theAnswer, path, SHA512, SHA512Ready}} = result;
 
-            await SHA512Ready();
+        await SHA512Ready();
 
-            const hexHash = SHA512()
-                .update('hello')
-                .update(' ')
-                .update(b4a.from('world'))
-                .digest('hex')
+        const hexHash = SHA512()
+            .update('hello')
+            .update(' ')
+            .update(b4a.from('world'))
+            .digest('hex')
 
-            t.is(theAnswer, 42, "We got an answer");
-            t.is(hexHash, "309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f",
-                "We digested a sha512 from a library that has it's own imports");
-            t.ok(path.posix, "We got a path module.");
-        } catch (e) {
-            debugger;
-        }
-    });
-}
+        t.is(theAnswer, 42, "We got an answer");
+        t.is(hexHash, "309ecc489c12d6eb4cc40f50c902f2b4d0ed77ee511a7c7a9bcd3ca86d4cd86f989dd35bc5ff499670da34255b45b0cfd830e81f605dcf7dc5542e93ae9cd76f",
+            "We digested a sha512 from a library that has it's own imports");
+        t.ok(path.posix, "We got a path module.");
+    } catch (e) {
+        debugger;
+    }
+});
+
 
 skip("testings", async t => {
     const result = await pack("testings", {
