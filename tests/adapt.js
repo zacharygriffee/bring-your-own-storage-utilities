@@ -2,14 +2,14 @@ import {test, solo} from "brittle";
 import RAM from "random-access-memory";
 import RAS from "random-access-storage";
 import b4a from "b4a";
-// import {iSource, RandomAccessCollection, setPack, enableRandomAccess} from "../dist/adapt.min.js";
+import {iSource, RandomAccessCollection, setPack, enableRandomAccess} from "../dist/adapt.min.js";
 import {coercePathAbsolute, findDown, findPackageJson} from "../dist/find.min.js";
 import {isAbsolute, list, readdir} from "../dist/query.min.js";
 import {pack} from "../dist/deploy.min.js";
 import Corestore from "corestore";
 
 
-import {iSource, enableRandomAccess, RandomAccessCollection, setPack} from "../lib/adapt/index.js";
+// import {iSource, enableRandomAccess, RandomAccessCollection, setPack} from "../lib/adapt/index.js";
 // import {findDown, findPackageJson} from "../lib/find/index.js";
 // import {list, readdir} from "../lib/query/index.js";
 
