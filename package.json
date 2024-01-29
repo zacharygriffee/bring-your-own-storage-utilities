@@ -1,9 +1,9 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.1307",
+  "version": "0.0.1308",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
-  "browser": "index.bundle.js",
+  "browser": "dist/all.min.js",
   "type": "module",
   "fundme": "bc1q9fpu6muvmg5fj76pyzg3ffjrmksnvfj3c0xva6",
   "scripts": {
