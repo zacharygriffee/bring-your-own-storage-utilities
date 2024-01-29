@@ -4,6 +4,8 @@ import path from "../lib/tiny-paths.js";
 import LocalDrive from "localdrive";
 import b4a from "b4a";
 import {rollupTerserBrowserPlugin} from "../dist/deploy/rollup-terser-browser-plugin.js";
+// import {template} from "../lib/deploy/template.js";
+// import {rollupTemplatePlugin} from "../lib/deploy/index.js";
 // import {rollupDynamicImports} from "../lib/deploy/rollup-dynamic-imports.js";
 // import {exists} from "../lib/resolve/jsdelivr.js";
 // WASM kicking my butt on being 'iso support'
@@ -24,7 +26,9 @@ const {
     rollupFromJsdelivr,
     rollupVirtualExports,
     setSvelteCompiler,
-    setRollup
+    setRollup,
+    rollupTemplatePlugin,
+    template
 } = deployPkg;
 
 await setSvelteCompiler(await import("../dist/svelte/svelte-compiler.min.js"));
@@ -210,6 +214,46 @@ test("Rollup with JsDelivr", {
     }
 });
 
+test("template", async t => {
+    const result = template("/*{print('hello ' + drinkChoice())}*/ and /*=hello*/ and /*-script*/ /*=drinkChoice()*/",
+        {
+            imports: {
+                drinkChoice: () => 'whiskey'
+            }
+        })
+    ({hello: "world", script: "<script>"});
+
+    t.is(result, "hello whiskey and world and &lt;script&gt; whiskey");
+    t.pass();
+});
+
+test("template plugin", async t => {
+    const result = await pack("entry.js", {
+        plugins: [
+            rollupVirtualPlugin({
+                "entry.js": `
+                      /*{ if (cash > 99) { }*/
+                      export const rich = true;
+                      /*{ } else { }*/
+                      export const poor = true;
+                      /*{ } }*/
+                
+                      export const /*=hello*/ = '/*=hello*/'; 
+                      export default "/*=hello*/";
+                      export const escaped = "/*-escape*/";
+                 `
+            }),
+            rollupTemplatePlugin({hello: "world", cash: 100, escape: "<html>"})
+        ],
+        autoImport: true
+    });
+
+    const {default: x, world, rich, poor, escaped} = result.module
+    t.is(x, world);
+    t.absent(poor);
+    t.ok(rich);
+    t.is(escaped, `&lt;html&gt;`);
+});
 
 skip("testings", async t => {
     const result = await pack("testings", {

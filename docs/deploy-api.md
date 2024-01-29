@@ -1,6 +1,26 @@
 
 # DEPLOY API
 
+## Objects
+
+<dl>
+<dt><a href="#Deploy">Deploy</a> : <code>object</code></dt>
+<dd></dd>
+</dl>
+
+## Functions
+
+<dl>
+<dt><a href="#rollupTemplatePlugin">rollupTemplatePlugin(params, config)</a> ⇒ <code>Object</code> | <code>*</code></dt>
+<dd><p>A templating similar to lodash-es/template but uses block-comment like deliminators
+See tests for Deploy for examples, since jsdocs doesn&#39;t display it very well.</p>
+</dd>
+<dt><a href="#template">template(code, config)</a> ⇒ <code>Object</code> | <code>*</code></dt>
+<dd><p>A templating similar to lodash-es/template but uses block-comment like deliminators
+See tests for Deploy for examples, since jsdocs doesn&#39;t display it very well.</p>
+</dd>
+</dl>
+
 <a name="Deploy"></a>
 
 ## Deploy : <code>object</code>
@@ -394,4 +414,30 @@ Exposure of terser plugin. Operates only on module.Leaves in 'debugger'.
 | --- | --- | --- | --- |
 | code | <code>string</code> |  | code |
 | [comments] | <code>boolean</code> | <code>false</code> | Keep the comments around? |
+
+<a name="rollupTemplatePlugin"></a>
+
+## rollupTemplatePlugin(params, config) ⇒ <code>Object</code> \| <code>\*</code>
+A templating similar to lodash-es/template but uses block-comment like deliminators
+See tests for Deploy for examples, since jsdocs doesn't display it very well.
+
+**Kind**: global function  
+
+| Param | Description |
+| --- | --- |
+| params | The parameters to use in template processing. |
+| config | see options of [lodash/template](https://lodash.com/docs/4.17.15#template) |
+
+<a name="template"></a>
+
+## template(code, config) ⇒ <code>Object</code> \| <code>\*</code>
+A templating similar to lodash-es/template but uses block-comment like deliminators
+See tests for Deploy for examples, since jsdocs doesn't display it very well.
+
+**Kind**: global function  
+
+| Param | Description |
+| --- | --- |
+| code | The code to process template |
+| config | see options of [lodash/template](https://lodash.com/docs/4.17.15#template) |
 
