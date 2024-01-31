@@ -1,0 +1,340 @@
+<script context="module">import Graph from "../Graph/Graph.svelte";
+import FlowChart from "../../components/FlowChart/FlowChart.svelte";
+import { createEventDispatcher, onMount, setContext } from "svelte";
+import { createGraph } from "../../utils/creators/createGraph.js";
+import { graphStore } from "../../stores/GraphStore.js";
+import { reloadStore } from "../../utils/savers/reloadStore.js";
+</script>
+
+<script>export let mermaid = "";
+export let theme = "light";
+export let id = 0;
+export let snapTo = 0;
+export let zoom = 1;
+export let TD = false;
+export let editable = true;
+export let locked = false;
+export let width = 0;
+export let height = 0;
+export let minimap = false;
+export let controls = false;
+export let toggle = false;
+export let drawer = false;
+export let fitView = false;
+export let selectionColor = "lightblue";
+export let edgeStyle = "bezier";
+export let endStyles = [null, null];
+export let edge = null;
+export let disableSelection = false;
+export let mermaidConfig = {};
+export let translation = { x: 0, y: 0 };
+export let trackpadPan = false;
+export let modifier = "meta";
+export let raiseEdgesOnSelect = false;
+export let edgesAboveNode = false;
+export let title = "";
+export let fixedZoom = false;
+export let pannable = true;
+const dispatch = createEventDispatcher();
+let graph;
+let direction = TD ? "TD" : "LR";
+setContext("snapTo", snapTo);
+setContext("edgeStyle", edgeStyle);
+setContext("endStyles", endStyles);
+setContext("graphEdge", edge);
+setContext("raiseEdgesOnSelect", raiseEdgesOnSelect);
+setContext("edgesAboveNode", edgesAboveNode);
+onMount(() => {
+  const stateObject = localStorage.getItem("state");
+  if (stateObject) {
+    graph = reloadStore(stateObject);
+    graphStore.add(graph, graph.id);
+  } else {
+    let graphKey = `G-${id || graphStore.count() + 1}`;
+    graph = createGraph(graphKey, { zoom, direction, editable, locked, translation });
+    graphStore.add(graph, graphKey);
+  }
+});
+$:
+  backgroundExists = $$slots.background;
+$:
+  edgeStore = graph && graph.edges;
+$:
+  if (graph)
+    graph.transforms.scale.set(zoom);
+$:
+  if (edgeStore) {
+    edgeStore.onEdgeChange((edge2, type) => {
+      dispatch(type, {
+        sourceAnchor: edge2.source,
+        targetAnchor: edge2.target,
+        sourceNode: edge2.source.node,
+        targetNode: edge2.target.node
+      });
+    });
+  }
+export function disconnect(source, target) {
+  const sourceNodeKey = `N-${source[0]}`;
+  const sourceNode = graph.nodes.get(sourceNodeKey);
+  if (!sourceNode)
+    return;
+  const sourceAnchor = sourceNode.anchors.get(`A-${source[1]}/N-${source[0]}`);
+  if (!sourceAnchor)
+    return;
+  const targetNodeKey = `N-${target[0]}`;
+  const targetNode = graph.nodes.get(targetNodeKey);
+  if (!targetNode)
+    return;
+  const targetAnchor = targetNode.anchors.get(`A-${target[1]}/N-${target[0]}`);
+  if (!targetAnchor)
+    return;
+  const edgeKey = graph.edges.match(sourceAnchor, targetAnchor);
+  if (!edgeKey)
+    return;
+  graph.edges.delete(edgeKey[0]);
+}
+</script>
+
+{#if graph}
+	<Graph
+		{width}
+		{height}
+		{toggle}
+		{backgroundExists}
+		{minimap}
+		{graph}
+		{fitView}
+		{fixedZoom}
+		{pannable}
+		{theme}
+		{drawer}
+		{controls}
+		{selectionColor}
+		{disableSelection}
+		{trackpadPan}
+		{modifier}
+		{title}
+		on:edgeDrop
+	>
+		{#if mermaid.length}
+			<FlowChart {mermaid} {mermaidConfig} />
+		{/if}
+		<slot />
+		<slot name="minimap" slot="minimap" />
+		<slot name="controls" slot="controls" />
+		<slot name="background" slot="background" />
+		<slot name="toggle" slot="toggle" />
+		<slot name="drawer" slot="drawer" />
+	</Graph>
+{:else}
+	<div
+		class="svelvet-temp"
+		style:width={width ? width + 'px' : '100%'}
+		style:height={height ? height + 'px' : '100%'}
+	/>
+{/if}
+
+<style>
+	.svelvet-temp {
+		background-color: transparent;
+	}
+	:root {
+		--default-node-border-width: 1.5px;
+		--default-node-width: 200px;
+		--default-node-height: 100px;
+		--default-node-border-radius: 10px;
+
+		--default-node-cursor: grab;
+		--default-node-cursor-blocked: not-allowed;
+		--default-background-cursor: move;
+
+		--default-anchor-border-width: 1px;
+		--default-anchor-radius: 50%;
+		--default-anchor-size: 12px;
+
+		--default-edge-width: 2px;
+
+		--default-selection-box-border-width: 1px;
+
+		--shadow-color: 0deg 0% 10%;
+		--shadow-elevation-low: 0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.4),
+			0.4px 0.8px 1px -1.2px hsl(var(--shadow-color) / 0.34),
+			1px 2px 2.5px -2.5px hsl(var(--shadow-color) / 0.34);
+		--shadow-elevation-medium: 0.3px 0.5px 0.7px hsl(var(--shadow-color) / 0.42),
+			0.8px 1.6px 2px -0.8px hsl(var(--shadow-color) / 0.1),
+			2.1px 4.1px 5.2px -1.7px hsl(var(--shadow-color) / 0.1),
+			5px 10px 12.6px -2.5px hsl(var(--shadow-color) / 0.1);
+
+		--default-controls-shadow: var(--shadow-elevation-medium);
+		--default-minimap-shadow: var(--shadow-elevation-medium);
+		--default-theme-toggle-shadow: var(--shadow-elevation-medium);
+	}
+
+	:root {
+		--default-node-color: hsl(0, 0%, 95%);
+		--default-node-border-color: hsl(0, 0%, 87%);
+		--default-node-selection-color: hsl(0, 0%, 13%);
+		--default-text-color: hsl(0, 0%, 20%);
+		--default-node-shadow: var(--shadow-elevation-medium);
+
+		--default-background-color: hsl(0, 0%, 100%);
+		--default-dot-color: hsl(0, 0%, 53%);
+
+		--default-accent-color: hsl(0, 0%, 100%);
+		--default-primary-color: hsl(0, 0%, 83%);
+
+		--default-selection-box-color: hsl(195, 53%, 79%);
+
+		--default-edge-color: hsl(0, 0%, 40%);
+		--default-target-edge-color: hsl(0, 0%, 0%);
+		--default-edge-shadow: var(--shadow-elevation-medium);
+		--default-label-color: hsl(0, 0%, 95%);
+		--default-label-text-color: hsl(0, 0%, 20%);
+
+		--plugin-border: hsl(0, 0%, 42%);
+		--default-controls-border: var(--plugin-border);
+		--default-minimap-border: var(--plugin-border);
+		--default-theme-toggle-border: var(--plugin-border);
+
+		--default-anchor-color: hsl(0, 0%, 67%);
+		--default-anchor-border-color: hsl(0, 0%, 100%);
+
+		--default-anchor-connected: hsl(0, 0%, 40%);
+		--default-anchor-connected-border: hsl(0, 0%, 95%);
+
+		--default-anchor-connecting: hsl(0, 0%, 40%);
+		--default-anchor-connecting-border: hsl(0, 0%, 100%);
+
+		--default-anchor-hovering: hsl(0, 0%, 46%);
+		--default-anchor-hovering-border: hsl(0, 0%, 0%);
+
+		--default-minimap-background-color: hsl(0, 0%, 100%);
+		--default-minimap-node-color: hsl(0, 0%, 95%);
+
+		--default-controls-background-color: hsl(0, 0%, 100%);
+		--default-controls-text-color: hsl(0, 0%, 20%);
+
+		--default-theme-toggle-text-color: hsl(0, 0%, 20%);
+		--default-theme-toggle-color: hsl(0, 0%, 100%);
+
+		--default-drawer-button-color: hsl(0, 2%, 89%);
+		--default-drawer-button-text-color: hsl(0, 0%, 20%);
+
+		--default-drawer-reset-button-color: hsl(0, 2%, 89%);
+		--default-drawer-reset-button-text-color: hsl(0, 0%, 20%);
+		--default-drawer-reset-button-hover-color: hsl(0, 0%, 30%);
+		--default-drawer-reset-button-hover-text-color: hsl(0, 0%, 100%);
+	}
+
+	:root[svelvet-theme='dark'] {
+		--default-node-color: hsl(0, 0%, 20%);
+		--default-node-border-color: hsl(0, 0%, 7%);
+		--default-node-selection-color: hsl(0, 0%, 87%);
+		--default-text-color: hsl(0, 0%, 100%);
+		--default-node-shadow: var(--shadow-elevation-medium);
+
+		--default-background-color: hsl(0, 0%, 27%);
+		--default-dot-color: hsl(0, 0%, 60%);
+
+		--default-accent-color: hsl(0, 0%, 7%);
+		--default-primary-color: hsl(0, 0%, 66%);
+
+		--default-selection-box-color: hsl(195, 53%, 79%);
+
+		--default-edge-color: hsl(0, 0%, 100%);
+		--default-target-edge-color: hsl(0, 0%, 0%);
+		--default-edge-shadow: var(--shadow-elevation-medium);
+		--default-label-color: hsl(0, 0%, 20%);
+		--default-label-text-color: hsl(0, 0%, 100%);
+
+		--default-anchor-color: hsl(0, 0%, 67%);
+		--default-anchor-border-color: hsl(0, 0%, 87%);
+		--default-anchor-connected: hsl(0, 0%, 100%);
+		--default-anchor-connected-border: hsl(0, 0%, 20%);
+
+		--default-anchor-connecting: hsl(0, 0%, 40%);
+		--default-anchor-connecting-border: hsl(0, 0%, 100%);
+
+		--default-anchor-hovering: hsl(0, 0%, 46%);
+		--default-anchor-hovering-border: hsl(0, 0%, 0%);
+
+		--plugin-border: hsl(0, 0%, 42%);
+		--default-controls-border: var(--plugin-border);
+		--default-minimap-border: var(--plugin-border);
+		--default-theme-toggle-border: var(--plugin-border);
+
+		--default-minimap-background-color: hsl(0, 0%, 27%);
+
+		--default-minimap-node-color: hsl(0, 0%, 20%);
+
+		--default-controls-background-color: hsl(0, 0%, 27%);
+		--default-controls-text-color: hsl(0, 0%, 100%);
+
+		--default-theme-toggle-text-color: hsl(0, 0%, 100%);
+		--default-theme-toggle-color: hsl(0, 0%, 27%);
+
+		--default-drawer-button-color: hsl(0, 0%, 19%);
+		--default-drawer-button-text-color: hsl(0, 0%, 100%);
+
+		--default-drawer-reset-button-color: hsl(0, 0%, 19%);
+		--default-drawer-reset-button-text-color: hsl(0, 0%, 89%);
+		--default-drawer-reset-button-hover-color: hsl(0, 0%, 59%);
+		--default-drawer-reset-button-hover-text-color: hsl(0, 0%, 100%);
+	}
+
+	:root[svelvet-theme='light'] {
+		--default-node-color: hsl(0, 0%, 95%);
+		--default-node-border-color: hsl(0, 0%, 87%);
+		--default-node-selection-color: hsl(0, 0%, 13%);
+		--default-text-color: hsl(0, 0%, 20%);
+		--default-node-shadow: var(--shadow-elevation-medium);
+
+		--default-background-color: hsl(0, 0%, 100%);
+		--default-dot-color: hsl(0, 0%, 53%);
+
+		--default-accent-color: hsl(0, 0%, 100%);
+		--default-primary-color: hsl(0, 0%, 83%);
+
+		--default-selection-box-color: hsl(195, 53%, 79%);
+
+		--default-edge-color: hsl(0, 0%, 40%);
+		--default-target-edge-color: hsl(0, 0%, 0%);
+		--default-edge-shadow: var(--shadow-elevation-medium);
+		--default-label-color: hsl(0, 0%, 95%);
+		--default-label-text-color: hsl(0, 0%, 20%);
+
+		--plugin-border: hsl(0, 0%, 42%);
+		--default-controls-border: var(--plugin-border);
+		--default-minimap-border: var(--plugin-border);
+		--default-theme-toggle-border: var(--plugin-border);
+
+		--default-anchor-color: hsl(0, 0%, 67%);
+		--default-anchor-border-color: hsl(0, 0%, 100%);
+
+		--default-anchor-connected: hsl(0, 0%, 40%);
+		--default-anchor-connected-border: hsl(0, 0%, 95%);
+
+		--default-anchor-connecting: hsl(0, 0%, 40%);
+		--default-anchor-connecting-border: hsl(0, 0%, 100%);
+
+		--default-anchor-hovering: hsl(0, 0%, 46%);
+		--default-anchor-hovering-border: hsl(0, 0%, 0%);
+
+		--default-minimap-background-color: hsl(0, 0%, 100%);
+		--default-minimap-node-color: hsl(0, 0%, 95%);
+
+		--default-controls-background-color: hsl(0, 0%, 100%);
+		--default-controls-text-color: hsl(0, 0%, 20%);
+
+		--default-theme-toggle-text-color: hsl(0, 0%, 20%);
+		--default-theme-toggle-color: hsl(0, 0%, 100%);
+
+		--default-drawer-button-color: hsl(0, 2%, 89%);
+		--default-drawer-button-text-color: hsl(0, 0%, 20%);
+
+		--default-drawer-reset-button-color: hsl(0, 2%, 89%);
+		--default-drawer-reset-button-text-color: hsl(0, 0%, 20%);
+		--default-drawer-reset-button-hover-color: hsl(0, 0%, 30%);
+		--default-drawer-reset-button-hover-text-color: hsl(0, 0%, 100%);
+	}
+</style>

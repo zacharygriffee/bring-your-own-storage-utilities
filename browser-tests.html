@@ -23,7 +23,8 @@
                 "@rollup/plugin-terser": "https://esm.run/@rollup/plugin-terser",
                 "FileExplorer": "./dist/components/FileExplorer.min.js",
                 "duplex-through": "https://esm.run/duplex-through",
-                "random-access-storage": "https://cdn.jsdelivr.net/npm/random-access-storage/+esm"
+                "random-access-storage": "https://cdn.jsdelivr.net/npm/random-access-storage/+esm",
+                "Svelvet": "./dist/svelte/svelvet.min.js"
             },
             "scopes": {
               "https://ga.jspm.io/": {
@@ -50,6 +51,7 @@
     import Hyperdrive from "hyperdrive";
     import b4a from "b4a";
     import * as Components from "FileExplorer";
+    import {Svelvet} from "Svelvet";
     const corestore = new Corestore(RAM);
     const hyperdrive = globalThis.testHyperDrive = new Hyperdrive(corestore);
 
@@ -113,6 +115,12 @@
         t.pass();
     });
 
+    test("Make svelvet grid", async t => {
+        new Svelvet({
+            target: document.getElementById("svelvet")
+        });
+    });
+
     test("Test Complete", async t => {
         console.timeEnd("Time of all tests");
         const [bodyEle] = document.getElementsByTagName("body");
@@ -129,5 +137,6 @@
     <h3>Source Explorer</h3>
 
 </div>
+<div id="svelvet"></div>
 </body>
 </html>

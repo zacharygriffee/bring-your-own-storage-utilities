@@ -254,28 +254,3 @@ test("template plugin", async t => {
     t.ok(rich);
     t.is(escaped, `&lt;html&gt;`);
 });
-
-skip("testings", async t => {
-    const result = await pack("testings", {
-        plugins: [
-            rollupVirtualPlugin(
-                {
-                    x: `
-                        export let res = 0;
-                        export function inc(i=1) { res+=i };
-                    `,
-                    testings: `
-                        import {res, inc} from "x";
-                        console.log(res);
-                        inc(5);
-                        console.log(res);
-                        export default res;
-                    `
-                }
-            )
-        ],
-        autoImport: true
-    });
-
-    debugger;
-});

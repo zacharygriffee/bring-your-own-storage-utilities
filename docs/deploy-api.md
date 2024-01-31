@@ -1,26 +1,6 @@
 
 # DEPLOY API
 
-## Objects
-
-<dl>
-<dt><a href="#Deploy">Deploy</a> : <code>object</code></dt>
-<dd></dd>
-</dl>
-
-## Functions
-
-<dl>
-<dt><a href="#rollupTemplatePlugin">rollupTemplatePlugin(params, config)</a> ⇒ <code>Object</code> | <code>*</code></dt>
-<dd><p>A templating similar to lodash-es/template but uses block-comment like deliminators
-See tests for Deploy for examples, since jsdocs doesn&#39;t display it very well.</p>
-</dd>
-<dt><a href="#template">template(code, config)</a> ⇒ <code>Object</code> | <code>*</code></dt>
-<dd><p>A templating similar to lodash-es/template but uses block-comment like deliminators
-See tests for Deploy for examples, since jsdocs doesn&#39;t display it very well.</p>
-</dd>
-</dl>
-
 <a name="Deploy"></a>
 
 ## Deploy : <code>object</code>
@@ -38,12 +18,14 @@ See tests for Deploy for examples, since jsdocs doesn&#39;t display it very well
     * [.exports.rollupFromSourcePlugin(source, config)](#Deploy.exports.rollupFromSourcePlugin)
     * [.exports.rollupReplaceThesePlugin(globBook)](#Deploy.exports.rollupReplaceThesePlugin) ⇒ <code>string</code> \| <code>Object</code>
     * [.exports.rollupSveltePluginNoServer(config)](#Deploy.exports.rollupSveltePluginNoServer) ⇒ <code>Object</code> \| <code>\*</code>
+    * [.exports.rollupTemplatePlugin(params, config)](#Deploy.exports.rollupTemplatePlugin) ⇒ <code>Object</code> \| <code>\*</code>
     * [.exports.rollupTerserBrowserPlugin([comments])](#Deploy.exports.rollupTerserBrowserPlugin)
     * [.exports.rollupVirtualPlugin(codeBook, config)](#Deploy.exports.rollupVirtualPlugin)
     * [.exports.rollupVirtualExports(entryName, exportBook, config)](#Deploy.exports.rollupVirtualExports) ⇒ <code>Object</code>
     * [.exports.setSvelteCompiler([svelteCompilerModule])](#Deploy.exports.setSvelteCompiler) ⇒ <code>Promise.&lt;void&gt;</code>
     * [.exports.svelteCompile()](#Deploy.exports.svelteCompile)
     * [.exports.svelteCompile$(code, config)](#Deploy.exports.svelteCompile$)
+    * [.exports.template(code, config)](#Deploy.exports.template) ⇒ <code>Object</code> \| <code>\*</code>
     * [.exports.terser(code, [comments])](#Deploy.exports.terser) ⇒ <code>Promise.&lt;MinifyOutput&gt;</code>
 
 <a name="Deploy.exports.ROLLUP"></a>
@@ -280,6 +262,19 @@ under the names of the above list.
 | config | This is the same configuration as [svelteCompile$](svelteCompile$) including the following |
 | [config.svelteCompiler] | See Deploy.setSvelteCompiler. This is a convenience function to set the compiler from here. However, if you've already set the compiler or have already run svelteCompiler function, this will do nothing. |
 
+<a name="Deploy.exports.rollupTemplatePlugin"></a>
+
+### Deploy.exports.rollupTemplatePlugin(params, config) ⇒ <code>Object</code> \| <code>\*</code>
+A templating similar to lodash-es/template but uses block-comment like deliminators
+See tests for Deploy for examples, since jsdocs doesn't display it very well.
+
+**Kind**: static method of [<code>Deploy</code>](#Deploy)  
+
+| Param | Description |
+| --- | --- |
+| params | The parameters to use in template processing. |
+| config | see options of [lodash/template](https://lodash.com/docs/4.17.15#template) |
+
 <a name="Deploy.exports.rollupTerserBrowserPlugin"></a>
 
 ### Deploy.exports.rollupTerserBrowserPlugin([comments])
@@ -403,6 +398,19 @@ Compile svelte code into javascript, css, and code map.
 | [config.accessors] | <code>true</code> | In svelte.compiler this is default false. To work between components from p2p land, accessors=true made it easier for me. |
 | [config.injectCss] | <code>true</code> | Add an IIFE function right into the HTML that injects the CSS produced by this compiler into the DOM. If you are running a long term app, with many different changes, you might want to declare this false due to the  fact that, css is only appended to the doc, but never removed. So you may want to handle this differently if that is your use-case. |
 
+<a name="Deploy.exports.template"></a>
+
+### Deploy.exports.template(code, config) ⇒ <code>Object</code> \| <code>\*</code>
+A templating similar to lodash-es/template but uses block-comment like deliminators
+See tests for Deploy for examples, since jsdocs doesn't display it very well.
+
+**Kind**: static method of [<code>Deploy</code>](#Deploy)  
+
+| Param | Description |
+| --- | --- |
+| code | The code to process template |
+| config | see options of [lodash/template](https://lodash.com/docs/4.17.15#template) |
+
 <a name="Deploy.exports.terser"></a>
 
 ### Deploy.exports.terser(code, [comments]) ⇒ <code>Promise.&lt;MinifyOutput&gt;</code>
@@ -414,30 +422,4 @@ Exposure of terser plugin. Operates only on module.Leaves in 'debugger'.
 | --- | --- | --- | --- |
 | code | <code>string</code> |  | code |
 | [comments] | <code>boolean</code> | <code>false</code> | Keep the comments around? |
-
-<a name="rollupTemplatePlugin"></a>
-
-## rollupTemplatePlugin(params, config) ⇒ <code>Object</code> \| <code>\*</code>
-A templating similar to lodash-es/template but uses block-comment like deliminators
-See tests for Deploy for examples, since jsdocs doesn't display it very well.
-
-**Kind**: global function  
-
-| Param | Description |
-| --- | --- |
-| params | The parameters to use in template processing. |
-| config | see options of [lodash/template](https://lodash.com/docs/4.17.15#template) |
-
-<a name="template"></a>
-
-## template(code, config) ⇒ <code>Object</code> \| <code>\*</code>
-A templating similar to lodash-es/template but uses block-comment like deliminators
-See tests for Deploy for examples, since jsdocs doesn't display it very well.
-
-**Kind**: global function  
-
-| Param | Description |
-| --- | --- |
-| code | The code to process template |
-| config | see options of [lodash/template](https://lodash.com/docs/4.17.15#template) |
 
