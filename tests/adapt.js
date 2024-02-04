@@ -1,10 +1,11 @@
-import {test, solo} from "brittle";
+import {test} from "brittle";
 import RAM from "random-access-memory";
 import RAS from "random-access-storage";
 import b4a from "b4a";
-import {iSource, RandomAccessCollection, setPack, enableRandomAccess} from "../dist/adapt.min.js";
+import {iSource, RandomAccessCollection, setPack} from "../dist/adapt.min.js";
+// import {enableRandomAccess, iSource, RandomAccessCollection, setPack} from "../lib/adapt/index.js";
 import {coercePathAbsolute, findDown, findPackageJson} from "../dist/find.min.js";
-import {isAbsolute, list, readdir} from "../dist/query.min.js";
+import {isAbsolute, readdir} from "../dist/query.min.js";
 import {pack} from "../dist/deploy.min.js";
 import Corestore from "corestore";
 
@@ -12,7 +13,6 @@ import Corestore from "corestore";
 // import {iSource, enableRandomAccess, RandomAccessCollection, setPack} from "../lib/adapt/index.js";
 // import {findDown, findPackageJson} from "../lib/find/index.js";
 // import {list, readdir} from "../lib/query/index.js";
-
 import {loadPackageJson} from "../dist/resolve.min.js";
 import {trimEnd, trimStart} from "../lib/util/index.js";
 
@@ -23,7 +23,6 @@ import {trimEnd, trimStart} from "../lib/util/index.js";
 // import {hasFile} from "./hasFile-test-helper.js";
 // import {RandomAccessCollection, setPack} from "../lib/adapt/fromRandomAccessCollection.js";
 setPack(pack);
-enableRandomAccess(RAS);
 
 const srcObj = {};
 const src = iSource({
@@ -89,21 +88,21 @@ test("isource randomaccess", async t => {
         await src.put("readableAndWritable", "123456789123456789123456789123456789123456789")
         const ras = src.randomAccess("readableAndWritable");
         const result1 = await promisify(ras, "read", 1, 4);
-        t.is(b4a.toString(result1), "2345");
+        t.is(b4a.toString(result1), "2345", 1);
         await promisify(ras, "write", 2, b4a.from("ab"));
         const result3 = await promisify(ras, "read", 1, 4);
-        t.is(b4a.toString(result3), "2ab5")
+        t.is(b4a.toString(result3), "2ab5", 2)
         await promisify(ras, "truncate", 5);
         await t.exception(() => promisify(ras, "read", 1, 6));
         await promisify(ras, "truncate", 10);
         const result4 = await promisify(ras, "read", 1, 6);
-        t.is(b4a.toString(result4), "2ab5\0\0");
+        t.is(b4a.toString(result4), "2ab5\0\0", 4);
         await promisify(ras, "write", 5, b4a.from("\0z"));
         const result5 = await promisify(ras, "read", 1, 7);
-        t.is(b4a.toString(result5), "2ab5\0z\0");
+        t.is(b4a.toString(result5), "2ab5\0z\0", 5);
         await promisify(ras, "del", 1, 3);
         const result6 = await promisify(ras, "read", 0, 10);
-        t.is(b4a.toString(result6), "1\0\0\0" + "5\0z\0\0\0");
+        t.is(b4a.toString(result6), "1\0\0\0" + "5\0z\0\0\0", 6);
         // delete the file from the iSource perspective.
         await src.del("readableAndWritable");
         await promisify(ras, "write", 1, b4a.from("1234"));

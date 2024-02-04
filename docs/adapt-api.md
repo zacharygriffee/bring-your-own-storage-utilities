@@ -41,8 +41,8 @@ source = {
 
     factory              // A function that returns a `string module` that defines how to
                          // install this storage source to make the source portable.
-    randomAccess         // Create a random access storage interface of the iSource. You must enable randomAccess
-                         // with Adapt.enableRandomAccess function before use.
+    randomAccess         // Create a random access storage interface of the iSource.
+    
     // Properties
     length               // For supporting sources, get the length. Not fully implemented.
     source               // the raw source iSource wraps.
