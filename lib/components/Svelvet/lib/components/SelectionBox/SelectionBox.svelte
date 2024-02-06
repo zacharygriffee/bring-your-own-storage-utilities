@@ -31,10 +31,10 @@ $:
     selectNodes();
   }
 onMount(updateNodes);
-function updateNodes() {
+async function updateNodes() {
   const DOMnodes = Array.from(document.querySelectorAll(".svelvet-node"));
-  nodes = DOMnodes.map((node) => {
-    const { top: top2, left: left2, width: width2, height: height2 } = node.getBoundingClientRect();
+  nodes = DOMnodes.map(async (node) => {
+    const { top: top2, left: left2, width: width2, height: height2 } = await (node.getBoundingClientRect?.() || node.getBoundingClientRectAsync?.());
     return { id: node.id, top: top2, left: left2, width: width2, height: height2 };
   });
 }

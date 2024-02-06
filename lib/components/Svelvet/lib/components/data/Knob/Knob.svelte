@@ -87,8 +87,8 @@ export function clamp(num) {
   currentDegree = degree;
   return degree;
 }
-function calculateNewAngle(cursorX, cursorY) {
-  const { top, left, width, height } = knobWrapperElement.getBoundingClientRect();
+async function calculateNewAngle(cursorX, cursorY) {
+  const { top, left, width, height } = await (knobWrapperElement.getBoundingClientRect?.() || knobWrapperElement.getBoundingClientRectAsync?.());
   const e = { clientX: cursorX, clientY: cursorY };
   const { x, y } = calculateRelativeCursor(e, top, left, width, height, $scale, $translation);
   const relativeX = x + 2 * $translation.x / $scale - width / 2;

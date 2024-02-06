@@ -18,10 +18,10 @@ let picking = false;
 let wheel = true;
 let wheelTop = 0;
 let wheelLeft = 0;
-const updatePosition = () => {
+const updatePosition = async () => {
   if (!picker)
     return;
-  const { top, left } = picker.getBoundingClientRect();
+  const { top, left } = await (picker.getBoundingClientRect?.() || picker.getBoundingClientRectAsync?.());
   const dimensions = get(graph.dimensions);
   const scale = get(graph.transforms.scale);
   const translation = get(graph.transforms.translation);
