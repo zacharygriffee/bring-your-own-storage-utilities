@@ -1,8 +1,9 @@
-import {test} from "brittle";
+import {test, solo} from "brittle";
 import RAM from "random-access-memory";
 import RAS from "random-access-storage";
 import b4a from "b4a";
-import {iSource, RandomAccessCollection, setPack} from "../dist/adapt.min.js";
+import {iSource, RandomAccessCollection, setPack, importMapSource} from "../dist/adapt.min.js";
+// import {importMapSource} from "../lib/adapt/importMapSource.js";
 // import {enableRandomAccess, iSource, RandomAccessCollection, setPack} from "../lib/adapt/index.js";
 import {coercePathAbsolute, findDown, findPackageJson} from "../dist/find.min.js";
 import {isAbsolute, readdir} from "../dist/query.min.js";
@@ -61,6 +62,24 @@ const src = iSource({
     },
     __contents: srcObj
 });
+
+const isNode = typeof process !== "undefined" && process?.versions?.node;
+
+if (!isNode) {
+    test("import map source", async t => {
+        const source = importMapSource();
+        const b4aLink = b4a.toString(await source.get("b4a"));
+        t.is(b4aLink, "https://esm.run/b4a");
+        const [first] = await source.readdir("@zacharygriffee");
+        const idb = b4a.toString(await source.get(first));
+        t.is(idb, "https://esm.run/@zacharygriffee/random-access-idb");
+        await source.put("margarita", b4a.from("italian"));
+        const marg = b4a.toString(await source.get("margarita"));
+        t.is(marg, "italian");
+        const exec = await source.exec("b4a");
+        t.ok(typeof exec.module.default.isBuffer === "function");
+    });
+}
 
 test("isource basic", async t => {
     const start = Date.now();

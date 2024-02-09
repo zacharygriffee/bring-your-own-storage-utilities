@@ -147,10 +147,10 @@ async function loadControls() {
 async function loadDrawer() {
   drawerComponent = (await import("../../components/Drawer/DrawerController.svelte")).default;
 }
-async function updateGraphDimensions() {
+function updateGraphDimensions() {
   if (!$graphDOMElement)
     return;
-  const DOMRect = await ($graphDOMElement.getBoundingClientRect?.() || $graphDOMElement.getBoundingClientRectAsync?.());
+  const DOMRect = $graphDOMElement.getBoundingClientRect();
   graphDimensions = {
     top: DOMRect.top,
     left: DOMRect.left,

@@ -73,6 +73,21 @@ npm install bring-your-own-storage-utilities --save
                     yield key.slice(path.length).split("/").shift();
                 }
             }
+        },
+        // NEW. Experimental, this format may change.
+        async exec(key, config = {}) {
+            const {
+              // Handler sticks out to public so that it can be 'micro-managed'
+              handler: async (key, config) => {
+                console.log(`"Executed ${key}`);
+              } 
+            } = config;
+            
+            // It would be good to get info on the file here
+            // and do any security checks, validations,
+            // or user notifications before sending to handler.
+            
+            return handler(key, config);
         }
     });
 ```
@@ -142,6 +157,8 @@ Any adaptors that can help to use common sources. Or any adaptors to pipe the so
 
 ### [API Documentation](https://github.com/zacharygriffee/bring-your-own-storage-utilities/blob/master/docs/adapt-api.md)
 
+- iSource interface to wrap sources to extend functionality
+- Create a source from webpage importMap.
 - Wrap a collection of [random-access-storage](https://github.com/random-access-storage) instances.
 
 ---

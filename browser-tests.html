@@ -11,6 +11,7 @@
             "imports": {
                 "brittle": "https://ga.jspm.io/npm:brittle@3.3.2/index.js",
                 "ALLTESTS": "./tests/all.js",
+                "ADAPT": "./tests/adapt.js",
                 "rxjs": "https://esm.run/rxjs",
                 "lodash-es": "https://esm.run/lodash-es",
                 "localdrive": "data:text/javascript;charset=utf-8;base64,ZXhwb3J0IGRlZmF1bHQgbnVsbDs=",
@@ -25,7 +26,7 @@
                 "duplex-through": "https://esm.run/duplex-through",
                 "random-access-storage": "https://cdn.jsdelivr.net/npm/random-access-storage/+esm",
                 "Svelvet": "./dist/svelte/svelvet.min.js",
-                "@zacharygriffee/random-access-idb": "https://esm.run/@zacharygriffee/random-access-idb@3.0.4"
+                "@zacharygriffee/random-access-idb": "https://esm.run/@zacharygriffee/random-access-idb"
             },
             "scopes": {
               "https://ga.jspm.io/": {
@@ -46,7 +47,7 @@
     import "./dist/svelte/svelte-internal.min.js";
     import "./dist/svelte/svelte-store.min.js";
     import "./dist/svelte/svelte-strap.min.js";
-    import {test} from "brittle";
+    import {test,solo} from "brittle";
     import RAM from "random-access-memory";
     import Corestore from "corestore";
     import Hyperdrive from "hyperdrive";
@@ -105,6 +106,7 @@
     console.log("Imports from the import map are there to support the tests.");
     console.time("Time of all tests");
     await import("ALLTESTS");
+    // await import("ALLTESTS");
     test("make file explorer", async t => {
         new Components.FileExplorerComponent({
             target: document.getElementById("fileExplorerTest"),
@@ -117,9 +119,9 @@
     });
 
     test("Make svelvet grid", async t => {
-        new Svelvet({
+        t.ok(new Svelvet({
             target: document.getElementById("svelvet")
-        });
+        }));
     });
 
     test("Test Complete", async t => {
