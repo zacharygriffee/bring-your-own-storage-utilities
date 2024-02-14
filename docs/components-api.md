@@ -1,6 +1,73 @@
 
 # COMPONENTS API
 
+## Classes
+
+<dl>
+<dt><a href="#SwipeSnap">SwipeSnap</a></dt>
+<dd><p>A class for creating a swipeable carousel with snapping behavior.</p>
+</dd>
+</dl>
+
+## Objects
+
+<dl>
+<dt><a href="#Components">Components</a> : <code>object</code></dt>
+<dd></dd>
+</dl>
+
+<a name="SwipeSnap"></a>
+
+## SwipeSnap
+A class for creating a swipeable carousel with snapping behavior.
+
+**Kind**: global class  
+
+* [SwipeSnap](#SwipeSnap)
+    * [new SwipeSnap([options])](#new_SwipeSnap_new)
+    * [.prevent(event)](#SwipeSnap+prevent)
+    * [.getProps()](#SwipeSnap+getProps) ⇒ <code>Object</code>
+
+<a name="new_SwipeSnap_new"></a>
+
+### new SwipeSnap([options])
+Creates an instance of SwipeSnap.
+
+
+| Param | Type | Default | Description |
+| --- | --- | --- | --- |
+| [options] | <code>Object</code> | <code>{}</code> | Options for configuring the SwipeSnap carousel. |
+| [options.element] | <code>HTMLElement</code> |  | The HTML element that contains the carousel. |
+| [options.is_vertical] | <code>boolean</code> | <code>false</code> | Whether the carousel is vertical (true) or horizontal (false). |
+| [options.transition_duration] | <code>number</code> | <code>300</code> | The duration of the transition animation in milliseconds. |
+| [options.allow_infinite_swipe] | <code>boolean</code> | <code>false</code> | Whether to allow infinite looping of carousel items. |
+
+<a name="SwipeSnap+prevent"></a>
+
+### swipeSnap.prevent(event)
+Prevents the default behavior of an event.
+
+**Kind**: instance method of [<code>SwipeSnap</code>](#SwipeSnap)  
+
+| Param | Type | Description |
+| --- | --- | --- |
+| event | <code>Event</code> | The event to prevent. |
+
+<a name="SwipeSnap+getProps"></a>
+
+### swipeSnap.getProps() ⇒ <code>Object</code>
+Retrieves the current properties of the carousel.
+
+**Kind**: instance method of [<code>SwipeSnap</code>](#SwipeSnap)  
+**Returns**: <code>Object</code> - Carousel properties object.  
+**Properties**
+
+| Name | Type | Description |
+| --- | --- | --- |
+| elements_count | <code>number</code> | The total number of carousel items. |
+| active_item | <code>number</code> | The index of the currently active carousel item. |
+| active_element | <code>HTMLElement</code> | The currently active carousel item element. |
+
 <a name="Components"></a>
 
 ## Components : <code>object</code>

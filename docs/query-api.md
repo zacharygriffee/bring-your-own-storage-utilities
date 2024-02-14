@@ -11,6 +11,7 @@
     * [.exports.append()](#Query.exports.append)
     * [.exports.createReadStream$()](#Query.exports.createReadStream$) ⇒
     * [.exports.createReadStream(source, key, [config])](#Query.exports.createReadStream) ⇒ <code>Readable</code>
+    * [.exports.execute(source, filePath, config)](#Query.exports.execute)
     * [.exports.getEntry$(source, path, [config])](#Query.exports.getEntry$)
     * [.exports.getEntry()](#Query.exports.getEntry)
     * [.exports.getTypeName$(source, key, config)](#Query.exports.getTypeName$) ⇒ <code>Observable.&lt;any&gt;</code>
@@ -108,6 +109,22 @@ does not have a native createReadStream function e.g. one that only has source.g
 | [config.length] |  | If config.end is not set, how many bytes from config.start not inclusive. |
 | [config.highWaterMark] |  | createReadStream will automatically chunkify to the highWaterMark any stream passed through. This will help to control the flow. |
 | [config.wait] | <code>false</code> | a common setting on network storage sources, unless you really want to wait, I have set the default automatically false to only queue locally cached resources. |
+
+<a name="Query.exports.execute"></a>
+
+### Query.exports.execute(source, filePath, config)
+Execute an executable file.
+
+**Kind**: static method of [<code>Query</code>](#Query)  
+
+| Param | Default | Description |
+| --- | --- | --- |
+| source |  |  |
+| filePath |  | The absolute path to the file |
+| config |  |  |
+| [config.overrideExecutability] | <code>false</code> | IF true, will not do any checks on whether the file is executable. |
+| [config.executionHandler] |  | Handle the execution of the file from the source. Default behavior is to use source.exec or source.execute with the filePath and the remaining configuration passed to execute |
+| [config.executabilityChecker] |  | How to check if the file is executable from the source. Default behavior checks the entry of the file whether it has a boolean value of executable. e.g. (await getEntry(source, filePath)).value.executable unless overrideExecutability is true. |
 
 <a name="Query.exports.getEntry$"></a>
 

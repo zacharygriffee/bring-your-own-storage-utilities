@@ -11,7 +11,7 @@ const projectFolder = new LocalDrive(path.resolve(__dirname, "./"));
 
 try {
     for await (const lib of ["deploy", "find", "query", "resolve", "adapt", "transport", "components"]) {
-        await jsdoc2md.render({files: `lib/${lib}/**.js`}).then(
+        await jsdoc2md.render({files: `lib/${lib}/**/*.js`}).then(
             data => {
                 data = `
 # ${lib.toUpperCase()} API

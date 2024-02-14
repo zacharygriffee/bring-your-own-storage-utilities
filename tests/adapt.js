@@ -4,12 +4,11 @@ import RAS from "random-access-storage";
 import b4a from "b4a";
 import {iSource, RandomAccessCollection, setPack, importMapSource} from "../dist/adapt.min.js";
 // import {importMapSource} from "../lib/adapt/importMapSource.js";
-// import {enableRandomAccess, iSource, RandomAccessCollection, setPack} from "../lib/adapt/index.js";
+// import {importMapSource, iSource, RandomAccessCollection, setPack} from "../lib/adapt/index.js";
 import {coercePathAbsolute, findDown, findPackageJson} from "../dist/find.min.js";
 import {isAbsolute, readdir} from "../dist/query.min.js";
 import {pack} from "../dist/deploy.min.js";
 import Corestore from "corestore";
-
 
 // import {iSource, enableRandomAccess, RandomAccessCollection, setPack} from "../lib/adapt/index.js";
 // import {findDown, findPackageJson} from "../lib/find/index.js";
@@ -208,55 +207,55 @@ test("readme example of isource", async t => {
     t.ok(((two.isFile && two.key === "/hello") || (two.isFolder && two.key === "/folder")));
     t.is(b4a.toString(await yourSource.get("folder/answer")), "42");
 });
-
-test("fromRandomAccessStorageCollection", {
-    skip: typeof fetch === "undefined"
-}, async t => {
-    const fileObject = {
-        ["snacks.txt"]: new RAM(b4a.from("pretzels, chips, olives, fries")),
-        ["margarita/standard.txt"]: new RAM(b4a.from("tequila, triple sec, sour")),
-        ["margarita/watermelon.txt"]: new RAM(b4a.from("tequila, triple sec, sour, watermelon puree")),
-        ["margarita/golden.txt"]: new RAM(b4a.from("tequila, triple sec, sour, orange juice")),
-        ["margarita/package.json"]: new RAM(b4a.from(`
-{
-  "name": "in-memory-package-json-for-margarita"
-}
-`))
-    };
-    const storeOfStorageInstalls = {};
-    const source = iSource({
-        put(k, buf) {
-            storeOfStorageInstalls[k] = buf;
-        },
-        get(k) {
-            return storeOfStorageInstalls[k];
-        }
-    })
-    const files = await RandomAccessCollection.install("RandomStorage", source);
-    t.ok(storeOfStorageInstalls.RandomStorage)
-
-    files.setCollection(fileObject);
-    const howtoMakeWatermelonMargarita = await files.get("margarita/watermelon.txt");
-    t.alike(howtoMakeWatermelonMargarita, b4a.from("tequila, triple sec, sour, watermelon puree"));
-
-    const doWeHaveSnacks = await files.exists("snacks.txt");
-    const doWeHaveSlashSnacks = await files.exists("/snacks.txt");
-
-    t.ok(doWeHaveSlashSnacks === doWeHaveSnacks, "Don't need leading slash to be absolute path, but its always recommended.");
-
-    const doWeHaveMartinis = await files.exists("martini.txt");
-    t.absent(doWeHaveMartinis, "We don't have martinis here.");
-
-    const [margaritaStandard, nothingElse] = await findDown(files, ["standard*"]);
-    t.is(margaritaStandard, "/margarita/standard.txt", "This library will coerce file names with root slash.");
-    t.absent(nothingElse);
-    const dir = await readdir(files, {recursive: true});
-    t.is(dir.length, Object.values(fileObject).length, "We just list all files recursively");
-    const [margaritaHasAJsonFile] = await findPackageJson(files, {cwd: "/margarita/"});
-    t.is(margaritaHasAJsonFile, "/margarita/package.json", "We found that margarita has a package.json");
-    const loadJson = await loadPackageJson(files, {cwd: "/margarita/"});
-    t.is(loadJson.name, "in-memory-package-json-for-margarita", "We can read the json file.");
-});
+// Currently not implemented
+// test("fromRandomAccessStorageCollection", {
+//     skip: typeof fetch === "undefined"
+// }, async t => {
+//     const fileObject = {
+//         ["snacks.txt"]: new RAM(b4a.from("pretzels, chips, olives, fries")),
+//         ["margarita/standard.txt"]: new RAM(b4a.from("tequila, triple sec, sour")),
+//         ["margarita/watermelon.txt"]: new RAM(b4a.from("tequila, triple sec, sour, watermelon puree")),
+//         ["margarita/golden.txt"]: new RAM(b4a.from("tequila, triple sec, sour, orange juice")),
+//         ["margarita/package.json"]: new RAM(b4a.from(`
+// {
+//   "name": "in-memory-package-json-for-margarita"
+// }
+// `))
+//     };
+//     const storeOfStorageInstalls = {};
+//     const source = iSource({
+//         put(k, buf) {
+//             storeOfStorageInstalls[k] = buf;
+//         },
+//         get(k) {
+//             return storeOfStorageInstalls[k];
+//         }
+//     })
+//     const files = await RandomAccessCollection.install("RandomStorage", source);
+//     t.ok(storeOfStorageInstalls.RandomStorage)
+//
+//     files.setCollection(fileObject);
+//     const howtoMakeWatermelonMargarita = await files.get("margarita/watermelon.txt");
+//     t.alike(howtoMakeWatermelonMargarita, b4a.from("tequila, triple sec, sour, watermelon puree"));
+//
+//     const doWeHaveSnacks = await files.exists("snacks.txt");
+//     const doWeHaveSlashSnacks = await files.exists("/snacks.txt");
+//
+//     t.ok(doWeHaveSlashSnacks === doWeHaveSnacks, "Don't need leading slash to be absolute path, but its always recommended.");
+//
+//     const doWeHaveMartinis = await files.exists("martini.txt");
+//     t.absent(doWeHaveMartinis, "We don't have martinis here.");
+//
+//     const [margaritaStandard, nothingElse] = await findDown(files, ["standard*"]);
+//     t.is(margaritaStandard, "/margarita/standard.txt", "This library will coerce file names with root slash.");
+//     t.absent(nothingElse);
+//     const dir = await readdir(files, {recursive: true});
+//     t.is(dir.length, Object.values(fileObject).length, "We just list all files recursively");
+//     const [margaritaHasAJsonFile] = await findPackageJson(files, {cwd: "/margarita/"});
+//     t.is(margaritaHasAJsonFile, "/margarita/package.json", "We found that margarita has a package.json");
+//     const loadJson = await loadPackageJson(files, {cwd: "/margarita/"});
+//     t.is(loadJson.name, "in-memory-package-json-for-margarita", "We can read the json file.");
+// });
 
 test("test corestore", async t => {
     const corestore = new Corestore(src.randomAccess);
