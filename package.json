@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.1330",
+  "version": "0.0.1331",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "browser": "dist/all.min.js",
