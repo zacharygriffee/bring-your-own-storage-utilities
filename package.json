@@ -1,6 +1,6 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.1331",
+  "version": "0.0.1332",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "browser": "dist/all.min.js",
@@ -77,6 +77,18 @@
     "./transport": {
       "default": "./lib/transport/index.js",
       "browser": "./dist/transport.min.js"
+    },
+    "./svelte/compiler": {
+      "default": "./dist/svelte/svelte-compiler.min.js"
+    },
+    "./svelte": {
+      "default": "./dist/svelte/svelte-internal.min.js"
+    },
+    "./svelte/svelvet": {
+      "default": "./dist/svelte/svelvet.min.js"
+    },
+    "./svelte/strap": {
+      "default": "./dist/svelte/svelte-strap.min.js"
     }
   },
   "devDependencies": {
