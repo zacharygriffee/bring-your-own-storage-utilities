@@ -396,7 +396,6 @@ Compile svelte code into javascript, css, and code map.
 | [config.generate] | <code>dom</code> | How to generate. |
 | [config.dev] | <code>false</code> | Whether to compile in dev mode (see svelte.compiler docs) |
 | [config.accessors] | <code>true</code> | In svelte.compiler this is default false. To work between components from p2p land, accessors=true made it easier for me. |
-| [config.injectCss] | <code>true</code> | Add an IIFE function right into the HTML that injects the CSS produced by this compiler into the DOM. If you are running a long term app, with many different changes, you might want to declare this false due to the  fact that, css is only appended to the doc, but never removed. So you may want to handle this differently if that is your use-case. |
 
 <a name="Deploy.exports.template"></a>
 
