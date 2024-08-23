@@ -1,11 +1,10 @@
 {
   "name": "bring-your-own-storage-utilities",
-  "version": "0.0.1332",
+  "version": "0.0.1333",
   "description": "Utilities for storage devices you bring on your own",
   "main": "index.js",
   "browser": "dist/all.min.js",
   "type": "module",
-  "fundme": "bc1q9fpu6muvmg5fj76pyzg3ffjrmksnvfj3c0xva6",
   "scripts": {
     "test": "node ./tests/all.js",
     "compile-docs": "node ./compile-docs.js",

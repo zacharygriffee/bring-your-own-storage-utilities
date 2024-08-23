@@ -100,6 +100,79 @@ test("Rollup with drive source.", async t => {
     t.comment("You can view the bundled result at tests/test-area/maragritas/makeMargarita-bundle.js");
 });
 
+test("Rollup with drive source from a nested folder", async t => {
+    const result = await pack(
+        "/tests/test-area/martini/martini.js",
+        {
+            plugins: [
+                rollupVirtualPlugin({
+                    "specials": "export default ['watermelon margarita'];"
+                }),
+                rollupFromSourcePlugin(projectFolder, {asInput: true})
+            ]
+        }
+    );
+
+    const { makeAMargarita, snacks } = await import(result.uri);
+
+    t.alike(snacks, [
+        "chips",
+        "pretzels",
+        "olives",
+        "french fries"
+    ]);
+
+    const {
+        tripleSec,
+        tequila,
+        ice
+    } = makeAMargarita();
+
+    t.is(tripleSec, 0.75);
+    t.is(tequila, 1.5);
+    t.is(ice, 1);
+});
+
+// New test: Rollup with absolute paths
+test("Rollup with drive source using absolute paths", async (t) => {
+    const absolutePath = path.resolve(projectFolder.basePath || "", "tests/test-area/absolute-path-test/test.js");
+    const result = await pack(absolutePath, {
+        plugins: [
+            rollupFromSourcePlugin(projectFolder, { asInput: true }),
+        ],
+    });
+
+    const { testFunc } = await import(result.uri);
+    t.ok(testFunc(), "Absolute path test has passed.");
+});
+
+// New test: Rollup with relative paths within the source
+test("Rollup with drive source using relative paths within source", async (t) => {
+    const relativePath = "/tests/test-area/relative-path-test/test.js"; // Source-relative path
+    const result = await pack(relativePath, {
+        plugins: [
+            rollupFromSourcePlugin(projectFolder, { asInput: true })
+        ]
+    });
+
+    const { testFunc } = await import(result.uri);
+    t.ok(testFunc(), "Relative path test with source-relative path has passed.");
+});
+
+// // New test: Rollup with source base path
+// test("Rollup with source having different base path", async (t) => {
+//     const customBasePath = path.resolve(projectFolder.basePath || "", "custom-base-path-test");
+//     const customSource = new LocalDrive(customBasePath);
+//     const result = await pack("test.js", {
+//         plugins: [
+//             rollupFromSourcePlugin(customSource, { asInput: true }),
+//         ],
+//     });
+//
+//     const { customBasePathTestFunc } = await import(result.uri);
+//     t.ok(customBasePathTestFunc(), "Custom base path test has passed.");
+// });
+
 test("test externalGlobalsPlugin also test autoImport", async t => {
     const {module: {default: result}} = await pack(
         "the-answer",
